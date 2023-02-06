@@ -57,7 +57,7 @@ Author: William Moss (235319)
                         <div class="col-2 rounded shadow bg-lightblue p-3">
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button>
-                            <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Work Allocated</button>
+                            <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
                             <button class="nav-link" id="v-pills-avaliability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-avaliability" type="button" role="tab" aria-controls="v-pills-avaliability" aria-selected="false">Avaliability</button>
                             <button class="nav-link" id="v-pills-timesheets-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timesheets" type="button" role="tab" aria-controls="v-pills-timesheets" aria-selected="false">Timesheets</button>
                             <button class="nav-link" id="v-pills-admin-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admin" type="button" role="tab" aria-controls="v-pills-admin" aria-selected="false">Admin Menu</button>
@@ -197,7 +197,7 @@ Author: William Moss (235319)
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="v-pills-work" role="tabpanel" aria-labelledby="v-pills-work-tab" tabindex="0"><h1 class="display-6 ps-3">Work Allocated</h1><hr>
+                                <div class="tab-pane fade" id="v-pills-work" role="tabpanel" aria-labelledby="v-pills-work-tab" tabindex="0"><h1 class="display-6 ps-3">Modules</h1><hr>
                                     <div class="container p-3">
                                         <div class="card bg-primary" style="width: 18rem;">
                                             <div class="card-header"><h6 class="mt-2 mb-2">Module Title</h6></div>
@@ -211,7 +211,24 @@ Author: William Moss (235319)
                                 </div>
                                 <div class="tab-pane fade" id="v-pills-avaliability" role="tabpanel" aria-labelledby="v-pills-avaliability-tab" tabindex="0"><h1 class="display-6 ps-3">Avaliability</h1><hr></div>
                                 <div class="tab-pane fade" id="v-pills-timesheets" role="tabpanel" aria-labelledby="v-pills-timesheets-tab" tabindex="0"><h1 class="display-6 ps-3">Timesheets</h1><hr></div>
-                                <div class="tab-pane fade" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab" tabindex="0"><h1 class="display-6 ps-3">Admin Menu</h1><hr></div>
+                                <div class="tab-pane fade" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab" tabindex="0"><h1 class="display-6 ps-3">Admin Menu</h1><hr>
+                                    <div class="container">
+                                        <div class="row text-center admin-buttons">
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-users fa-2xl"></i><br><p class="mb-1 mt-2">User Management</p></button>
+                                            </div>
+                                            <div class="col">
+                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-book-open fa-2xl"></i><br><p class="mb-1 mt-2">Module Management</p></button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-clock fa-2xl"></i><br><p class="mb-1 mt-2">Sessions Management</p></button>
+                                            </div>
+                                            <div class="col">
+                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-user-plus fa-2xl"></i><br><p class="mb-1 mt-2">Session Allocation</p></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0"><h1 class="display-6 ps-3">Settings</h1><hr></div>
                               </div>
                             </div>
