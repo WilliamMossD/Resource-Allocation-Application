@@ -22,6 +22,7 @@ Author: William Moss (235319)
         <!-- JQuery -->
         <script   src="https://code.jquery.com/jquery-3.6.1.min.js"   integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="   crossorigin="anonymous"></script>
         <!-- JavaScript -->
+        <script defer src="assets/js/functions.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
         <script defer src="assets/js/brands.js"></script>
         <script defer src="assets/js/solid.js"></script>
@@ -29,11 +30,13 @@ Author: William Moss (235319)
 
 
     </head> 
-        <body class="bg-body">
+        <body class="bg-body" onload="load()">
             <div class="container-fluid p-0">
                 <nav class="navbar bg-dark" data-bs-theme="dark">
-                    <div class="container-fluid justify-content-center">
-                    <a class="navbar-brand">Tutor Scheduling Software</a>
+                    <div class="container-fluid text-center">
+                        <span class="col-4" id="time">HH:MM</span>
+                        <a class="navbar-brand col-4">Tutor Scheduling Software</a>
+                        <span class="col-4" id="date">DD:MM:YYYY</span>
                     </div>
                 </nav>
             </div>
@@ -41,8 +44,8 @@ Author: William Moss (235319)
                 <div class="row">
                     <div class="col-12 d-flex user-row rounded shadow bg-lightblue p-5 mt-5">
                         <div class="col-8 d-flex text-center">
-                            <img class="profile-icon pe-2" src="assets/images/person-icon.png">
-                            <div class="container text-start">
+                            <img class="profile-icon" src="assets/images/person-icon.png">
+                            <div class="container ps-4 text-start">
                                 <h1 class="display-6">Welcome, John Doe</h1>
                                 <h5 class="fw-light">Position: *Insert Position Here*</h2>
                                 <h5 class="fw-light">Email: *Insert Email*</h2>
@@ -54,7 +57,7 @@ Author: William Moss (235319)
                         </div>
                     </div>
                     <div class="col-12 p-0 mt-5 d-flex">
-                        <div class="col-2 rounded shadow bg-lightblue p-3">
+                        <div class="col-2 rounded shadow bg-lightblue p-3" style="height: fit-content;">
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button>
                             <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
@@ -209,22 +212,226 @@ Author: William Moss (235319)
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="v-pills-avaliability" role="tabpanel" aria-labelledby="v-pills-avaliability-tab" tabindex="0"><h1 class="display-6 ps-3">Avaliability</h1><hr></div>
+                                <div class="tab-pane fade" id="v-pills-avaliability" role="tabpanel" aria-labelledby="v-pills-avaliability-tab" tabindex="0"><h1 class="display-6 ps-3">Avaliability</h1><hr>
+                                    <div class="container">
+                                        <div class="row p-3">
+                                            <div class="col-12">
+                                                <table class="table text-center fw-normal table-striped table-bordered aval-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="first-cell" scope="col"></th>
+                                                        <th scope="col">Monday</th>
+                                                        <th scope="col">Tuesday</th>
+                                                        <th scope="col">Wednesday</th>
+                                                        <th scope="col">Thursday</th>
+                                                        <th scope="col">Friday</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tr>
+                                                        <th scope="row">08:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="active"></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">09:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">10:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">11:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">12:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">13:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">14:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">15:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">16:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">17:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">18:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">19:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">20:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">21:00</th>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-4 ps-4">
+                                                <button type="button" class="btn btn-danger">Clear</button>
+                                            </div>
+                                            <div class="col-4 text-center">
+                                                <button type="button" class="btn btn-warning">Reset</button>
+                                            </div>
+                                            <div class="col-4 text-end pe-4">
+                                                <button type="button" class="btn btn-success">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="tab-pane fade" id="v-pills-timesheets" role="tabpanel" aria-labelledby="v-pills-timesheets-tab" tabindex="0"><h1 class="display-6 ps-3">Timesheets</h1><hr></div>
                                 <div class="tab-pane fade" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab" tabindex="0"><h1 class="display-6 ps-3">Admin Menu</h1><hr>
-                                    <div class="container">
-                                        <div class="row text-center admin-buttons">
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-users fa-2xl"></i><br><p class="mb-1 mt-2">User Management</p></button>
+                                    <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="pills-usermanagement-tab" data-bs-toggle="pill" data-bs-target="#pills-usermanage" type="button" role="tab" aria-controls="pills-usermanage" aria-selected="true">User Management</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-modulemanagement-tab" data-bs-toggle="pill" data-bs-target="#pills-modulemanage" type="button" role="tab" aria-controls="pills-modulemanage" aria-selected="false">Module Management</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-sessionmanagement-tab" data-bs-toggle="pill" data-bs-target="#pills-sessionmanage" type="button" role="tab" aria-controls="pills-sessionmanage" aria-selected="false">Session Management</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-sessionallocation-tab" data-bs-toggle="pill" data-bs-target="#pills-sessionallocation" type="button" role="tab" aria-controls="pills-sessionallocation" aria-selected="false">Session Allocation</button>
+                                        </li>
+                                    </ul><hr>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="pills-usermanage" role="tabpanel" aria-labelledby="pills-usermanagement-tab" tabindex="0">
+                                            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="pills-adduser-tab" data-bs-toggle="pill" data-bs-target="#pills-adduser" type="button" role="tab" aria-controls="pills-adduser" aria-selected="true">Add User</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-edituser-tab" data-bs-toggle="pill" data-bs-target="#pills-edituser" type="button" role="tab" aria-controls="pills-edituser" aria-selected="false">Edit User</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-deleteuser-tab" data-bs-toggle="pill" data-bs-target="#pills-deleteuser" type="button" role="tab" aria-controls="pills-deleteuser" aria-selected="false">Delete User</button>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="pills-tabContent">
+                                                <div class="tab-pane fade show active" id="pills-adduser" role="tabpanel" aria-labelledby="pills-adduser-tab" tabindex="0">
+                                                    <div class="container">
+                                                        <form class="row g-3 pt-3 pb-3">
+                                                            <div class="col-6 mb-2">
+                                                            <label for="firstName" class="form-label">First Name</label>
+                                                            <input type="text" class="form-control custom-input" id="firstNameInput" placeholder="First Name">
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="lastName" class="form-label">Last Name</label>
+                                                                <input type="text" class="form-control custom-input" id="lastNameInput" placeholder="Last Name">
+                                                            </div>
+                                                            <div class="col-12 mb-2">
+                                                                <label for="email" class="form-label">Email Address</label>
+                                                                <input type="email" class="form-control custom-input" id="emailInput" placeholder="name@example.com">
+                                                            </div>
+                                                            <div class="col-12 mb-2 form-check" style="padding-left: 2rem !important;">
+                                                                <input type="checkbox" class="form-check-input" id="adminCheck">
+                                                                <label class="form-check-label" for="adminCheck">Make User Admin</label>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Create User</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="pills-edituser" role="tabpanel" aria-labelledby="pills-edituser-tab" tabindex="0">
+                                                    <div class="container">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="pills-deleteuser" role="tabpanel" aria-labelledby="pills-deleteuser-tab" tabindex="0">
+                                                    <div class="container">
+                                                        
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col">
-                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-book-open fa-2xl"></i><br><p class="mb-1 mt-2">Module Management</p></button>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-modulemanage" role="tabpanel" aria-labelledby="pills-modulemanagement-tab" tabindex="0">
+                                            <div class="container">
+                                                
                                             </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-clock fa-2xl"></i><br><p class="mb-1 mt-2">Sessions Management</p></button>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-sessionmanage" role="tabpanel" aria-labelledby="pills-sessionmanagement-tab" tabindex="0">
+                                            <div class="container">
+                                                
                                             </div>
-                                            <div class="col">
-                                                <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-user-plus fa-2xl"></i><br><p class="mb-1 mt-2">Session Allocation</p></button>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-sessionallocation" role="tabpanel" aria-labelledby="pills-sessionallocation-tab" tabindex="0">
+                                            <div class="container">
+                                                
                                             </div>
                                         </div>
                                     </div>
