@@ -19,8 +19,14 @@ function date() {
 /* Clock Function */
 function time() {
     let currentTime = new Date();
-    let hr = currentTime.getHours();
-    let mn = currentTime.getMinutes();
-    document.getElementById("time").innerText = hr.toString() + ':' + mn.toString();
+    let hr = currentTime.getHours().toString();
+    let mn = currentTime.getMinutes().toString();
+    if (hr < 10) {
+        hr = "0" + hr;
+    }
+    if (mn < 10){
+        mn =  "0" + mn;
+    }
+    document.getElementById("time").innerText = hr + ':' + mn;
     setTimeout(time, 1000);
 }

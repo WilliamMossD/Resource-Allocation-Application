@@ -115,3 +115,14 @@ tbody th {
     border-radius: 0 !important;
     color: white !important;
 }
+
+.form-control:disabled {
+    background-color: rgb(57, 101, 161)!important;
+    opacity: 0.5 !important;    
+    cursor: not-allowed;
+}
+
+.custom-textarea {
+    background-color: transparent !important;
+    color: white !important;
+}

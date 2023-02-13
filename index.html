@@ -386,18 +386,18 @@ Author: William Moss (235319)
                                             <div class="tab-content" id="pills-tabContent">
                                                 <div class="tab-pane fade show active" id="pills-adduser" role="tabpanel" aria-labelledby="pills-adduser-tab" tabindex="0">
                                                     <div class="container">
-                                                        <form class="row g-3 pt-3 pb-3">
+                                                        <form id="addUser" class="row g-3 pt-2 pb-2">
                                                             <div class="col-6 mb-2">
-                                                            <label for="firstName" class="form-label">First Name</label>
-                                                            <input type="text" class="form-control custom-input" id="firstNameInput" placeholder="First Name">
+                                                                <label for="firstNameInput" class="form-label">First Name</label>
+                                                                <input type="text" class="form-control custom-input" id="firstNameInput" required>
                                                             </div>
                                                             <div class="col-6 mb-2">
-                                                                <label for="lastName" class="form-label">Last Name</label>
-                                                                <input type="text" class="form-control custom-input" id="lastNameInput" placeholder="Last Name">
+                                                                <label for="lastNameInput" class="form-label">Last Name</label>
+                                                                <input type="text" class="form-control custom-input" id="lastNameInput" required>
                                                             </div>
                                                             <div class="col-12 mb-2">
-                                                                <label for="email" class="form-label">Email Address</label>
-                                                                <input type="email" class="form-control custom-input" id="emailInput" placeholder="name@example.com">
+                                                                <label for="emailInput" class="form-label">Email Address</label>
+                                                                <input type="email" class="form-control custom-input" id="emailInput" required>
                                                             </div>
                                                             <div class="col-12 mb-2 form-check" style="padding-left: 2rem !important;">
                                                                 <input type="checkbox" class="form-check-input" id="adminCheck">
@@ -409,24 +409,218 @@ Author: William Moss (235319)
                                                 </div>
                                                 <div class="tab-pane fade" id="pills-edituser" role="tabpanel" aria-labelledby="pills-edituser-tab" tabindex="0">
                                                     <div class="container">
-                                                        
+                                                        <form id="editUser" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editUserSelect" class="form-label">Enter User's Name</label>
+                                                                <input class="form-control custom-input" list="userList" id="editUserSelect" required>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="editFirstNameInput" class="form-label">First Name</label>
+                                                                <input type="text" class="form-control custom-input" id="editFirstNameInput" disabled>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="editLastNameInput" class="form-label">Last Name</label>
+                                                                <input type="text" class="form-control custom-input" id="editLastNameInput" disabled>
+                                                            </div>
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editEmailInput" class="form-label">Email Address</label>
+                                                                <input type="email" class="form-control custom-input" id="editEmailInput" disabled>
+                                                            </div>
+                                                            <div class="col-12 mb-2 form-check" style="padding-left: 2rem !important;">
+                                                                <input type="checkbox" class="form-check-input" id="editAdminCheck" disabled>
+                                                                <label class="form-check-label" for="editAdminCheck">Make User Admin</label>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade" id="pills-deleteuser" role="tabpanel" aria-labelledby="pills-deleteuser-tab" tabindex="0">
                                                     <div class="container">
-                                                        
+                                                        <form id="deleteUser" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="deleteUserSelect" class="form-label">Enter User's Name</label>
+                                                                <input class="form-control custom-input" list="userList" id="deleteUserSelect" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Delete User</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-modulemanage" role="tabpanel" aria-labelledby="pills-modulemanagement-tab" tabindex="0">
-                                            <div class="container">
-                                                
+                                            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="pills-addmodule-tab" data-bs-toggle="pill" data-bs-target="#pills-addmodule" type="button" role="tab" aria-controls="pills-addmodule" aria-selected="true">Add Module</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-editmodule-tab" data-bs-toggle="pill" data-bs-target="#pills-editmodule" type="button" role="tab" aria-controls="pills-editmodule" aria-selected="false">Edit Module</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-deletemodule-tab" data-bs-toggle="pill" data-bs-target="#pills-deletemodule" type="button" role="tab" aria-controls="pills-deletemodule" aria-selected="false">Delete Module</button>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="pills-tabContent">
+                                                <div class="tab-pane fade show active" id="pills-addmodule" role="tabpanel" aria-labelledby="pills-addmodule-tab" tabindex="0">
+                                                    <div class="container">
+                                                        <form id="addModule" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-6 mb-2">
+                                                                <label for="moduleNameInput" class="form-label">Module Name</label>
+                                                                <input type="text" class="form-control custom-input" id="moduleNameInput" required>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="moduleConInput" class="form-label">Module Convenor</label>
+                                                                <input type="text" class="form-control custom-input" id="moduleConInput" required>
+                                                            </div>
+                                                            <div class="col-12 mb-2">
+                                                                <label for="moduleDesInput" class="form-label">Module Description</label>
+                                                                <textarea class="form-control custom-textarea" id="moduleDesInput" rows="2" maxlength="150"></textarea>
+                                                            </div>
+                                                            <div class="col-12 mb-2">
+                                                                <label for="moduleLinkInput" class="form-label">Canvas Link</label>
+                                                                <input type="url" class="form-control custom-input" id="moduleLinkInput" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Create Module</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="pills-editmodule" role="tabpanel" aria-labelledby="pills-editmodule-tab" tabindex="0">
+                                                    <div class="container">
+                                                        <form id="editModule" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editModuleSelect" class="form-label">Enter Module Name</label>
+                                                                <input class="form-control custom-input" list="moduleList" id="editModuleSelect" required>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="editModuleNameInput" class="form-label">Module Name</label>
+                                                                <input type="text" class="form-control custom-input" id="editModuleNameInput" required>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="editModuleConInput" class="form-label">Module Convenor</label>
+                                                                <input type="text" class="form-control custom-input" id="editModuleConInput" required>
+                                                            </div>
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editModuleDesInput" class="form-label">Module Description</label>
+                                                                <textarea class="form-control custom-textarea" id="editModuleDesInput" rows="2" maxlength="150"></textarea>
+                                                            </div>
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editModuleLinkInput" class="form-label">Canvas Link</label>
+                                                                <input type="url" class="form-control custom-input" id="editModuleLinkInput" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="pills-deletemodule" role="tabpanel" aria-labelledby="pills-deletemodule-tab" tabindex="0">
+                                                    <div class="container">
+                                                        <form id="deleteModule" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editModuleSelect" class="form-label">Enter Module Name</label>
+                                                                <input class="form-control custom-input" list="moduleList" id="editModuleSelect" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Delete Module</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-sessionmanage" role="tabpanel" aria-labelledby="pills-sessionmanagement-tab" tabindex="0">
-                                            <div class="container">
-                                                
+                                            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="pills-addsession-tab" data-bs-toggle="pill" data-bs-target="#pills-addsession" type="button" role="tab" aria-controls="pills-addsession" aria-selected="true">Add Session</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-editsession-tab" data-bs-toggle="pill" data-bs-target="#pills-editsession" type="button" role="tab" aria-controls="pills-editsession" aria-selected="false">Edit Session</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pills-deletesession-tab" data-bs-toggle="pill" data-bs-target="#pills-deletesession" type="button" role="tab" aria-controls="pills-deletesession" aria-selected="false">Delete Session</button>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="pills-tabContent">
+                                                <div class="tab-pane fade show active" id="pills-addsession" role="tabpanel" aria-labelledby="pills-addsession-tab" tabindex="0">
+                                                    <div class="container">
+                                                        <form id="addSession" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="sessionModuleNameInput" class="form-label">Module Name</label>
+                                                                <input class="form-control custom-input" list="moduleList" id="sessionModuleNameInput" required>
+                                                            </div>
+                                                            <div class="col-5 mb-2">
+                                                                <label for="moduleLocInput" class="form-label">Session Location</label>
+                                                                <input type="text" class="form-control custom-input" id="moduleLocInput" required>
+                                                            </div>
+                                                            <div class="col-5 mb-2">
+                                                                <label for="sessionTypeSelect" class="form-label">Type of Session</label>
+                                                                <select class="form-select custom-input" aria-label="Select Session Type" id="sessionTypeSelect" required>
+                                                                    <option value="">Select Session Type</option>
+                                                                    <option value="Lab">Lab</option>
+                                                                    <option value="Teaching">Teaching</option>
+                                                                    <option value="Other">Other</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-2 mb-2">
+                                                                <label for="sessionTAInput" class="form-label">TA Allocation</label>
+                                                                <input type="number" class="form-control custom-input" id="sessionTAInput" min="1" required>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="sessionDaySelect" class="form-label">Day of Session</label>
+                                                                <select class="form-select custom-input" aria-label="Select Session Day" id="sessionDaySelect" required>
+                                                                    <option value="">Select Day of Week</option>
+                                                                    <option value="Monday">Monday</option>
+                                                                    <option value="Tuesday">Tuesday</option>
+                                                                    <option value="Wednesday">Wednesday</option>
+                                                                    <option value="Thursday">Thursday</option>
+                                                                    <option value="Friday">Friday</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-3 mb-2">
+                                                                <label for="sessionStartTimeInput" class="form-label">Start Time</label>
+                                                                <input type="time" class="form-control custom-input" id="sessionStartTimeInput" min="08:00" max="20:30" step="1800" required>
+                                                            </div>
+                                                            <div class="col-3 mb-2">
+                                                                <label for="sessionEndTimeInput" class="form-label">End Time</label>
+                                                                <input type="time" class="form-control custom-input" id="sessionEndTimeInput" min="08:30" max="21:00" step="1800" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Add Session</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="pills-editsession" role="tabpanel" aria-labelledby="pills-editsession-tab" tabindex="0">
+                                                    <div class="container">
+                                                        <form id="editModule" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editModuleSelect" class="form-label">Enter Module Name</label>
+                                                                <input class="form-control custom-input" list="moduleList" id="editModuleSelect" required>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                            <label for="editFirstNameInput" class="form-label">First Name</label>
+                                                            <input type="text" class="form-control custom-input" id="editFirstNameInput" disabled>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label for="editLastNameInput" class="form-label">Last Name</label>
+                                                                <input type="text" class="form-control custom-input" id="editLastNameInput" disabled>
+                                                            </div>
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editEmailInput" class="form-label">Email Address</label>
+                                                                <input type="email" class="form-control custom-input" id="editEmailInput" disabled>
+                                                            </div>
+                                                            <div class="col-12 mb-2 form-check" style="padding-left: 2rem !important;">
+                                                                <input type="checkbox" class="form-check-input" id="editAdminCheck" disabled>
+                                                                <label class="form-check-label" for="editAdminCheck">Make User Admin</label>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="pills-deletesession" role="tabpanel" aria-labelledby="pills-deletesession-tab" tabindex="0">
+                                                    <div class="container">
+                                                        <form id="deleteModule" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="editModuleSelect" class="form-label">Enter Module Name</label>
+                                                                <input class="form-control custom-input" list="moduleList" id="editModuleSelect" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Delete Module</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-sessionallocation" role="tabpanel" aria-labelledby="pills-sessionallocation-tab" tabindex="0">
@@ -436,12 +630,22 @@ Author: William Moss (235319)
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0"><h1 class="display-6 ps-3">Settings</h1><hr></div>
-                              </div>
-                            </div>
+                            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0"><h1 class="display-6 ps-3">Settings</h1><hr></div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- User Datalist -->
+            <datalist id="userList">
+                <option value="User One"></option>
+                <option value="User Two"></option>
+                <option value="User Three"></option>
+            </datalist>
+            <!-- Module Datalist -->
+            <datalist id="moduleList">
+                <option value="Module One"></option>
+                <option value="Module Two"></option>
+                <option value="Module Three"></option>
+            </datalist>
         </body>
 </html>
