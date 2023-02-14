@@ -126,3 +126,7 @@ tbody th {
     background-color: transparent !important;
     color: white !important;
 }
+
+.input-group .btn {
+    border-radius: var(--bs-btn-border-radius) !important;
+}
