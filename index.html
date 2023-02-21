@@ -451,26 +451,26 @@ Author: William Moss (235319)
                                         <div class="tab-pane fade show active" id="pills-adduser" role="tabpanel"
                                             aria-labelledby="pills-adduser-tab" tabindex="0">
                                             <div class="container">
-                                                <form id="addUser" class="row g-3 pt-2 pb-2">
+                                                <form id="addUser" name='addUser' class="row g-3 pt-2 pb-2">
                                                     <div class="col-6 mb-2">
                                                         <label for="firstNameInput" class="form-label">First
                                                             Name</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="firstNameInput" required>
+                                                            id="firstNameInput" name="firstNameInput" required>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="lastNameInput" class="form-label">Last Name</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="lastNameInput" required>
+                                                            id="lastNameInput" name="lastNameInput" required>
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="emailInput" class="form-label">Email Address</label>
                                                         <input type="email" class="form-control custom-input"
-                                                            id="emailInput" required>
+                                                            id="emailInput" name="emailInput" required>
                                                     </div>
                                                     <div class="col-12 mb-2 form-check"
                                                         style="padding-left: 2rem !important;">
-                                                        <input type="checkbox" class="form-check-input" id="adminCheck">
+                                                        <input type="checkbox" class="form-check-input" id="adminCheck" name="adminCheck">
                                                         <label class="form-check-label" for="adminCheck">Make User
                                                             Admin</label>
                                                     </div>
@@ -486,30 +486,30 @@ Author: William Moss (235319)
                                                         <label for="editUserSelect" class="form-label">Enter User's
                                                             Name</label>
                                                         <input class="form-control custom-input" list="userList"
-                                                            id="editUserSelect" required>
+                                                            id="editUserSelect" name="editUserSelect" required>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="editFirstNameInput" class="form-label">First
                                                             Name</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="editFirstNameInput" disabled>
+                                                            id="editFirstNameInput" name="editFirstNameInput" disabled>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="editLastNameInput" class="form-label">Last
                                                             Name</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="editLastNameInput" disabled>
+                                                            id="editLastNameInput" name="editLastNameInput" disabled>
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="editEmailInput" class="form-label">Email
                                                             Address</label>
                                                         <input type="email" class="form-control custom-input"
-                                                            id="editEmailInput" disabled>
+                                                            id="editEmailInput" name="editEmailInput" disabled>
                                                     </div>
                                                     <div class="col-12 mb-2 form-check"
                                                         style="padding-left: 2rem !important;">
                                                         <input type="checkbox" class="form-check-input"
-                                                            id="editAdminCheck" disabled>
+                                                            id="editAdminCheck" name="editAdminCheck" disabled>
                                                         <label class="form-check-label" for="editAdminCheck">Make User
                                                             Admin</label>
                                                     </div>
@@ -526,7 +526,7 @@ Author: William Moss (235319)
                                                         <label for="deleteUserSelect" class="form-label">Enter User's
                                                             Name</label>
                                                         <input class="form-control custom-input" list="userList"
-                                                            id="deleteUserSelect" required>
+                                                            id="deleteUserSelect" name="deleteUserSelect" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Delete User</button>
                                                 </form>
@@ -565,25 +565,25 @@ Author: William Moss (235319)
                                                         <label for="moduleNameInput" class="form-label">Module
                                                             Name</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="moduleNameInput" required>
+                                                            id="moduleNameInput" name="moduleNameInput" required>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="moduleConInput" class="form-label">Module
                                                             Convenor</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="moduleConInput" required>
+                                                            id="moduleConInput" name="moduleConInput" required>
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="moduleDesInput" class="form-label">Module
                                                             Description</label>
                                                         <textarea class="form-control custom-textarea"
-                                                            id="moduleDesInput" rows="2" maxlength="150"></textarea>
+                                                            id="moduleDesInput" name="moduleDesInput" rows="2" maxlength="150"></textarea>
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="moduleLinkInput" class="form-label">Canvas
                                                             Link</label>
                                                         <input type="url" class="form-control custom-input"
-                                                            id="moduleLinkInput" required>
+                                                            id="moduleLinkInput" name="moduleLinkInput" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Create Module</button>
                                                 </form>
@@ -597,32 +597,32 @@ Author: William Moss (235319)
                                                         <label for="editModuleSelect" class="form-label">Enter Module
                                                             Name</label>
                                                         <input class="form-control custom-input" list="moduleList"
-                                                            id="editModuleSelect" required>
+                                                            id="editModuleSelect" name="editModuleSelect" required>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="editModuleNameInput" class="form-label">Module
                                                             Name</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="editModuleNameInput" required disabled>
+                                                            id="editModuleNameInput" name="editModuleNameInput" required disabled>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="editModuleConInput" class="form-label">Module
                                                             Convenor</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="editModuleConInput" required disabled>
+                                                            id="editModuleConInput" name="editModuleConInput" required disabled>
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="editModuleDesInput" class="form-label">Module
                                                             Description</label>
                                                         <textarea class="form-control custom-textarea"
-                                                            id="editModuleDesInput" rows="2" maxlength="150"
+                                                            id="editModuleDesInput" name="editModuleDesInput" rows="2" maxlength="150"
                                                             disabled></textarea>
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="editModuleLinkInput" class="form-label">Canvas
                                                             Link</label>
                                                         <input type="url" class="form-control custom-input"
-                                                            id="editModuleLinkInput" required disabled>
+                                                            id="editModuleLinkInput" name="editModuleLinkInput" required disabled>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary" disabled>Save
                                                         Changes</button>
@@ -637,7 +637,7 @@ Author: William Moss (235319)
                                                         <label for="editModuleSelect" class="form-label">Enter Module
                                                             Name</label>
                                                         <input class="form-control custom-input" list="moduleList"
-                                                            id="editModuleSelect" required>
+                                                            id="editModuleSelect" name="editModuleSelect" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Delete Module</button>
                                                 </form>
@@ -672,7 +672,7 @@ Author: William Moss (235319)
                                                             Name</label>
                                                         <div class="input-group mb-3">
                                                             <input class="form-control custom-input" list="moduleList"
-                                                                id="editModuleSelect" required>
+                                                                id="editModuleSelect" name="editModuleSelect" required>
                                                             <button class="btn ms-3 btn-primary" type="button"
                                                                 id="button-addon2">View Sessions</button>
                                                         </div>
@@ -688,19 +688,19 @@ Author: William Moss (235319)
                                                         <label for="sessionModuleNameInput" class="form-label">Module
                                                             Name</label>
                                                         <input class="form-control custom-input" list="moduleList"
-                                                            id="sessionModuleNameInput" required>
+                                                            id="sessionModuleNameInput" name="sessionModuleNameInput" required>
                                                     </div>
                                                     <div class="col-5 mb-2">
                                                         <label for="moduleLocInput" class="form-label">Session
                                                             Location</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="moduleLocInput" required>
+                                                            id="moduleLocInput" name="moduleLocInput" required>
                                                     </div>
                                                     <div class="col-5 mb-2">
                                                         <label for="sessionTypeSelect" class="form-label">Type of
                                                             Session</label>
                                                         <select class="form-select custom-input"
-                                                            aria-label="Select Session Type" id="sessionTypeSelect"
+                                                            aria-label="Select Session Type" id="sessionTypeSelect" name="sessionTypeSelect"
                                                             required>
                                                             <option value="">Select Session Type</option>
                                                             <option value="Lab">Lab</option>
@@ -712,13 +712,13 @@ Author: William Moss (235319)
                                                         <label for="sessionTAInput" class="form-label">TA
                                                             Allocation</label>
                                                         <input type="number" class="form-control custom-input"
-                                                            id="sessionTAInput" min="1" required>
+                                                            id="sessionTAInput" name="sessionTAInput" min="1" required>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="sessionDaySelect" class="form-label">Day of
                                                             Session</label>
                                                         <select class="form-select custom-input"
-                                                            aria-label="Select Session Day" id="sessionDaySelect"
+                                                            aria-label="Select Session Day" id="sessionDaySelect" name="sessionDaySelect"
                                                             required>
                                                             <option value="">Select Day of Week</option>
                                                             <option value="Monday">Monday</option>
@@ -732,14 +732,14 @@ Author: William Moss (235319)
                                                         <label for="sessionStartTimeInput" class="form-label">Start
                                                             Time</label>
                                                         <input type="time" class="form-control custom-input"
-                                                            id="sessionStartTimeInput" min="08:00" max="20:30"
+                                                            id="sessionStartTimeInput" name="sessionStartTimeInput" min="08:00" max="20:30"
                                                             step="1800" required>
                                                     </div>
                                                     <div class="col-3 mb-2">
                                                         <label for="sessionEndTimeInput" class="form-label">End
                                                             Time</label>
                                                         <input type="time" class="form-control custom-input"
-                                                            id="sessionEndTimeInput" min="08:30" max="21:00" step="1800"
+                                                            id="sessionEndTimeInput" name="sessionEndTimeInput" min="08:30" max="21:00" step="1800"
                                                             required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Add Session</button>

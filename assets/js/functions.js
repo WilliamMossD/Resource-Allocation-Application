@@ -8,7 +8,7 @@
 for (var i = 0; i < document.forms.length; i++) {
     document.forms[i].addEventListener("submit", (event) => {
         event.preventDefault();
-        formHandler(event.target.id)
+        formHandler(event.target.id);
     });
 }
 
@@ -51,7 +51,7 @@ function formHandler(id) {
     $.ajax({
         type: 'POST',
         url: actionUrl,
-        data: $(id).serialize(),
+        data: $('#'+id).serialize(),
         success: function (data) {
             alert(data)
         },

@@ -13,16 +13,16 @@
     $PASSWORD = 'Btf7@w&7Dhi1';
     $DATABASE = 'mossfree_';
 
+    echo(print_r($_POST));
+
     // Connect to database
     try {
-        $conn = new mysqli($servername, $username, $password);
+        $con = mysqli_connect($HOST, $USER, $PASSWORD, $DATABASE);
         if ($conn->connect_error) {
             echo "Connection Failed";
         } 
     } catch (Exception $e) {
         echo "Unknown Error. Please try again";
     }
-
-    echo $_POST;
 
 ?>
