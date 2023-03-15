@@ -5,7 +5,7 @@
 
 // Add event listener to all forms
 for (var i = 0; i < document.forms.length; i++) {
-  document.forms[i].addEventListener("submit", (event) => {
+    document.forms[i].addEventListener("submit", (event) => {
     event.preventDefault();
     formHandler(event.target.id);
   });
@@ -47,7 +47,7 @@ function load() {
 /* Form Handler */
 function formHandler(id) {
   var actionUrl = "assets/php/formHandler.php";
-  var formData = $("#" + id).serializeArray(); // convert form to array
+  var formData = $("#" + id).serializeArray(); // Convert form to array
   formData.unshift({name: "formID", value: id});
 
 
@@ -56,9 +56,44 @@ function formHandler(id) {
     url: actionUrl,
     data: $.param(formData),
     success: function (data) {
-      alert(data);
+      if (id == "viewSession") {
+        // Convert JSON data into an array
+        var array = JSON.parse(data);
+
+        // Update and display table
+        var table = document.getElementById("sessionsTable");
+
+        // Remove existing rows
+        for (var i = table.rows.length - 1; i > 0; i--) {
+          table.deleteRow(i);
+        }
+
+        for (var i = 0; i < array.length; i++) {
+          var newRow = table.insertRow();
+          var cell1 = newRow.insertCell();
+          cell1.innerHTML = array[i][0];
+          var cell2 = newRow.insertCell();
+          cell2.innerHTML = array[i][2];
+          var cell3 = newRow.insertCell();
+          cell3.innerHTML = array[i][3];
+          var cell4 = newRow.insertCell();
+          cell4.innerHTML = array[i][4];
+          var cell5 = newRow.insertCell();
+          cell5.innerHTML = array[i][5];
+          var cell6 = newRow.insertCell();
+          cell6.innerHTML = array[i][6];
+          var cell7 = newRow.insertCell();
+          cell7.innerHTML = array[i][1];
+      }
+      table.style.display = "table";
+      } else {
+        alert(data);
+      }
+      document.getElementById(id).reset();
     },
-    error: function () {},
+    error: function () {
+      alert("Unknown Error Occured");
+    },
   });
 }
 

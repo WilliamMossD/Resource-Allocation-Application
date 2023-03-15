@@ -665,19 +665,39 @@ Author: William Moss (235319)
                                         <div class="tab-pane fade show active" id="pills-viewsession" role="tabpanel"
                                             aria-labelledby="pills-viewsession-tab" tabindex="0">
                                             <div class="container">
-                                                <form id="viewSession" class="row g-3 pt-2 pb-2">
-                                                    <div class="col-12 mb-2">
-                                                        <label for="editModuleSelect" class="form-label">Enter
-                                                            Module
-                                                            Name</label>
-                                                        <div class="input-group mb-3">
-                                                            <input class="form-control custom-input" list="moduleList"
-                                                                id="editModuleSelect" name="editModuleSelect" required>
-                                                            <button class="btn ms-3 btn-primary" type="button"
-                                                                id="button-addon2">View Sessions</button>
-                                                        </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <form id="viewSession" class="row g-3 pt-2 pb-2">
+                                                            <div class="col-12 mb-2">
+                                                                <label for="sessionsModuleSelect" class="form-label">Enter
+                                                                    Module
+                                                                    ID</label>
+                                                                <div class="input-group mb-3">
+                                                                    <input class="form-control custom-input" list="moduleList"
+                                                                        id="sessionsModuleSelect" name="sessionsModuleSelect" required>
+                                                                    <button class="btn ms-3 btn-primary" type="submit">View Sessions</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                </form>
+                                                    <div class="col-12">
+                                                        <table class="table table-striped" style="display: none;" id="sessionsTable">
+                                                            <thead>
+                                                                <tr>
+                                                                <th scope="col">Session ID</th>
+                                                                <th scope="col">Day</th>
+                                                                <th scope="col">Start Time</th>
+                                                                <th scope="col">End Time</th>
+                                                                <th scope="col">Session Type</th>
+                                                                <th scope="col">Location</th>
+                                                                <th scope="col">Num of TA</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-addsession" role="tabpanel"

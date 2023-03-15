@@ -152,6 +152,19 @@
                 // Validate Input
                 if (validateInput($deleteUserSelect, inputType::Number) && $deleteUserSelect > 0) {
 
+                    // Validates that the user entered refrences an actual user in the database
+                    $stmt = $con->prepare('SELECT ta_num FROM teaching_assistants WHERE ta_num = ?');
+                    $stmt->bind_param('i', $deleteUserSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $stmt->store_result();
+                    
+                    if ($stmt->num_rows == 0) {
+                        echo "Invalid User ID";
+                        exit();
+                    } 
+
                     // Prepare MySQL Statement
                     $stmt = $con->prepare('DELETE FROM teaching_assistants WHERE ta_num=?');
                     $stmt->bind_param('i', $deleteUserSelect);
@@ -221,10 +234,24 @@
 
             // deleteModule Form -  [deleteModuleSelect] / [Text] / [50]
             case "deleteModule":
+
                 $deleteModuleSelect = $_POST['deleteModuleSelect'];
 
                 // Validate Input
                 if (validateInput($deleteModuleSelect, inputType::Number) && $deleteModuleSelect > 0) {
+
+                    // Validates that the module_num entered refrences an actual module in the database
+                    $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
+                    $stmt->bind_param('i', $deleteModuleSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $stmt->store_result();
+                    
+                    if ($stmt->num_rows == 0) {
+                        echo "Invalid Module ID";
+                        exit();
+                    } 
 
                     // Prepare MySQL Statement
                     $stmt = $con->prepare('DELETE FROM modules WHERE module_num=?');
@@ -244,9 +271,52 @@
                     exit();
                 }
 
-            // viewSession Form
+            // viewSession Form - [sessionsModuleSelect] / [Num] / [N/A]
             case "viewSession":
-                break;
+
+                $sessionsModuleSelect = $_POST['sessionsModuleSelect'];
+
+                // Validate Input
+                if (validateInput($sessionsModuleSelect, inputType::Number) && $sessionsModuleSelect > 0) {
+
+                    // Validates that the module_num entered refrences an actual module in the database
+                    $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
+                    $stmt->bind_param('i', $sessionsModuleSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $stmt->store_result();
+                    
+                    if ($stmt->num_rows == 0) {
+                        echo "Invalid Module ID";
+                        exit();
+                    } 
+
+                    // Prepare MySQL Statement
+                    $stmt = $con->prepare('SELECT module_session_num, num_of_ta, session_day, session_start, session_end, session_type, session_location FROM module_sessions WHERE module_num=?');
+                    $stmt->bind_param('i', $sessionsModuleSelect);
+
+                    // Execute MySQL Statement
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if (!$result) {
+                        echo "No Sessions Exist";
+                        exit();
+                    } else {
+                        $i = 0;
+                        while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+                            $rows[$i] = [$row["module_session_num"], $row["num_of_ta"], $row["session_day"], $row["session_start"], $row["session_end"], $row["session_type"], $row["session_location"]];
+                            $i++;
+                        }
+                        echo json_encode($rows);
+                        exit();
+                    }
+
+                } else {
+                    echo "Invalid Module ID";
+                    exit();
+                }
 
             // addSession Form - [sessionModuleNameInput, moduleLocInput, sessionTypeSelect, sessionTAInput, sessionDaySelect, sessionStartTimeInput, sessionEndTimeInput]
             //                   [Number, Name, [Lab/Teaching/Other], Number, [Monday-Friday], HHMM, HHMM]
@@ -267,6 +337,7 @@
 
                 if (validateInput($sessionModuleNameInput, inputType::Number) && $sessionModuleNameInput > 0) {
                     
+                    // Validates that the module_num entered refrences an actual module in the database
                     $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
                     $stmt->bind_param('i', $sessionModuleNameInput);
 
@@ -331,7 +402,7 @@
 
             // Unknown Form ID
             default:
-                echo "Error: Unknown Form ID";
+                echo "Unknown Form Submitted";
                 exit();
         }
     } catch (Exception $e) {
