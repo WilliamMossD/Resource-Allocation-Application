@@ -1,12 +1,54 @@
+<?php 
+
+/*
+ * homepage.php file for the Individual Project (University of Sussex 2023) 
+ * Author: William Moss (235319)  
+ */
+
+ // Start PHP Session 
+ session_start();
+
+ try {
+
+    // Database Connection Info
+    $HOST = 'localhost';
+    $USER = 'mossfree_admin';
+    $PASSWORD = 'Btf7@w&7Dhi1';
+    $DATABASE = 'mossfree_tutordatabase';
+
+    try {
+        $con = mysqli_connect($HOST, $USER, $PASSWORD, $DATABASE);
+    } catch (Exception $e) {
+        // Redirect back to root
+        header('Location: index.html');
+        exit();
+    }
+
+    if (mysqli_connect_errno()) {
+        // Redirect back to root
+        header('Location: index.html');
+        exit();
+    }
+
+    // Get rows from module table
+    $stmt = $con->prepare('SELECT * from modules ORDER BY module_num ASC');
+    $stmt->execute();
+    $modulerows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+    // Get rows from teaching assistants table 
+    $stmt = $con->prepare('SELECT ta_num, fname, lname from teaching_assistants ORDER BY ta_num ASC');
+    $stmt->execute();
+    $tarows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+} catch (Exception $e) {
+    header('Location: index.html');
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
-
-<!-- 
-index.html file for the Individual Project (University of Sussex 2023) 
-Author: William Moss (235319)    
--->
-
 <html lang="en">
-
 <head>
     <title>Tutor Scheduling Software</title>
 
@@ -33,10 +75,7 @@ Author: William Moss (235319)
     <script defer src="assets/js/brands.js"></script>
     <script defer src="assets/js/solid.js"></script>
     <script defer src="assets/js/fontawesome.js"></script>
-
-
 </head>
-
 <body class="bg-body" onload="load()">
     <div class="container-fluid p-0">
         <nav class="navbar bg-dark" data-bs-theme="dark">
@@ -112,115 +151,115 @@ Author: William Moss (235319)
                                         </thead>
                                         <tr>
                                             <th scope="row">08:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="08Mon"></td>
+                                            <td id="08Tue"></td>
+                                            <td id="08Wed"></td>
+                                            <td id="08Thu"></td>
+                                            <td id="08Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">09:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="09Mon"></td>
+                                            <td id="09Tue"></td>
+                                            <td id="09Wed"></td>
+                                            <td id="09Thu"></td>
+                                            <td id="09Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">10:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="10Mon"></td>
+                                            <td id="10Tue"></td>
+                                            <td id="10Wed"></td>
+                                            <td id="10Thu"></td>
+                                            <td id="10Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">11:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="11Mon"></td>
+                                            <td id="11Tue"></td>
+                                            <td id="11Wed"></td>
+                                            <td id="11Thu"></td>
+                                            <td id="11Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">12:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="12Mon"></td>
+                                            <td id="12Tue"></td>
+                                            <td id="12Wed"></td>
+                                            <td id="12Thu"></td>
+                                            <td id="12Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">13:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="13Mon"></td>
+                                            <td id="13Tue"></td>
+                                            <td id="13Wed"></td>
+                                            <td id="13Thu"></td>
+                                            <td id="13Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">14:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="14Mon"></td>
+                                            <td id="14Tue"></td>
+                                            <td id="14Wed"></td>
+                                            <td id="14Thu"></td>
+                                            <td id="14Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">15:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="15Mon"></td>
+                                            <td id="15Tue"></td>
+                                            <td id="15Wed"></td>
+                                            <td id="15Thu"></td>
+                                            <td id="15Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">16:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="16Mon"></td>
+                                            <td id="16Tue"></td>
+                                            <td id="16Wed"></td>
+                                            <td id="16Thu"></td>
+                                            <td id="16Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">17:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="17Mon"></td>
+                                            <td id="17Tue"></td>
+                                            <td id="17Wed"></td>
+                                            <td id="17Thu"></td>
+                                            <td id="17Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">18:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="18Mon"></td>
+                                            <td id="18Tue"></td>
+                                            <td id="18Wed"></td>
+                                            <td id="18Thu"></td>
+                                            <td id="18Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">19:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="19Mon"></td>
+                                            <td id="19Tue"></td>
+                                            <td id="19Wed"></td>
+                                            <td id="19Thu"></td>
+                                            <td id="19Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">20:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="20Mon"></td>
+                                            <td id="20Tue"></td>
+                                            <td id="20Wed"></td>
+                                            <td id="20Thu"></td>
+                                            <td id="20Fri"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">21:00</th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td id="21Mon"></td>
+                                            <td id="21Tue"></td>
+                                            <td id="21Wed"></td>
+                                            <td id="21Thu"></td>
+                                            <td id="21Fri"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -232,16 +271,22 @@ Author: William Moss (235319)
                             <h1 class="display-6 ps-3">Modules</h1>
                             <hr>
                             <div class="container p-3">
-                                <div class="card bg-primary" style="width: 18rem;">
-                                    <div class="card-header">
-                                        <h6 class="mt-2 mb-2">Module Title</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <h6 class="card-subtitle mb-2"><i class="fa-solid fa-chalkboard-user"></i> :
-                                            Module Convener</h6>
-                                        <p class="card-text">Module Description</p>
-                                        <a href="#" class="card-link link-info">Canvas Page</a>
-                                    </div>
+                                <div class="row">
+                                    <?php foreach ($modulerows as $row) : ?>
+                                        <div class="col-4">
+                                            <div class="card bg-primary">
+                                                <div class="card-header">
+                                                    <h6 class="mt-2 mb-2"><?= $row['module_name'] ?> (ID: <?= $row['module_num'] ?>)</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h6 class="card-subtitle mb-2"><i class="fa-solid fa-chalkboard-user"></i> :
+                                                    <?= $row['module_convenor'] ?></h6>
+                                                    <p class="card-text"><?= $row['module_description'] ?></p>
+                                                    <a href="<?= $row['link'] ?>" class="card-link link-info" target="_blank">Canvas Page</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
@@ -788,16 +833,15 @@ Author: William Moss (235319)
         </div>
         <!-- User Datalist -->
         <datalist id="userList">
-            <option value="1">User One</option>
-            <option value="2">User Two</option>
-            <option value="3">User Three</option>
+            <?php foreach ($tarows as $row) : ?>
+                <option value="<?= $row['ta_num'] ?>"><?= $row['fname'] ?> <?= $row['lname'] ?></option>
+            <?php endforeach; ?>
         </datalist>
         <!-- Module Datalist -->
         <datalist id="moduleList">
-            <option value="1">Module One</option>
-            <option value="2">Module Two</option>
-            <option value="3">Module Three</option>
+        <?php foreach ($modulerows as $row) : ?>
+                <option value="<?= $row['module_num'] ?>"><?= $row['module_name'] ?></option>
+            <?php endforeach; ?>
         </datalist>
-</body>
-
+    </body>
 </html>

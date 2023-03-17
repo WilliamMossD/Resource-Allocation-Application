@@ -65,7 +65,7 @@ function formHandler(id) {
 
         // Remove existing rows
         for (var i = table.rows.length - 1; i > 0; i--) {
-          table.deleteRow(i);
+            table.deleteRow(i);
         }
 
         for (var i = 0; i < array.length; i++) {
