@@ -55,10 +55,19 @@ function formHandler(id) {
     type: "POST",
     url: actionUrl,
     data: $.param(formData),
+    beforeSend: function() {
+      // Disable button
+      document.getElementById(id).querySelector('button[type="submit"]').disabled = true;
+    },
     success: function (data) {
       if (id == "viewSession") {
         // Convert JSON data into an array
-        var array = JSON.parse(data);
+        try {
+          var array = JSON.parse(data);
+        } catch (e) {
+            alert(data);
+            return;
+        }
 
         // Update and display table
         var table = document.getElementById("sessionsTable");
@@ -75,7 +84,7 @@ function formHandler(id) {
           var cell2 = newRow.insertCell();
           cell2.innerHTML = array[i][2];
           var cell3 = newRow.insertCell();
-          cell3.innerHTML = array[i][3];
+          cell3.innerHTML = array[i][3];  
           var cell4 = newRow.insertCell();
           cell4.innerHTML = array[i][4];
           var cell5 = newRow.insertCell();
@@ -86,13 +95,81 @@ function formHandler(id) {
           cell7.innerHTML = array[i][1];
       }
       table.style.display = "table";
+      } else if (id == "selectUser") {
+        // Convert JSON data into an array
+        try {
+          var array = JSON.parse(data);
+        } catch (e) {
+            alert(data);
+            return;
+        }
+
+        // Update form values in updateUser form and enable inputs
+        document.getElementById("editFirstNameInput").value = array['fname'];
+        document.getElementById("editLastNameInput").value = array['lname'];
+        document.getElementById("editEmailInput").value = array['email'];
+        document.getElementById("editAdminCheck").checked = array['admin'];
+        document.getElementById("editUserSelect").value = array['ta_num'];
+        document.getElementById("editFirstNameInput").disabled = false;
+        document.getElementById("editLastNameInput").disabled = false;
+        document.getElementById("editEmailInput").disabled = false;
+        document.getElementById("editAdminCheck").disabled = false;
+        document.getElementById("savebtn").disabled = false;
+
+      } else if (id == "updateUser") {
+        // Disable inputs in form 
+        document.getElementById("editFirstNameInput").disabled = true;
+        document.getElementById("editLastNameInput").disabled = true;
+        document.getElementById("editEmailInput").disabled = true;
+        document.getElementById("editAdminCheck").disabled = true;
+        document.getElementById("savebtn").disabled = true;
+        alert(data);
+        location.reload();
+
+      } else if (id == "selectModule") {
+        // Convert JSON data into an array
+        try {
+          var array = JSON.parse(data);
+        } catch (e) {
+            alert(data);
+            return;
+        }
+
+        // Update form values in updateUser form and enable inputs
+        document.getElementById("editModuleNameInput").value = array['module_name'];
+        document.getElementById("editModuleConInput").value = array['module_convenor'];
+        document.getElementById("editModuleDesInput").value = array['module_description'];
+        document.getElementById("editModuleLinkInput").value = array['link'];
+        document.getElementById("editModuleSelect").value = array['module_num'];
+        document.getElementById("editModuleNameInput").disabled = false;
+        document.getElementById("editModuleConInput").disabled = false;
+        document.getElementById("editModuleDesInput").disabled = false;
+        document.getElementById("editModuleLinkInput").disabled = false;
+        document.getElementById("savebtn2").disabled = false;
+
+      } else if (id == "updateModule") {
+        // Disable inputs in form 
+        document.getElementById("editModuleNameInput").disabled = true;
+        document.getElementById("editModuleConInput").disabled = true;
+        document.getElementById("editModuleDesInput").disabled = true;
+        document.getElementById("editModuleLinkInput").disabled = true;
+        document.getElementById("savebtn2").disabled = true;
+        alert(data);
+        location.reload();
       } else {
         alert(data);
+        location.reload();
       }
+      // Resets Form
       document.getElementById(id).reset();
     },
     error: function () {
       alert("Unknown Error Occured");
+    },
+
+    complete: function() {
+      // Enable button
+      document.getElementById(id).querySelector('button[type="submit"]').disabled = false;
     },
   });
 }

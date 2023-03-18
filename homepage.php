@@ -527,13 +527,18 @@
                                         <div class="tab-pane fade" id="pills-edituser" role="tabpanel"
                                             aria-labelledby="pills-edituser-tab" tabindex="0">
                                             <div class="container">
-                                                <form id="editUser" class="row g-3 pt-2 pb-2">
+                                                <form id="selectUser" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="editUserSelect" class="form-label">Enter User's
+                                                        <label for="userSelect" class="form-label">Enter User's
                                                             ID</label>
-                                                        <input class="form-control custom-input" list="userList"
-                                                            id="editUserSelect" name="editUserSelect" required>
+                                                        <div class="input-group mb-3">
+                                                            <input class="form-control custom-input" list="userList"
+                                                                id="userSelect" name="userSelect" required>
+                                                            <button type="submit" class="btn btn-primary ms-2">Select</button>
+                                                        </div>
                                                     </div>
+                                                </form>
+                                                <form id="updateUser" class="row g-3 pt-2 pb-2">
                                                     <div class="col-6 mb-2">
                                                         <label for="editFirstNameInput" class="form-label">First
                                                             Name</label>
@@ -559,7 +564,8 @@
                                                         <label class="form-check-label" for="editAdminCheck">Make User
                                                             Admin</label>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary" disabled>Save
+                                                    <input type="hidden" id="editUserSelect" name="editUserSelect" value="">
+                                                    <button type="submit" id="savebtn" class="btn btn-primary" disabled>Save
                                                         Changes</button>
                                                 </form>
                                             </div>
@@ -623,7 +629,7 @@
                                                         <label for="moduleDesInput" class="form-label">Module
                                                             Description</label>
                                                         <textarea class="form-control custom-textarea"
-                                                            id="moduleDesInput" name="moduleDesInput" rows="2" maxlength="150"></textarea>
+                                                            id="moduleDesInput" name="moduleDesInput" rows="2" maxlength="100"></textarea>
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="moduleLinkInput" class="form-label">Canvas
@@ -638,13 +644,18 @@
                                         <div class="tab-pane fade" id="pills-editmodule" role="tabpanel"
                                             aria-labelledby="pills-editmodule-tab" tabindex="0">
                                             <div class="container">
-                                                <form id="editModule" class="row g-3 pt-2 pb-2">
+                                                <form id="selectModule" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="editModuleSelect" class="form-label">Enter Module
+                                                        <label for="moduleSelect" class="form-label">Enter Module
                                                             ID</label>
-                                                        <input class="form-control custom-input" list="moduleList"
-                                                            id="editModuleSelect" name="editModuleSelect" required>
+                                                        <div class="input-group mb-3">
+                                                            <input class="form-control custom-input" list="moduleList"
+                                                                id="moduleSelect" name="moduleSelect" required>
+                                                            <button type="submit" class="btn btn-primary ms-2">Select</button>
+                                                        </div>
                                                     </div>
+                                                </form>
+                                                <form id="updateModule" class="row g-3 pt-2 pb-2">
                                                     <div class="col-6 mb-2">
                                                         <label for="editModuleNameInput" class="form-label">Module
                                                             Name</label>
@@ -661,7 +672,7 @@
                                                         <label for="editModuleDesInput" class="form-label">Module
                                                             Description</label>
                                                         <textarea class="form-control custom-textarea"
-                                                            id="editModuleDesInput" name="editModuleDesInput" rows="2" maxlength="150"
+                                                            id="editModuleDesInput" name="editModuleDesInput" rows="2" maxlength="100"
                                                             disabled></textarea>
                                                     </div>
                                                     <div class="col-12 mb-2">
@@ -670,7 +681,8 @@
                                                         <input type="url" class="form-control custom-input"
                                                             id="editModuleLinkInput" name="editModuleLinkInput" required disabled>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary" disabled>Save
+                                                    <input type="hidden" id="editModuleSelect" name="editModuleSelect" value="">
+                                                    <button type="submit" id="savebtn2" class="btn btn-primary" disabled>Save
                                                         Changes</button>
                                                 </form>
                                             </div>

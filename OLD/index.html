@@ -482,13 +482,18 @@ Author: William Moss (235319)
                                         <div class="tab-pane fade" id="pills-edituser" role="tabpanel"
                                             aria-labelledby="pills-edituser-tab" tabindex="0">
                                             <div class="container">
-                                                <form id="editUser" class="row g-3 pt-2 pb-2">
+                                                <form id="selectUser" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="editUserSelect" class="form-label">Enter User's
+                                                        <label for="userSelect" class="form-label">Enter User's
                                                             ID</label>
-                                                        <input class="form-control custom-input" list="userList"
-                                                            id="editUserSelect" name="editUserSelect" required>
+                                                        <div class="input-group mb-3">
+                                                            <input class="form-control custom-input" list="userList"
+                                                                id="userSelect" name="userSelect" required>
+                                                            <button type="submit" class="btn btn-primary ms-2">Select</button>
+                                                        </div>
                                                     </div>
+                                                </form>
+                                                <form id="updateUser" class="row g-3 pt-2 pb-2">
                                                     <div class="col-6 mb-2">
                                                         <label for="editFirstNameInput" class="form-label">First
                                                             Name</label>
@@ -514,6 +519,7 @@ Author: William Moss (235319)
                                                         <label class="form-check-label" for="editAdminCheck">Make User
                                                             Admin</label>
                                                     </div>
+                                                    <input type="hidden" id="editUserSelect" name="editUserSelect" value="">
                                                     <button type="submit" class="btn btn-primary" disabled>Save
                                                         Changes</button>
                                                 </form>

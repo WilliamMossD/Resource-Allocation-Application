@@ -105,7 +105,7 @@
                 $emailInput = sanitizeInput($_POST['emailInput']);
 
                 // Validate Inputs
-                if (validateInput($firstNameInput, inputType::Name) && validateInput($lastNameInput, inputType::Name) && validateInput($emailInput, inputType::Email)){
+                if (validateInput($firstNameInput, inputType::Name)){
                     if (validateInput($lastNameInput, inputType::Name)) {
                         if (validateInput($emailInput, inputType::Email)) {
                             
@@ -140,10 +140,181 @@
                     exit();
                 }
 
-            // editUser Form 
-            case "editUser":
-                break;
+            // selectUser Form 
+            case "selectUser":
 
+                $userSelect = $_POST['userSelect'];
+
+                if (validateInput($userSelect, inputType::Number) && $userSelect > 0) {
+                    // Validates that the user entered refrences an actual user in the database
+                    $stmt = $con->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE ta_num = ?');
+                    $stmt->bind_param('i', $userSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    
+                    if ($result->num_rows == 0) {
+                        echo "Invalid User ID";
+                        exit();
+                    } 
+
+                    echo json_encode($result->fetch_array(MYSQLI_ASSOC));
+                    exit();
+
+                } else {
+                    echo "Invalid User ID Format";
+                    exit();
+                }
+            // updateUser Form
+            case "updateUser":
+            
+                // Sanitize Inputs
+                $editFirstNameInput = sanitizeInput($_POST['editFirstNameInput']);
+                $editLastNameInput = sanitizeInput($_POST['editLastNameInput']);
+                $editEmailInput = sanitizeInput($_POST['editEmailInput']);
+                $editUserSelect = $_POST['editUserSelect'];
+
+                // Validate Inputs
+                if (validateInput($editUserSelect, inputType::Number) && $editUserSelect > 0) {
+                    // Validates that the user entered refrences an actual user in the database
+                    $stmt = $con->prepare('SELECT ta_num FROM teaching_assistants WHERE ta_num = ?');
+                    $stmt->bind_param('i', $editUserSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $stmt->store_result();
+                    
+                    if ($stmt->num_rows == 0) {
+                        echo "Invalid User ID";
+                        exit();
+                    } 
+                    if (validateInput($editFirstNameInput, inputType::Name)){
+                        if (validateInput($editLastNameInput, inputType::Name)) {
+                            if (validateInput($editEmailInput, inputType::Email)) {
+                                
+                                // Prepare MySQL Statment
+                                $stmt = $con->prepare('UPDATE teaching_assistants SET fname=?, lname=?, email=?, admin=? WHERE ta_num=?');
+                                if (is_null($_POST['editAdminCheck'])) {
+                                    $admin = 0;
+                                } else {
+                                    $admin = 1;
+                                }
+                                $stmt->bind_param('sssii', $editFirstNameInput, $editLastNameInput, $editEmailInput, $admin, $editUserSelect);
+
+                                // Execute MySQL Statement
+                                if (!$stmt->execute()) {
+                                    echo "Database Update Failed";
+                                    exit();
+                                } else {
+                                    echo "User Successfully Edited";
+                                    exit();
+                                }
+
+                            } else {
+                                echo "Invalid Email Format";
+                                exit();
+                            }
+                        } else {
+                            echo "Invalid Last Name";
+                            exit();
+                        }
+                    } else {
+                        echo "Invalid First Name";
+                        exit();
+                    }
+                } else {
+                    echo "Invalid User ID Format";
+                    exit();
+                }
+            // selectModule Case
+            case "selectModule":
+
+                    $moduleSelect = $_POST['moduleSelect'];
+    
+                    if (validateInput($moduleSelect, inputType::Number) && $moduleSelect > 0) {
+                        // Validates that the user entered refrences an actual user in the database
+                        $stmt = $con->prepare('SELECT * FROM modules WHERE module_num = ?');
+                        $stmt->bind_param('i', $moduleSelect);
+    
+                        // Executes the statement and stores the result
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        
+                        if ($result->num_rows == 0) {
+                            echo "Invalid Module ID";
+                            exit();
+                        } 
+    
+                        echo json_encode($result->fetch_array(MYSQLI_ASSOC));
+                        exit();
+    
+                    } else {
+                        echo "Invalid Module ID Format";
+                        exit();
+                    }
+            // updateModule Form
+            case "updateModule":
+                // Sanitize Inputs
+                $editModuleNameInput = sanitizeInput($_POST['editModuleNameInput']);
+                $editModuleConInput = sanitizeInput($_POST['editModuleConInput']);
+                $editModuleDesInput = sanitizeInput($_POST['editModuleDesInput']);
+                $editModuleLinkInput = sanitizeInput($_POST['editModuleLinkInput']);
+                $editModuleSelect = $_POST['editModuleSelect'];
+
+                // Validate Inputs
+                if (validateInput($editModuleSelect, inputType::Number) && $editModuleSelect > 0) {
+                    // Validates that the user entered refrences an actual user in the database
+                    $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
+                    $stmt->bind_param('i', $editModuleSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $stmt->store_result();
+                    
+                    if ($stmt->num_rows == 0) {
+                        echo "Invalid Module ID";
+                        exit();
+                    } 
+                    // Validate Inputs
+                    if (validateInput($editModuleNameInput, inputType::Name)) {
+                        if (validateInput($editModuleConInput, inputType::Name)) {
+                            if (validateInput($editModuleDesInput, inputType::Text)) {
+                                if (validateInput($editModuleLinkInput, inputType::URL)) {
+                                
+                                    // Prepare MySQL Statment
+                                    $stmt = $con->prepare('UPDATE modules SET module_name=?, module_convenor=?, module_description=?, link=? WHERE module_num=?');
+                                    $stmt->bind_param('ssssi', $editModuleNameInput, $editModuleConInput, $editModuleDesInput, $editModuleLinkInput, $editModuleSelect);
+
+                                    // Execute MySQL Statement
+                                    if (!$stmt->execute()) {
+                                        echo "Database Update Failed";
+                                        exit();
+                                    } else {
+                                        echo "Module Successfully Edited";
+                                        exit();
+                                    }
+
+                                } else {
+                                    echo "Invalid Link Format";
+                                    exit();
+                                }
+                            } else {
+                                echo "Invalid Text Format";
+                                exit();
+                            }
+                        } else {
+                            echo "Invalid Convenor Name";
+                            exit();
+                        }
+                    } else {
+                        echo "Invalid Module Name";
+                        exit();
+                    }
+                } else {
+                    echo "Invalid Module ID Format";
+                    exit();
+                }
             // deleteUser Form - [deleteUserSelect] / [Num]
             case "deleteUser":
 
