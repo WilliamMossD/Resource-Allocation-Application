@@ -47,9 +47,12 @@ function load() {
 /* Form Handler */
 function formHandler(id) {
   var actionUrl = "assets/php/formHandler.php";
-  var formData = $("#" + id).serializeArray(); // Convert form to array
-  formData.unshift({name: "formID", value: id});
-
+  if (document.getElementById(id).tagName == 'FORM') {
+    var formData = $("#" + id).serializeArray(); // Convert form to array
+    formData.unshift({name: "formID", value: id});
+  } else {
+    return;
+  }
 
   $.ajax({
     type: "POST",
@@ -93,8 +96,13 @@ function formHandler(id) {
           cell6.innerHTML = array[i][6];
           var cell7 = newRow.insertCell();
           cell7.innerHTML = array[i][1];
-      }
-      table.style.display = "table";
+          var cell8 = newRow.insertCell();
+          cell8.innerHTML = '<div class="btn-group" role="group"><button type="button" title="View Allocation" onClick="" class="btn btn-primary"><i class="fa-solid fa-chalkboard-user"></i></button><button type="button" title="Delete Session" onClick="" class="btn btn-danger"><i class="fa-solid fa-x"></i></button></div>';
+      
+        }
+
+        table.style.display = "table";
+
       } else if (id == "selectUser") {
         // Convert JSON data into an array
         try {

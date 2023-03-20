@@ -749,6 +749,7 @@
                                                                 <th scope="col">Session Type</th>
                                                                 <th scope="col">Location</th>
                                                                 <th scope="col">Num of TA</th>
+                                                                <th scope="col">Actions</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
