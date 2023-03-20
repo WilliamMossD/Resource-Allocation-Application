@@ -96,9 +96,6 @@ function formHandler(id) {
           cell6.innerHTML = array[i][6];
           var cell7 = newRow.insertCell();
           cell7.innerHTML = array[i][1];
-          var cell8 = newRow.insertCell();
-          cell8.innerHTML = '<div class="btn-group" role="group"><button type="button" title="View Allocation" onClick="" class="btn btn-primary"><i class="fa-solid fa-chalkboard-user"></i></button><button type="button" title="Delete Session" onClick="" class="btn btn-danger"><i class="fa-solid fa-x"></i></button></div>';
-      
         }
 
         table.style.display = "table";

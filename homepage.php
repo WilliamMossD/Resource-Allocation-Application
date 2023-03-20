@@ -718,6 +718,18 @@
                                                 aria-controls="pills-addsession" aria-selected="true">Add
                                                 Session</button>
                                         </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-editsession-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-editsession" type="button" role="tab"
+                                                aria-controls="pills-editsession" aria-selected="true">Edit
+                                                Session</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-deletesession-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-deletesession" type="button" role="tab"
+                                                aria-controls="pills-deletesession" aria-selected="true">Delete
+                                                Session</button>
+                                        </li>
                                     </ul>
                                     <div class="tab-content" id="pills-tabContent">
                                         <div class="tab-pane fade show active" id="pills-viewsession" role="tabpanel"
@@ -822,6 +834,98 @@
                                                             required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Add Session</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-editsession" role="tabpanel"
+                                            aria-labelledby="pills-editsession-tab" tabindex="0">
+                                            <div class="container">
+                                                <form id="selectSession" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="sessionSelect" class="form-label">Enter Session
+                                                            ID</label>
+                                                        <div class="input-group mb-3">
+                                                            <input class="form-control custom-input"
+                                                                id="sessionSelect" name="sessionSelect" required>
+                                                            <button type="submit" class="btn btn-primary ms-2">Select</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <form id="updateSession" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="editSessionModuleNameInput" class="form-label">Module
+                                                            ID</label>
+                                                        <input class="form-control custom-input" list="moduleList"
+                                                            id="editSessionModuleNameInput" name="editSessionModuleNameInput" required>
+                                                    </div>
+                                                    <div class="col-5 mb-2">
+                                                        <label for="editModuleLocInput" class="form-label">Session
+                                                            Location</label>
+                                                        <input type="text" class="form-control custom-input"
+                                                            id="editModuleLocInput" name="editModuleLocInput" required>
+                                                    </div>
+                                                    <div class="col-5 mb-2">
+                                                        <label for="editSessionTypeSelect" class="form-label">Type of
+                                                            Session</label>
+                                                        <select class="form-select custom-input"
+                                                            aria-label="Select Session Type" id="editSessionTypeSelect" name="editSessionTypeSelect"
+                                                            required>
+                                                            <option value="">Select Session Type</option>
+                                                            <option value="Lab">Lab</option>
+                                                            <option value="Teaching">Teaching</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-2 mb-2">
+                                                        <label for="editSessionTAInput" class="form-label">TA
+                                                            Allocation</label>
+                                                        <input type="number" class="form-control custom-input"
+                                                            id="editSessionTAInput" name="editSessionTAInput" min="1" required>
+                                                    </div>
+                                                    <div class="col-6 mb-2">
+                                                        <label for="editSessionDaySelect" class="form-label">Day of
+                                                            Session</label>
+                                                        <select class="form-select custom-input"
+                                                            aria-label="Select Session Day" id="editSessionDaySelect" name="editSessionDaySelect"
+                                                            required>
+                                                            <option value="">Select Day of Week</option>
+                                                            <option value="Monday">Monday</option>
+                                                            <option value="Tuesday">Tuesday</option>
+                                                            <option value="Wednesday">Wednesday</option>
+                                                            <option value="Thursday">Thursday</option>
+                                                            <option value="Friday">Friday</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-3 mb-2">
+                                                        <label for="editSessionStartTimeInput" class="form-label">Start
+                                                            Time</label>
+                                                        <input type="time" class="form-control custom-input"
+                                                            id="editSessionStartTimeInput" name="editSessionStartTimeInput" min="08:00" max="20:30"
+                                                            step="1800" required>
+                                                    </div>
+                                                    <div class="col-3 mb-2">
+                                                        <label for="editSessionEndTimeInput" class="form-label">End
+                                                            Time</label>
+                                                        <input type="time" class="form-control custom-input"
+                                                            id="editSessionEndTimeInput" name="editSessionEndTimeInput" min="08:30" max="21:00" step="1800"
+                                                            required>
+                                                    </div>
+                                                    <input type="hidden" id="editSessionSelect" name="editSessionSelect" value="">
+                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-deletesession" role="tabpanel"
+                                            aria-labelledby="pills-deletesession-tab" tabindex="0">
+                                            <div class="container">
+                                            <form id="deleteSession" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="deleteSessionSelect" class="form-label">Enter Session
+                                                            ID</label>
+                                                        <input class="form-control custom-input"
+                                                            id="deleteSessionSelect" name="deleteSessionSelect" required>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Delete Session</button>
                                                 </form>
                                             </div>
                                         </div>
