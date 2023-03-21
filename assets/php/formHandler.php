@@ -573,7 +573,7 @@
     
                 if (validateInput($sessionSelect, inputType::Number) && $sessionSelect > 0) {
                     // Validates that the user entered refrences an actual user in the database
-                    $stmt = $con->prepare('SELECT * FROM module_sessions WHERE module_session_num = ?');
+                    $stmt = $con->prepare('SELECT module_session_num, module_num, session_location, session_type, num_of_ta, session_day, session_start, session_end FROM module_sessions WHERE module_session_num = ?');
                     $stmt->bind_param('i', $sessionSelect);
 
                     // Executes the statement and stores the result

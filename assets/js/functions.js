@@ -63,148 +63,78 @@ function formHandler(id) {
       document.getElementById(id).querySelector('button[type="submit"]').disabled = true;
     },
     success: function (data) {
-      if (id == "viewSession") {
-        // Convert JSON data into an array
-        try {
-          var array = JSON.parse(data);
-        } catch (e) {
-            alert(data);
-            return;
+      // Convert JSON data into an array
+      try {
+        var array = JSON.parse(data);
+        if (id == "viewSession") { 
+
+          // Get table by ID
+          var table = document.getElementById("sessionsTable");
+
+          // Remove existing rows
+          for (var i = table.rows.length - 1; i > 0; i--) {
+              table.deleteRow(i);
+          }
+
+          // Add new rows and populate
+          for (var i = 0; i < array.length; i++) {
+            var newRow = table.insertRow();
+            var cell1 = newRow.insertCell();
+            cell1.innerHTML = array[i][0];
+            var cell2 = newRow.insertCell();
+            cell2.innerHTML = array[i][2];
+            var cell3 = newRow.insertCell();
+            cell3.innerHTML = array[i][3];  
+            var cell4 = newRow.insertCell();
+            cell4.innerHTML = array[i][4];
+            var cell5 = newRow.insertCell();
+            cell5.innerHTML = array[i][5];
+            var cell6 = newRow.insertCell();
+            cell6.innerHTML = array[i][6];
+            var cell7 = newRow.insertCell();
+            cell7.innerHTML = array[i][1];
+          }
+
+          // Display Table
+          table.style.display = "table";
+
+        } else if (["selectUser", "selectModule", "selectSession"].includes(id)) {
+
+          var form;
+
+          switch (id) {
+            case "selectUser":
+              form = "updateUser";
+              break;
+            case "selectModule":
+              form = "updateModule";
+              break;
+            case "selectSession":
+              form = "updateSession";
+              break;
+          }
+
+          // Update form values
+          setFormValues(form, Object.values(array));
+          // Enable Inputs
+          formDisable(form, false);
+          
+
+        } else if (["updateUser", "updateModule", "updateSession"].includes(id)) {
+
+          // Disable form inputs
+          formDisable(id, true);
+
+          // Alert Data
+          alert(data);
         }
-
-        // Update and display table
-        var table = document.getElementById("sessionsTable");
-
-        // Remove existing rows
-        for (var i = table.rows.length - 1; i > 0; i--) {
-            table.deleteRow(i);
-        }
-
-        for (var i = 0; i < array.length; i++) {
-          var newRow = table.insertRow();
-          var cell1 = newRow.insertCell();
-          cell1.innerHTML = array[i][0];
-          var cell2 = newRow.insertCell();
-          cell2.innerHTML = array[i][2];
-          var cell3 = newRow.insertCell();
-          cell3.innerHTML = array[i][3];  
-          var cell4 = newRow.insertCell();
-          cell4.innerHTML = array[i][4];
-          var cell5 = newRow.insertCell();
-          cell5.innerHTML = array[i][5];
-          var cell6 = newRow.insertCell();
-          cell6.innerHTML = array[i][6];
-          var cell7 = newRow.insertCell();
-          cell7.innerHTML = array[i][1];
-        }
-
-        table.style.display = "table";
-
-      } else if (id == "selectUser") {
-        // Convert JSON data into an array
-        try {
-          var array = JSON.parse(data);
-        } catch (e) {
-            alert(data);
-            return;
-        }
-
-        // Update form values in updateUser form and enable inputs
-        document.getElementById("editFirstNameInput").value = array['fname'];
-        document.getElementById("editLastNameInput").value = array['lname'];
-        document.getElementById("editEmailInput").value = array['email'];
-        document.getElementById("editAdminCheck").checked = array['admin'];
-        document.getElementById("editUserSelect").value = array['ta_num'];
-        document.getElementById("editFirstNameInput").disabled = false;
-        document.getElementById("editLastNameInput").disabled = false;
-        document.getElementById("editEmailInput").disabled = false;
-        document.getElementById("editAdminCheck").disabled = false;
-        document.getElementById("savebtn").disabled = false;
-
-      } else if (id == "updateUser") {
-        // Disable inputs in form 
-        document.getElementById("editFirstNameInput").disabled = true;
-        document.getElementById("editLastNameInput").disabled = true;
-        document.getElementById("editEmailInput").disabled = true;
-        document.getElementById("editAdminCheck").disabled = true;
-        document.getElementById("savebtn").disabled = true;
+  
+      } catch (e) {
+        // Alert Data
         alert(data);
-        location.reload();
-
-      } else if (id == "selectModule") {
-        // Convert JSON data into an array
-        try {
-          var array = JSON.parse(data);
-        } catch (e) {
-            alert(data);
-            return;
-        }
-
-        // Update form values in updateModule form and enable inputs
-        document.getElementById("editModuleNameInput").value = array['module_name'];
-        document.getElementById("editModuleConInput").value = array['module_convenor'];
-        document.getElementById("editModuleDesInput").value = array['module_description'];
-        document.getElementById("editModuleLinkInput").value = array['link'];
-        document.getElementById("editModuleSelect").value = array['module_num'];
-        document.getElementById("editModuleNameInput").disabled = false;
-        document.getElementById("editModuleConInput").disabled = false;
-        document.getElementById("editModuleDesInput").disabled = false;
-        document.getElementById("editModuleLinkInput").disabled = false;
-        document.getElementById("savebtn2").disabled = false;
-
-      } else if (id == "updateModule") {
-        // Disable inputs in form 
-        document.getElementById("editModuleNameInput").disabled = true;
-        document.getElementById("editModuleConInput").disabled = true;
-        document.getElementById("editModuleDesInput").disabled = true;
-        document.getElementById("editModuleLinkInput").disabled = true;
-        document.getElementById("savebtn2").disabled = true;
-        alert(data);
-        location.reload();
-      } else if (id == "selectSession") {
-        // Convert JSON data into an array
-        try {
-          var array = JSON.parse(data);
-        } catch (e) {
-            alert(data);
-            return;
-        }
-
-        // Update form values in updateSession form and enable inputs
-        document.getElementById("editSessionModuleNameInput").value = array['module_num'];
-        document.getElementById("editSessionLocInput").value = array['session_location'];
-        document.getElementById("editSessionTypeSelect").value = array['session_type'];
-        document.getElementById("editSessionTAInput").value = array['num_of_ta'];
-        document.getElementById("editSessionDaySelect").value = array['session_day'];
-        document.getElementById("editSessionStartTimeInput").value = array['session_start'];
-        document.getElementById("editSessionEndTimeInput").value = array['session_end'];
-        document.getElementById("editSessionSelect").value = array['module_session_num']
-        document.getElementById("editSessionModuleNameInput").disabled = false;
-        document.getElementById("editSessionLocInput").disabled = false;
-        document.getElementById("editSessionTypeSelect").disabled = false;
-        document.getElementById("editSessionTAInput").disabled = false;
-        document.getElementById("editSessionDaySelect").disabled = false;
-        document.getElementById("editSessionStartTimeInput").disabled = false;
-        document.getElementById("editSessionEndTimeInput").disabled = false;
-        document.getElementById("savebtn3").disabled = false;
-
-      } else if (id == "updateSession") {
-        // Disable inputs in form
-        document.getElementById("editSessionModuleNameInput").disabled = true;
-        document.getElementById("editSessionLocInput").disabled = true;
-        document.getElementById("editSessionTypeSelect").disabled = true;
-        document.getElementById("editSessionTAInput").disabled = true;
-        document.getElementById("editSessionDaySelect").disabled = true;
-        document.getElementById("editSessionStartTimeInput").disabled = true;
-        document.getElementById("editSessionEndTimeInput").disabled = true;
-        document.getElementById("savebtn3").disabled = true;
-        alert(data);
-        location.reload();
-      } else {
-        alert(data);
-        location.reload();
       }
-      // Resets Form
+
+      // Reset Form
       document.getElementById(id).reset();
     },
     error: function () {
@@ -216,6 +146,27 @@ function formHandler(id) {
       document.getElementById(id).querySelector('button[type="submit"]').disabled = false;
     },
   });
+}
+
+/* Update Form Values Function */
+function setFormValues(id, values) {
+  formInputs = document.getElementById(id).querySelectorAll('input, select, textarea');
+  for (var i = 0; i < formInputs.length; i++) {
+    if (formInputs[i].type == "checkbox") {
+      formInputs[i].checked = values[i];
+    } else {
+      formInputs[i].value = values[i];
+    }
+  }
+}
+
+/* Enable/Disable Form Function 
+   State = True/False (Sets the disabled attribute true/false) */
+function formDisable(id, state) {
+  var formElements =  document.getElementById(id).elements;
+  for (var i = 0; i < formElements.length; i++) {
+    formElements[i].disabled = state;
+  }
 }
 
 /* Date Function */

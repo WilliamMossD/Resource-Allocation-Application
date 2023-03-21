@@ -539,6 +539,7 @@
                                                     </div>
                                                 </form>
                                                 <form id="updateUser" class="row g-3 pt-2 pb-2">
+                                                    <input type="hidden" id="editUserSelect" name="editUserSelect" value="">
                                                     <div class="col-6 mb-2">
                                                         <label for="editFirstNameInput" class="form-label">First
                                                             Name</label>
@@ -564,7 +565,6 @@
                                                         <label class="form-check-label" for="editAdminCheck">Make User
                                                             Admin</label>
                                                     </div>
-                                                    <input type="hidden" id="editUserSelect" name="editUserSelect" value="">
                                                     <button type="submit" id="savebtn" class="btn btn-primary" disabled>Save
                                                         Changes</button>
                                                 </form>
@@ -656,6 +656,7 @@
                                                     </div>
                                                 </form>
                                                 <form id="updateModule" class="row g-3 pt-2 pb-2">
+                                                    <input type="hidden" id="editModuleSelect" name="editModuleSelect" value="">
                                                     <div class="col-6 mb-2">
                                                         <label for="editModuleNameInput" class="form-label">Module
                                                             Name</label>
@@ -681,7 +682,6 @@
                                                         <input type="url" class="form-control custom-input"
                                                             id="editModuleLinkInput" name="editModuleLinkInput" required disabled>
                                                     </div>
-                                                    <input type="hidden" id="editModuleSelect" name="editModuleSelect" value="">
                                                     <button type="submit" id="savebtn2" class="btn btn-primary" disabled>Save
                                                         Changes</button>
                                                 </form>
@@ -851,6 +851,7 @@
                                                     </div>
                                                 </form>
                                                 <form id="updateSession" class="row g-3 pt-2 pb-2">
+                                                    <input type="hidden" id="editSessionSelect" name="editSessionSelect" value="">
                                                     <div class="col-12 mb-2">
                                                         <label for="editSessionModuleNameInput" class="form-label">Module
                                                             ID</label>
@@ -909,7 +910,6 @@
                                                             id="editSessionEndTimeInput" name="editSessionEndTimeInput" min="08:30" max="21:00" step="1800"
                                                             required disabled>
                                                     </div>
-                                                    <input type="hidden" id="editSessionSelect" name="editSessionSelect" value="">
                                                     <button type="submit" class="btn btn-primary" id="savebtn3" >Save Changes</button>
                                                 </form>
                                             </div>
