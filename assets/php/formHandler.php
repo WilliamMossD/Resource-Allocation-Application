@@ -264,7 +264,7 @@
 
                 // Validate Inputs
                 if (validateInput($editModuleSelect, inputType::Number) && $editModuleSelect > 0) {
-                    // Validates that the user entered refrences an actual user in the database
+                    // Validates that the user entered refrences an actual module in the database
                     $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
                     $stmt->bind_param('i', $editModuleSelect);
 
@@ -399,10 +399,6 @@
                     exit();
                 }
 
-            // editModule Form
-            case "editModule":
-                break;
-
             // deleteModule Form -  [deleteModuleSelect] / [Text] / [50]
             case "deleteModule":
 
@@ -438,7 +434,7 @@
                     }
 
                 } else {
-                    echo "Invalid Module ID";
+                    echo "Invalid Module ID Format";
                     exit();
                 }
 
@@ -559,7 +555,7 @@
                                 exit();
                             }
                         } else {
-                            echo "Invalid Date";
+                            echo "Invalid Session Type Selected";
                             exit();
                         }
                     } else {
@@ -571,6 +567,166 @@
                     exit();
                 }
 
+            // Select Session Form
+            case "selectSession":
+                $sessionSelect = $_POST['sessionSelect'];
+    
+                if (validateInput($sessionSelect, inputType::Number) && $sessionSelect > 0) {
+                    // Validates that the user entered refrences an actual user in the database
+                    $stmt = $con->prepare('SELECT * FROM module_sessions WHERE module_session_num = ?');
+                    $stmt->bind_param('i', $sessionSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    
+                    if ($result->num_rows == 0) {
+                        echo "Invalid Session ID";
+                        exit();
+                    } 
+
+                    echo json_encode($result->fetch_array(MYSQLI_ASSOC));
+                    exit();
+
+                } else {
+                    echo "Invalid Session ID Format";
+                    exit();
+                }
+
+            // Update Session Form
+            case "updateSession":
+
+                // Sanitize Inputs
+                $editSessionSelect = $_POST['editSessionSelect'];
+                $editSessionModuleNameInput = $_POST['editSessionModuleNameInput'];
+                $editSessionLocInput = sanitizeInput($_POST['editSessionLocInput']);
+                $editSessionTypeSelect = sanitizeInput($_POST['editSessionTypeSelect']);
+                $editSessionTAInput = $_POST['editSessionTAInput'];
+                $editSessionDaySelect = sanitizeInput($_POST['editSessionDaySelect']);
+                $editSessionStartTimeInput = $_POST['editSessionStartTimeInput'];
+                $editSessionEndTimeInput = $_POST['editSessionEndTimeInput'];
+
+                if (validateInput($editSessionSelect, inputType::Number) && $editSessionSelect > 0) {
+                    
+                    // Validates that the module_num entered refrences an actual module in the database
+                    $stmt = $con->prepare('SELECT module_session_num FROM module_sessions WHERE module_session_num = ?');
+                    $stmt->bind_param('i', $editSessionSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $stmt->store_result();
+                    
+                    if ($stmt->num_rows == 0) {
+                        echo "Invalid Session Number";
+                        exit();
+                    } 
+
+                    if (validateInput($editSessionModuleNameInput, inputType::Number) && $editSessionModuleNameInput > 0) {
+                        
+                        // Validates that the module_num entered refrences an actual module in the database
+                        $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
+                        $stmt->bind_param('i', $editSessionModuleNameInput);
+
+                        // Executes the statement and stores the result
+                        $stmt->execute();
+                        $stmt->store_result();
+                        
+                        if ($stmt->num_rows == 0) {
+                            echo "Invalid Module Number";
+                            exit();
+                        } 
+
+
+                        if (validateInput($editSessionLocInput, inputType::Name)) {
+                            if (in_array($editSessionTypeSelect, ["Lab", "Teaching", "Other"])) {
+                                if (validateInput($editSessionTAInput, inputType::Number) && (0 < $editSessionTAInput) && ($editSessionTAInput <= 5)) {
+                                    if (in_array($editSessionDaySelect, ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])) {
+                                        if (validateInput($editSessionStartTimeInput, inputType::HHMM) && (strtotime("08:00") <= strtotime($editSessionStartTimeInput)) && (strtotime($editSessionStartTimeInput) <= strtotime("20:30"))) {
+                                            if (validateInput($editSessionEndTimeInput, inputType::HHMM) && (strtotime("08:30") <= strtotime($editSessionEndTimeInput)) && (strtotime($editSessionEndTimeInput) <= strtotime("21:00")) && (strtotime($editSessionEndTimeInput) > strtotime($editSessionStartTimeInput))) {
+                                                
+                                                // Prepare MySQL Statment
+                                                $stmt = $con->prepare('UPDATE module_sessions SET module_num=?, num_of_ta=?, session_day=?, session_start=?, session_end=?, session_type=?, session_location=? WHERE module_session_num=?');
+                                                $stmt->bind_param('issssssi', $editSessionModuleNameInput, $editSessionTAInput, $editSessionDaySelect, $editSessionStartTimeInput, $editSessionEndTimeInput, $editSessionTypeSelect, $editSessionLocInput, $editSessionSelect);
+
+                                                // Execute MySQL Statement
+                                                if (!$stmt->execute()) {
+                                                    echo "Database Update Failed";
+                                                    exit();
+                                                } else {
+                                                    echo "Session Successfully Edited";
+                                                    exit();
+                                                }
+                                            } else {
+                                                echo "Invalid End Time Format or Range";
+                                                exit();
+                                            }
+                                        } else {
+                                            echo "Invalid Start Time Format or Range";
+                                            exit();
+                                        }
+                                    } else {
+                                        echo "Invalid Date";
+                                        exit();
+                                    }
+                                } else {
+                                    echo "Invalid TA Number";
+                                    exit();
+                                }
+                            } else {
+                                echo "Invalid Session Type Selected";
+                                exit();
+                            }
+                        } else {
+                            echo "Invalid Location Format";
+                            exit();
+                        }
+                    } else {
+                        echo "Invalid Module ID Format";
+                        exit();
+                    }
+                } else {
+                    echo "Invalid Session ID Format";
+                    exit();
+                }
+
+            // Delete Session Form
+            case "deleteSession":
+
+                $deleteSessionSelect = $_POST['deleteSessionSelect'];
+
+                // Validate Input
+                if (validateInput($deleteSessionSelect, inputType::Number) && $deleteSessionSelect > 0) {
+
+                    // Validates that the module_num entered refrences an actual module in the database
+                    $stmt = $con->prepare('SELECT module_session_num FROM module_sessions WHERE module_session_num = ?');
+                    $stmt->bind_param('i', $deleteSessionSelect);
+
+                    // Executes the statement and stores the result
+                    $stmt->execute();
+                    $stmt->store_result();
+                    
+                    if ($stmt->num_rows == 0) {
+                        echo "Invalid Session ID";
+                        exit();
+                    } 
+
+                    // Prepare MySQL Statement
+                    $stmt = $con->prepare('DELETE FROM module_sessions WHERE module_session_num=?');
+                    $stmt->bind_param('i', $deleteSessionSelect);
+
+                    // Execute MySQL Statement
+                    if (!$stmt->execute()) {
+                        echo "Database Deletion Failed";
+                        exit();
+                    } else {
+                        echo "Session Successfully Deleted";
+                        exit();
+                    }
+
+                } else {
+                    echo "Invalid Session ID Format";
+                    exit();
+                }
             // Unknown Form ID
             default:
                 echo "Unknown Form Submitted";

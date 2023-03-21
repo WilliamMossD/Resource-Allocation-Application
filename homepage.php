@@ -761,8 +761,7 @@
                                                                 <th scope="col">Session Type</th>
                                                                 <th scope="col">Location</th>
                                                                 <th scope="col">Num of TA</th>
-                                                                <th scope="col">Actions</th>
-                                                                </tr>
+                                                            </tr>
                                                             </thead>
                                                             <tbody>
                                                             </tbody>
@@ -856,20 +855,20 @@
                                                         <label for="editSessionModuleNameInput" class="form-label">Module
                                                             ID</label>
                                                         <input class="form-control custom-input" list="moduleList"
-                                                            id="editSessionModuleNameInput" name="editSessionModuleNameInput" required>
+                                                            id="editSessionModuleNameInput" name="editSessionModuleNameInput" required disabled>
                                                     </div>
                                                     <div class="col-5 mb-2">
-                                                        <label for="editModuleLocInput" class="form-label">Session
+                                                        <label for="editSessionLocInput" class="form-label">Session
                                                             Location</label>
                                                         <input type="text" class="form-control custom-input"
-                                                            id="editModuleLocInput" name="editModuleLocInput" required>
+                                                            id="editSessionLocInput" name="editSessionLocInput" required disabled>
                                                     </div>
                                                     <div class="col-5 mb-2">
                                                         <label for="editSessionTypeSelect" class="form-label">Type of
                                                             Session</label>
                                                         <select class="form-select custom-input"
                                                             aria-label="Select Session Type" id="editSessionTypeSelect" name="editSessionTypeSelect"
-                                                            required>
+                                                            required disabled>
                                                             <option value="">Select Session Type</option>
                                                             <option value="Lab">Lab</option>
                                                             <option value="Teaching">Teaching</option>
@@ -880,14 +879,14 @@
                                                         <label for="editSessionTAInput" class="form-label">TA
                                                             Allocation</label>
                                                         <input type="number" class="form-control custom-input"
-                                                            id="editSessionTAInput" name="editSessionTAInput" min="1" required>
+                                                            id="editSessionTAInput" name="editSessionTAInput" min="1" required disabled>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="editSessionDaySelect" class="form-label">Day of
                                                             Session</label>
                                                         <select class="form-select custom-input"
                                                             aria-label="Select Session Day" id="editSessionDaySelect" name="editSessionDaySelect"
-                                                            required>
+                                                            required disabled>
                                                             <option value="">Select Day of Week</option>
                                                             <option value="Monday">Monday</option>
                                                             <option value="Tuesday">Tuesday</option>
@@ -901,17 +900,17 @@
                                                             Time</label>
                                                         <input type="time" class="form-control custom-input"
                                                             id="editSessionStartTimeInput" name="editSessionStartTimeInput" min="08:00" max="20:30"
-                                                            step="1800" required>
+                                                            step="1800" required disabled>
                                                     </div>
                                                     <div class="col-3 mb-2">
                                                         <label for="editSessionEndTimeInput" class="form-label">End
                                                             Time</label>
                                                         <input type="time" class="form-control custom-input"
                                                             id="editSessionEndTimeInput" name="editSessionEndTimeInput" min="08:30" max="21:00" step="1800"
-                                                            required>
+                                                            required disabled>
                                                     </div>
                                                     <input type="hidden" id="editSessionSelect" name="editSessionSelect" value="">
-                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                    <button type="submit" class="btn btn-primary" id="savebtn3" >Save Changes</button>
                                                 </form>
                                             </div>
                                         </div>
