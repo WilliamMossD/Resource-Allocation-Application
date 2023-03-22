@@ -8,42 +8,6 @@
 // Start PHP Session 
 session_start();
 
-try {
-
-    // Database Connection Info
-    $HOST = 'localhost';
-    $USER = 'mossfree_admin';
-    $PASSWORD = 'Btf7@w&7Dhi1';
-    $DATABASE = 'mossfree_tutordatabase';
-
-    try {
-        $con = mysqli_connect($HOST, $USER, $PASSWORD, $DATABASE);
-    } catch (Exception $e) {
-        // Redirect back to root
-        header('Location: index.html');
-        exit();
-    }
-
-    if (mysqli_connect_errno()) {
-        // Redirect back to root
-        header('Location: index.html');
-        exit();
-    }
-
-    // Get rows from module table
-    $stmt = $con->prepare('SELECT * from modules ORDER BY module_num ASC');
-    $stmt->execute();
-    $modulerows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
-    // Get rows from teaching assistants table 
-    $stmt = $con->prepare('SELECT ta_num, fname, lname from teaching_assistants ORDER BY ta_num ASC');
-    $stmt->execute();
-    $tarows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-} catch (Exception $e) {
-    header('Location: index.html');
-    exit();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -253,22 +217,8 @@ try {
                             <h1 class="display-6 ps-3">Modules</h1>
                             <hr>
                             <div class="container p-3">
-                                <div class="row">
-                                    <?php foreach ($modulerows as $row) : ?>
-                                        <div class="col-4">
-                                            <div class="card bg-primary">
-                                                <div class="card-header">
-                                                    <h6 class="mt-2 mb-2"><?= $row['module_name'] ?> (ID: <?= $row['module_num'] ?>)</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <h6 class="card-subtitle mb-2"><i class="fa-solid fa-chalkboard-user"></i> :
-                                                        <?= $row['module_convenor'] ?></h6>
-                                                    <p class="card-text"><?= $row['module_description'] ?></p>
-                                                    <a href="<?= $row['link'] ?>" class="card-link link-info" target="_blank">Canvas Page</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
+                                <div class="row" id="moduleCards">
+                                    <?php include('assets/php/getModuleCards.php') ?>
                                 </div>
                             </div>
                         </div>
@@ -785,7 +735,7 @@ try {
                                                             Session</label>
                                                         <select class="form-select custom-input" aria-label="Select Session Day" id="editSessionDaySelect" name="editSessionDaySelect" required disabled>
                                                             <option value="">Select Day of Week</option>
-                                                            <option value="Monday">Monday</option>
+                                                                <option value="Monday">Monday</option>
                                                             <option value="Tuesday">Tuesday</option>
                                                             <option value="Wednesday">Wednesday</option>
                                                             <option value="Thursday">Thursday</option>
@@ -837,15 +787,11 @@ try {
         </div>
         <!-- User Datalist -->
         <datalist id="userList">
-            <?php foreach ($tarows as $row) : ?>
-                <option value="<?= $row['ta_num'] ?>"><?= $row['fname'] ?> <?= $row['lname'] ?></option>
-            <?php endforeach; ?>
+            <?php include('assets/php/getUserList.php') ?>
         </datalist>
         <!-- Module Datalist -->
         <datalist id="moduleList">
-            <?php foreach ($modulerows as $row) : ?>
-                <option value="<?= $row['module_num'] ?>"><?= $row['module_name'] ?></option>
-            <?php endforeach; ?>
+            <?php include('assets/php/getModuleList.php') ?>
         </datalist>
     </body>
 </html>

@@ -29,9 +29,11 @@ document.getElementById("clearAval").addEventListener("click", function () {
     .querySelectorAll("#avaltable td")
     .forEach((e) => e.classList.remove("active"));
 });
+
 document.getElementById("resetAval").addEventListener("click", function () {
   // Resets table back to last saved state
 });
+
 document.getElementById("saveAval").addEventListener("click", function () {
   // Turn table data into a 2D array
   // POST data to database
@@ -135,6 +137,11 @@ function formHandler(id) {
 
       // Reset Form
       document.getElementById(id).reset();
+
+      // Updates lists and module HTML
+      getModuleCards();
+      getUserList();
+      getModuleList();
     },
     error: function () {
       alert("Unknown Error Occured");
@@ -170,6 +177,33 @@ function formDisable(id, state) {
   for (var i = 0; i < formElements.length; i++) {
     formElements[i].disabled = state;
   }
+}
+
+/* Updates user list data list */
+function getUserList() {
+  // Send GET request
+  $.get("assets/php/getUserList.php", function (data) {
+    // Update HTML
+    document.getElementById("userList").innerHTML = data;
+  });
+}
+
+/* Updates module list data list */
+function getModuleList() {
+  // Send GET request
+  $.get("assets/php/getModuleList.php", function (data) {
+    // Update HTML
+    document.getElementById("moduleList").innerHTML = data;
+  });
+}
+
+/* Updates module cards tab */
+function getModuleCards() {
+  // Send GET request
+  $.get("assets/php/getModuleCards.php", function (data) {
+    // Update HTML
+    document.getElementById("moduleCards").innerHTML = data;
+  });
 }
 
 /* Date Function */
