@@ -73,6 +73,66 @@
         }
     }
 
+    // Gets user data by ID - Does not return password column
+    function getUserData($id, $conn) {
+        $stmt = $conn->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE ta_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result;
+    }
+
+    // Gets module data by ID
+    function getModuleData($id, $conn) {
+        $stmt = $conn->prepare('SELECT * FROM modules WHERE module_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result;
+    }
+
+    // Gets session data by ID
+    function getSessionData($id, $conn) {
+        $stmt = $conn->prepare('SELECT module_session_num, module_num, session_location, session_type, num_of_ta, session_day, session_start, session_end FROM module_sessions WHERE module_session_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result;
+    }
+
+    // Checks if user exists
+    function userExists($id, $conn) {
+        if (getUserData($id, $conn)->num_rows == 0) {
+            return false;
+        } 
+        return true;
+    }
+
+    // Checks if moduleExists
+    function moduleExists($id, $conn) {
+        if (getModuleData($id, $conn)->num_rows == 0) {
+            return false;
+        } 
+        return true;
+    }
+
+    // Checks if session exists
+    function sessionExists($id, $conn) {
+        if (getSessionData($id, $conn)->num_rows == 0) {
+            return false;
+        } 
+        return true;
+    }
+
     // Database Connection Info
     $HOST = 'localhost';
     $USER = 'mossfree_admin';
@@ -146,19 +206,16 @@
                 $userSelect = $_POST['userSelect'];
 
                 if (validateInput($userSelect, inputType::Number) && $userSelect > 0) {
-                    // Validates that the user entered refrences an actual user in the database
-                    $stmt = $con->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE ta_num = ?');
-                    $stmt->bind_param('i', $userSelect);
-
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $result = $stmt->get_result();
+                    // Gets user data
+                    $result = getUserData($userSelect, $con);
                     
+                    // Checks that user data is not empty
                     if ($result->num_rows == 0) {
                         echo "Invalid User ID";
                         exit();
                     } 
 
+                    // Returns row in a JSON format
                     echo json_encode($result->fetch_array(MYSQLI_ASSOC));
                     exit();
 
@@ -177,18 +234,14 @@
 
                 // Validate Inputs
                 if (validateInput($editUserSelect, inputType::Number) && $editUserSelect > 0) {
-                    // Validates that the user entered refrences an actual user in the database
-                    $stmt = $con->prepare('SELECT ta_num FROM teaching_assistants WHERE ta_num = ?');
-                    $stmt->bind_param('i', $editUserSelect);
 
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
+                    // Checks user exists
+                    if (!userExists($editUserSelect, $con)) {
                         echo "Invalid User ID";
                         exit();
                     } 
+
+                    // Validates that the user entered refrences an actual user in the database
                     if (validateInput($editFirstNameInput, inputType::Name)){
                         if (validateInput($editLastNameInput, inputType::Name)) {
                             if (validateInput($editEmailInput, inputType::Email)) {
@@ -230,31 +283,31 @@
             // selectModule Case
             case "selectModule":
 
-                    $moduleSelect = $_POST['moduleSelect'];
-    
-                    if (validateInput($moduleSelect, inputType::Number) && $moduleSelect > 0) {
-                        // Validates that the user entered refrences an actual user in the database
-                        $stmt = $con->prepare('SELECT * FROM modules WHERE module_num = ?');
-                        $stmt->bind_param('i', $moduleSelect);
-    
-                        // Executes the statement and stores the result
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        
-                        if ($result->num_rows == 0) {
-                            echo "Invalid Module ID";
-                            exit();
-                        } 
-    
-                        echo json_encode($result->fetch_array(MYSQLI_ASSOC));
+                $moduleSelect = $_POST['moduleSelect'];
+
+                if (validateInput($moduleSelect, inputType::Number) && $moduleSelect > 0) {
+
+                    // Gets module data
+                    $result = getModuleData($moduleSelect, $con);
+                    
+                    // Checks that module data is not empty
+                    if ($result->num_rows == 0) {
+                        echo "Invalid Module ID";
                         exit();
-    
-                    } else {
-                        echo "Invalid Module ID Format";
-                        exit();
-                    }
+                    } 
+
+                    // Returns row in a JSON format
+                    echo json_encode($result->fetch_array(MYSQLI_ASSOC));
+                    exit();
+
+                } else {
+                    echo "Invalid Module ID Format";
+                    exit();
+                }
+
             // updateModule Form
             case "updateModule":
+
                 // Sanitize Inputs
                 $editModuleNameInput = sanitizeInput($_POST['editModuleNameInput']);
                 $editModuleConInput = sanitizeInput($_POST['editModuleConInput']);
@@ -264,19 +317,13 @@
 
                 // Validate Inputs
                 if (validateInput($editModuleSelect, inputType::Number) && $editModuleSelect > 0) {
-                    // Validates that the user entered refrences an actual module in the database
-                    $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
-                    $stmt->bind_param('i', $editModuleSelect);
 
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
+                    // Checks that module exists
+                    if (!moduleExists($editModuleSelect, $con)) {
                         echo "Invalid Module ID";
                         exit();
                     } 
-                    // Validate Inputs
+
                     if (validateInput($editModuleNameInput, inputType::Name)) {
                         if (validateInput($editModuleConInput, inputType::Name)) {
                             if (validateInput($editModuleDesInput, inputType::Text)) {
@@ -315,6 +362,7 @@
                     echo "Invalid Module ID Format";
                     exit();
                 }
+
             // deleteUser Form - [deleteUserSelect] / [Num]
             case "deleteUser":
 
@@ -323,15 +371,8 @@
                 // Validate Input
                 if (validateInput($deleteUserSelect, inputType::Number) && $deleteUserSelect > 0) {
 
-                    // Validates that the user entered refrences an actual user in the database
-                    $stmt = $con->prepare('SELECT ta_num FROM teaching_assistants WHERE ta_num = ?');
-                    $stmt->bind_param('i', $deleteUserSelect);
-
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
+                    // Checks user exists
+                    if (!userExists($deleteUserSelect, $con)) {
                         echo "Invalid User ID";
                         exit();
                     } 
@@ -407,15 +448,8 @@
                 // Validate Input
                 if (validateInput($deleteModuleSelect, inputType::Number) && $deleteModuleSelect > 0) {
 
-                    // Validates that the module_num entered refrences an actual module in the database
-                    $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
-                    $stmt->bind_param('i', $deleteModuleSelect);
-
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
+                    // Checks that module exists
+                    if (!moduleExists($deleteModuleSelect, $con)) {
                         echo "Invalid Module ID";
                         exit();
                     } 
@@ -572,14 +606,11 @@
                 $sessionSelect = $_POST['sessionSelect'];
     
                 if (validateInput($sessionSelect, inputType::Number) && $sessionSelect > 0) {
-                    // Validates that the user entered refrences an actual user in the database
-                    $stmt = $con->prepare('SELECT module_session_num, module_num, session_location, session_type, num_of_ta, session_day, session_start, session_end FROM module_sessions WHERE module_session_num = ?');
-                    $stmt->bind_param('i', $sessionSelect);
 
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $result = $stmt->get_result();
+                    // Gets session data
+                    $result = getSessionData($sessionSelect, $con);
                     
+                    // Checks that session data is not empty
                     if ($result->num_rows == 0) {
                         echo "Invalid Session ID";
                         exit();
@@ -608,16 +639,9 @@
 
                 if (validateInput($editSessionSelect, inputType::Number) && $editSessionSelect > 0) {
                     
-                    // Validates that the module_num entered refrences an actual module in the database
-                    $stmt = $con->prepare('SELECT module_session_num FROM module_sessions WHERE module_session_num = ?');
-                    $stmt->bind_param('i', $editSessionSelect);
-
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
-                        echo "Invalid Session Number";
+                    // Checks session exisits
+                    if (!sessionExists($editSessionSelect, $con)) {
+                        echo "Invalid Session ID";
                         exit();
                     } 
 
@@ -697,15 +721,8 @@
                 // Validate Input
                 if (validateInput($deleteSessionSelect, inputType::Number) && $deleteSessionSelect > 0) {
 
-                    // Validates that the module_num entered refrences an actual module in the database
-                    $stmt = $con->prepare('SELECT module_session_num FROM module_sessions WHERE module_session_num = ?');
-                    $stmt->bind_param('i', $deleteSessionSelect);
-
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
+                    // Checks session exisits
+                    if (!sessionExists($deleteSessionSelect, $con)) {
                         echo "Invalid Session ID";
                         exit();
                     } 
@@ -734,7 +751,5 @@
         }
     } catch (Exception $e) {
         echo "Unknown Error";
-        echo $e;
     }
-
 ?>
