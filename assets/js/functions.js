@@ -5,7 +5,7 @@
 
 // Add event listener to all forms
 for (var i = 0; i < document.forms.length; i++) {
-    document.forms[i].addEventListener("submit", (event) => {
+  document.forms[i].addEventListener("submit", (event) => {
     event.preventDefault();
     formHandler(event.target.id);
   });
@@ -47,9 +47,9 @@ function load() {
 /* Form Handler */
 function formHandler(id) {
   var actionUrl = "assets/php/formHandler.php";
-  if (document.getElementById(id).tagName == 'FORM') {
+  if (document.getElementById(id).tagName == "FORM") {
     var formData = $("#" + id).serializeArray(); // Convert form to array
-    formData.unshift({name: "formID", value: id});
+    formData.unshift({ name: "formID", value: id });
   } else {
     return;
   }
@@ -58,22 +58,23 @@ function formHandler(id) {
     type: "POST",
     url: actionUrl,
     data: $.param(formData),
-    beforeSend: function() {
+    beforeSend: function () {
       // Disable button
-      document.getElementById(id).querySelector('button[type="submit"]').disabled = true;
+      document
+        .getElementById(id)
+        .querySelector('button[type="submit"]').disabled = true;
     },
     success: function (data) {
       // Convert JSON data into an array
       try {
         var array = JSON.parse(data);
-        if (id == "viewSession") { 
-
+        if (id == "viewSession") {
           // Get table by ID
           var table = document.getElementById("sessionsTable");
 
           // Remove existing rows
           for (var i = table.rows.length - 1; i > 0; i--) {
-              table.deleteRow(i);
+            table.deleteRow(i);
           }
 
           // Add new rows and populate
@@ -84,7 +85,7 @@ function formHandler(id) {
             var cell2 = newRow.insertCell();
             cell2.innerHTML = array[i][2];
             var cell3 = newRow.insertCell();
-            cell3.innerHTML = array[i][3];  
+            cell3.innerHTML = array[i][3];
             var cell4 = newRow.insertCell();
             cell4.innerHTML = array[i][4];
             var cell5 = newRow.insertCell();
@@ -97,9 +98,9 @@ function formHandler(id) {
 
           // Display Table
           table.style.display = "table";
-
-        } else if (["selectUser", "selectModule", "selectSession"].includes(id)) {
-
+        } else if (
+          ["selectUser", "selectModule", "selectSession"].includes(id)
+        ) {
           var form;
 
           switch (id) {
@@ -118,17 +119,15 @@ function formHandler(id) {
           setFormValues(form, Object.values(array));
           // Enable Inputs
           formDisable(form, false);
-          
-
-        } else if (["updateUser", "updateModule", "updateSession"].includes(id)) {
-
+        } else if (
+          ["updateUser", "updateModule", "updateSession"].includes(id)
+        ) {
           // Disable form inputs
           formDisable(id, true);
 
           // Alert Data
           alert(data);
         }
-  
       } catch (e) {
         // Alert Data
         alert(data);
@@ -141,16 +140,20 @@ function formHandler(id) {
       alert("Unknown Error Occured");
     },
 
-    complete: function() {
+    complete: function () {
       // Enable button
-      document.getElementById(id).querySelector('button[type="submit"]').disabled = false;
+      document
+        .getElementById(id)
+        .querySelector('button[type="submit"]').disabled = false;
     },
   });
 }
 
 /* Update Form Values Function */
 function setFormValues(id, values) {
-  formInputs = document.getElementById(id).querySelectorAll('input, select, textarea');
+  formInputs = document
+    .getElementById(id)
+    .querySelectorAll("input, select, textarea");
   for (var i = 0; i < formInputs.length; i++) {
     if (formInputs[i].type == "checkbox") {
       formInputs[i].checked = values[i];
@@ -163,7 +166,7 @@ function setFormValues(id, values) {
 /* Enable/Disable Form Function 
    State = True/False (Sets the disabled attribute true/false) */
 function formDisable(id, state) {
-  var formElements =  document.getElementById(id).elements;
+  var formElements = document.getElementById(id).elements;
   for (var i = 0; i < formElements.length; i++) {
     formElements[i].disabled = state;
   }
