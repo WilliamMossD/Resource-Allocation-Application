@@ -39,7 +39,6 @@
         }
 
     } catch (Exception $e) {
-        header('Location: index.html');
         exit();
     }
 

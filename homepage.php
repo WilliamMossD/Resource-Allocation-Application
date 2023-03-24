@@ -436,10 +436,11 @@ session_start();
                                             <div class="container">
                                                 <form id="selectUser" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="userSelect" class="form-label">Enter User's
-                                                            ID</label>
+                                                        <label for="userSelect" class="form-label">Select User</label>
                                                         <div class="input-group mb-3">
-                                                            <input class="form-control custom-input" list="userList" id="userSelect" name="userSelect" required>
+                                                            <select type="user" class="form-control custom-input" id="userSelect" name="userSelect" required>
+                                                                <?php include('assets/php/getUserList.php') ?>
+                                                            </select>
                                                             <button type="submit" class="btn btn-primary ms-2">Select</button>
                                                         </div>
                                                     </div>
@@ -475,9 +476,10 @@ session_start();
                                             <div class="container">
                                                 <form id="deleteUser" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="deleteUserSelect" class="form-label">Enter User's
-                                                            ID</label>
-                                                        <input class="form-control custom-input" list="userList" id="deleteUserSelect" name="deleteUserSelect" required>
+                                                        <label for="deleteUserSelect" class="form-label">Select User</label>
+                                                        <select type="user" class="form-control custom-input" id="deleteUserSelect" name="deleteUserSelect" required>
+                                                            <?php include('assets/php/getUserList.php') ?>
+                                                        </select>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Delete User</button>
                                                 </form>
@@ -532,10 +534,11 @@ session_start();
                                             <div class="container">
                                                 <form id="selectModule" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="moduleSelect" class="form-label">Enter Module
-                                                            ID</label>
+                                                        <label for="moduleSelect" class="form-label">Select Module</label>
                                                         <div class="input-group mb-3">
-                                                            <input class="form-control custom-input" list="moduleList" id="moduleSelect" name="moduleSelect" required>
+                                                            <select type="module" class="form-control custom-input" id="moduleSelect" name="moduleSelect" required>
+                                                                <?php include('assets/php/getModuleList.php') ?>
+                                                            </select>
                                                             <button type="submit" class="btn btn-primary ms-2">Select</button>
                                                         </div>
                                                     </div>
@@ -571,9 +574,10 @@ session_start();
                                             <div class="container">
                                                 <form id="deleteModule" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="deleteModuleSelect" class="form-label">Enter Module
-                                                            ID</label>
-                                                        <input class="form-control custom-input" list="moduleList" id="deleteModuleSelect" name="deleteModuleSelect" required>
+                                                        <label for="deleteModuleSelect" class="form-label">Select Module</label>
+                                                        <select type="module" class="form-control custom-input" id="deleteModuleSelect" name="deleteModuleSelect" required>
+                                                            <?php include('assets/php/getModuleList.php') ?>
+                                                        </select>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Delete Module</button>
                                                 </form>
@@ -607,11 +611,11 @@ session_start();
                                                     <div class="col-12">
                                                         <form id="viewSession" class="row g-3 pt-2 pb-2">
                                                             <div class="col-12 mb-2">
-                                                                <label for="sessionsModuleSelect" class="form-label">Enter
-                                                                    Module
-                                                                    ID</label>
+                                                                <label for="sessionsModuleSelect" class="form-label">Select Module</label>
                                                                 <div class="input-group mb-3">
-                                                                    <input class="form-control custom-input" list="moduleList" id="sessionsModuleSelect" name="sessionsModuleSelect" required>
+                                                                    <select type="module" class="form-control custom-input" id="sessionsModuleSelect" name="sessionsModuleSelect" required>
+                                                                        <?php include('assets/php/getModuleList.php') ?>
+                                                                    </select>
                                                                     <button class="btn ms-3 btn-primary" type="submit">View Sessions</button>
                                                                 </div>
                                                             </div>
@@ -641,9 +645,10 @@ session_start();
                                             <div class="container">
                                                 <form id="addSession" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="sessionModuleNameInput" class="form-label">Module
-                                                            ID</label>
-                                                        <input class="form-control custom-input" list="moduleList" id="sessionModuleNameInput" name="sessionModuleNameInput" required>
+                                                        <label for="sessionModuleNameInput" class="form-label">Module Name</label>
+                                                        <select type="module" class="form-control custom-input" id="sessionModuleNameInput" name="sessionModuleNameInput" required>
+                                                            <?php include('assets/php/getModuleList.php') ?>
+                                                        </select>
                                                     </div>
                                                     <div class="col-5 mb-2">
                                                         <label for="moduleLocInput" class="form-label">Session
@@ -695,10 +700,11 @@ session_start();
                                             <div class="container">
                                                 <form id="selectSession" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="sessionSelect" class="form-label">Enter Session
-                                                            ID</label>
+                                                        <label for="sessionSelect" class="form-label">Select Session</label>
                                                         <div class="input-group mb-3">
-                                                            <input class="form-control custom-input" id="sessionSelect" name="sessionSelect" required>
+                                                            <select type="session" class="form-control custom-input" id="sessionSelect" name="sessionSelect" required>
+                                                            <?php include('assets/php/getSessionList.php') ?>
+                                                            </select>
                                                             <button type="submit" class="btn btn-primary ms-2">Select</button>
                                                         </div>
                                                     </div>
@@ -706,9 +712,10 @@ session_start();
                                                 <form id="updateSession" class="row g-3 pt-2 pb-2">
                                                     <input type="hidden" id="editSessionSelect" name="editSessionSelect" value="">
                                                     <div class="col-12 mb-2">
-                                                        <label for="editSessionModuleNameInput" class="form-label">Module
-                                                            ID</label>
-                                                        <input class="form-control custom-input" list="moduleList" id="editSessionModuleNameInput" name="editSessionModuleNameInput" required disabled>
+                                                        <label for="editSessionModuleNameInput" class="form-label">Module Name</label>
+                                                        <select type="module" class="form-control custom-input" id="editSessionModuleNameInput" name="editSessionModuleNameInput" required disabled>           
+                                                            <?php include('assets/php/getModuleList.php') ?>
+                                                        </select>
                                                     </div>
                                                     <div class="col-5 mb-2">
                                                         <label for="editSessionLocInput" class="form-label">Session
@@ -760,9 +767,10 @@ session_start();
                                             <div class="container">
                                                 <form id="deleteSession" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
-                                                        <label for="deleteSessionSelect" class="form-label">Enter Session
-                                                            ID</label>
-                                                        <input class="form-control custom-input" id="deleteSessionSelect" name="deleteSessionSelect" required>
+                                                        <label for="deleteSessionSelect" class="form-label">Select Session</label>
+                                                        <select type="session" class="form-control custom-input" id="deleteSessionSelect" name="deleteSessionSelect" required>
+                                                            <?php include('assets/php/getSessionList.php') ?>
+                                                        </select>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Delete Session</button>
                                                 </form>
@@ -771,8 +779,46 @@ session_start();
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="pills-sessionallocation" role="tabpanel" aria-labelledby="pills-sessionallocation-tab" tabindex="0">
-                                    <div class="container">
+                                    <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="pills-viewallocation-tab" data-bs-toggle="pill" data-bs-target="#pills-viewallocation" type="button" role="tab" aria-controls="pills-viewallocation" aria-selected="false">View
+                                                Allocation</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-manualallocation-tab" data-bs-toggle="pill" data-bs-target="#pills-manualallocation" type="button" role="tab" aria-controls="pills-manualallocation" aria-selected="true">Manual
+                                                Allocation</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-autoallocation-tab" data-bs-toggle="pill" data-bs-target="#pills-autoallocation" type="button" role="tab" aria-controls="pills-autoallocation" aria-selected="true">Automatic
+                                                Allocation</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="pills-viewallocation" role="tabpanel" aria-labelledby="pills-viewallocation-tab" tabindex="0">
+                                            <div class="container">
+                                                <form id="viewSession" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="viewAllocSessionSelect" class="form-label">Select Session</label>
+                                                        <div class="input-group mb-3">
+                                                            <select type="session" class="form-control custom-input" id="viewAllocSessionSelect" name="viewAllocSessionSelect" required>
+                                                                <?php include('assets/php/getSessionList.php') ?>
+                                                            </select>
+                                                            <button class="btn ms-3 btn-primary" type="submit">View Allocation</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-manualallocation" role="tabpanel" aria-labelledby="pills-manualallocation-tab" tabindex="0">
+                                            <div class="container">
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-autoallocation" role="tabpanel" aria-labelledby="pills-autoallocation-tab" tabindex="0">
+                                            <div class="container">
 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -785,13 +831,5 @@ session_start();
                 </div>
             </div>
         </div>
-        <!-- User Datalist -->
-        <datalist id="userList">
-            <?php include('assets/php/getUserList.php') ?>
-        </datalist>
-        <!-- Module Datalist -->
-        <datalist id="moduleList">
-            <?php include('assets/php/getModuleList.php') ?>
-        </datalist>
     </body>
 </html>

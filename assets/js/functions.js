@@ -142,6 +142,7 @@ function formHandler(id) {
       getModuleCards();
       getUserList();
       getModuleList();
+      getSessionList();
     },
     error: function () {
       alert("Unknown Error Occured");
@@ -184,7 +185,12 @@ function getUserList() {
   // Send GET request
   $.get("assets/php/getUserList.php", function (data) {
     // Update HTML
-    document.getElementById("userList").innerHTML = data;
+    var selects = document.getElementsByTagName("select");
+    for (var i = 0; i < selects.length; i++) {
+      if (selects[i].getAttribute("type") == "user") {
+        selects[i].innerHTML = data;
+      }
+    }
   });
 }
 
@@ -193,7 +199,26 @@ function getModuleList() {
   // Send GET request
   $.get("assets/php/getModuleList.php", function (data) {
     // Update HTML
-    document.getElementById("moduleList").innerHTML = data;
+    var selects = document.getElementsByTagName("select");
+    for (var i = 0; i < selects.length; i++) {
+      if (selects[i].getAttribute("type") == "module") {
+        selects[i].innerHTML = data;
+      }
+    }
+  });
+}
+
+/* Updates module list data list */
+function getSessionList() {
+  // Send GET request
+  $.get("assets/php/getSessionList.php", function (data) {
+    // Update HTML
+    var selects = document.getElementsByTagName("select");
+    for (var i = 0; i < selects.length; i++) {
+      if (selects[i].getAttribute("type") == "session") {
+        selects[i].innerHTML = data;
+      }
+    }
   });
 }
 

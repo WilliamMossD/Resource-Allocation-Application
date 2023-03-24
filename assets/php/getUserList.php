@@ -35,11 +35,10 @@
         $tarows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         foreach ($tarows as $row) {
-            echo '<option value="'.$row['ta_num'] .'">'.$row['fname'].$row['lname'].'</option>';
+            echo '<option value="'.$row['ta_num'] .'">'.$row['fname'].' '.$row['lname'].'</option>';
         }
 
     } catch (Exception $e) {
-        header('Location: index.html');
         exit();
     }
 
