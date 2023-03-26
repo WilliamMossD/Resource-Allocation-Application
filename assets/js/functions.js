@@ -100,6 +100,62 @@ function formHandler(id) {
 
           // Display Table
           table.style.display = "table";
+        } else if (id == "viewAllocationBySession") {
+          // Get table by ID
+          var table = document.getElementById("allocationUserTable");
+
+          // Hide other table
+          document.getElementById("allocationSessionTable").style.display = "none";
+
+          // Remove existing rows
+          for (var i = table.rows.length - 1; i > 0; i--) {
+            table.deleteRow(i);
+          }
+
+          // Add new rows and populate
+          for (var i = 0; i < array.length; i++) {
+            var newRow = table.insertRow();
+            var cell1 = newRow.insertCell();
+            cell1.innerHTML = array[i][0];
+            var cell2 = newRow.insertCell();
+            cell2.innerHTML = array[i][1];
+            var cell3 = newRow.insertCell();
+            cell3.innerHTML = array[i][2];
+          }
+
+          // Display Table
+          table.style.display = "table";
+        } else if (id == "viewAllocationByUser") {
+          // Get table by ID
+          var table = document.getElementById("allocationSessionTable");
+
+          // Hide other table
+          document.getElementById("allocationUserTable").style.display = "none";
+
+          // Remove existing rows
+          for (var i = table.rows.length - 1; i > 0; i--) {
+            table.deleteRow(i);
+          }
+
+          // Add new rows and populate
+          for (var i = 0; i < array.length; i++) {
+            var newRow = table.insertRow();
+            var cell1 = newRow.insertCell();
+            cell1.innerHTML = array[i][0];
+            var cell2 = newRow.insertCell();
+            cell2.innerHTML = array[i][1];
+            var cell3 = newRow.insertCell();
+            cell3.innerHTML = array[i][2];
+            var cell4 = newRow.insertCell();
+            cell4.innerHTML = array[i][3];
+            var cell5 = newRow.insertCell();
+            cell5.innerHTML = array[i][4];
+            var cell6 = newRow.insertCell();
+            cell6.innerHTML = array[i][5];
+          }
+
+          // Display Table
+          table.style.display = "table";
         } else if (
           ["selectUser", "selectModule", "selectSession"].includes(id)
         ) {
@@ -121,16 +177,19 @@ function formHandler(id) {
           setFormValues(form, Object.values(array));
           // Enable Inputs
           formDisable(form, false);
-        } else if (
+        } 
+      } catch (e) {
+        if (
           ["updateUser", "updateModule", "updateSession"].includes(id)
         ) {
           // Disable form inputs
           formDisable(id, true);
-
-          // Alert Data
-          alert(data);
+        } else if (["viewAllocationByUser", "viewAllocationBySession"].includes(id)) {
+          document.getElementById("allocationSessionTable").style.display = "none";
+          document.getElementById("allocationUserTable").style.display = "none";
+        } else if ("viewSession" == id) {
+          document.getElementById("sessionsTable").style.display = "none";
         }
-      } catch (e) {
         // Alert Data
         alert(data);
       }

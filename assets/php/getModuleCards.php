@@ -38,7 +38,7 @@
             echo '<div class="col-4">';
                 echo '<div class="card bg-primary">';
                     echo '<div class="card-header">';
-                        echo '<h6 class="mt-2 mb-2">' . $row['module_name'] . '(ID:' . $row['module_num'] . ')</h6>';
+                        echo '<h6 class="mt-2 mb-2">' . $row['module_name'] . ' (ID: ' . $row['module_num'] . ')</h6>';
                     echo '</div>';
                     echo '<div class="card-body">';
                         echo '<h6 class="card-subtitle mb-2"><i class="fa-solid fa-chalkboard-user"></i> :'

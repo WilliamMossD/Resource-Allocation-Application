@@ -377,7 +377,7 @@
                     $stmt->execute();
                     $result = $stmt->get_result();
 
-                    if (!$result) {
+                    if ($result->num_rows == 0) {
                         echo "No Sessions Exist";
                         exit();
                     } else {
@@ -607,12 +607,44 @@
                     $stmt = $con->prepare('DELETE FROM module_sessions WHERE module_session_num=?');
                     $stmt->bind_param('i', $deleteSessionSelect);
 
+
+                } else {
+                    echo "Invalid Session ID Format";
+                    exit();
+                }
+            
+            // View Allocation by Session Form
+            case "viewAllocationBySession":
+
+                $viewAllocSessionSelect = $_POST['viewAllocSessionSelect'];
+
+                // Validate Input
+                if (validateInput($viewAllocSessionSelect, inputType::Number) && $viewAllocSessionSelect > 0) {
+
+                    // Checks session exisits
+                    if (!sessionExists($viewAllocSessionSelect, $con)) {
+                        echo "Invalid Session ID";
+                        exit();
+                    } 
+
+                    // Prepare MySQL Statement
+                    $stmt = $con->prepare('SELECT teaching_assistants.ta_num, teaching_assistants.fname, teaching_assistants.lname FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?');
+                    $stmt->bind_param('i', $viewAllocSessionSelect);
+
                     // Execute MySQL Statement
-                    if (!$stmt->execute()) {
-                        echo "Database Deletion Failed";
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows == 0) {
+                        echo "No Allocation Exists";
                         exit();
                     } else {
-                        echo "Session Successfully Deleted";
+                        $i = 0;
+                        while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+                            $rows[$i] = [$row["ta_num"], $row["fname"], $row["lname"]];
+                            $i++;
+                        }
+                        echo json_encode($rows);
                         exit();
                     }
 
@@ -620,6 +652,47 @@
                     echo "Invalid Session ID Format";
                     exit();
                 }
+
+            // View Allocation by User Form
+            case "viewAllocationByUser":
+
+                $viewAllocUserSelect = $_POST['viewAllocUserSelect'];
+
+                // Validate Input
+                if (validateInput($viewAllocUserSelect, inputType::Number) && $viewAllocUserSelect > 0) {
+
+                    // Checks session exisits
+                    if (!userExists($viewAllocUserSelect, $con)) {
+                        echo "Invalid User ID";
+                        exit();
+                    } 
+
+                    // Prepare MySQL Statement
+                    $stmt = $con->prepare('SELECT modules.module_name, module_sessions.session_day, module_sessions.session_start, module_sessions.session_end, module_sessions.session_type, module_sessions.session_location FROM modules, module_sessions, assigned_to WHERE modules.module_num = module_sessions.module_num AND module_sessions.module_session_num = assigned_to.module_session_num AND assigned_to.ta_num=?');
+                    $stmt->bind_param('i', $viewAllocUserSelect);
+
+                    // Execute MySQL Statement
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows == 0) {
+                        echo "No Allocation Exists";
+                        exit();
+                    } else {
+                        $i = 0;
+                        while($row = $result->fetch_array(MYSQLI_ASSOC)) {
+                            $rows[$i] = [$row["module_name"], $row["session_day"], $row["session_start"], $row["session_end"], $row["session_type"], $row["session_location"]];
+                            $i++;
+                        }
+                        echo json_encode($rows);
+                        exit();
+                    }
+
+                } else {
+                    echo "Invalid User ID Format";
+                    exit();
+                }
+
             // Unknown Form ID
             default:
                 echo "Unknown Form Submitted";

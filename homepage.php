@@ -796,7 +796,7 @@ session_start();
                                     <div class="tab-content" id="pills-tabContent">
                                         <div class="tab-pane fade show active" id="pills-viewallocation" role="tabpanel" aria-labelledby="pills-viewallocation-tab" tabindex="0">
                                             <div class="container">
-                                                <form id="viewSession" class="row g-3 pt-2 pb-2">
+                                                <form id="viewAllocationBySession" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
                                                         <label for="viewAllocSessionSelect" class="form-label">Select Session</label>
                                                         <div class="input-group mb-3">
@@ -807,6 +807,47 @@ session_start();
                                                         </div>
                                                     </div>
                                                 </form>
+                                                <div class="col-12 mb-2">
+                                                    <p class="mb-0 text-center"> or </p>
+                                                </div>
+                                                <form id="viewAllocationByUser" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="viewAllocUserSelect" class="form-label">Select User</label>
+                                                        <div class="input-group mb-3">
+                                                            <select type="user" class="form-control custom-input" id="," name="viewAllocUserSelect" required>
+                                                                <?php include('assets/php/getUserList.php') ?>
+                                                            </select>
+                                                            <button class="btn ms-3 btn-primary" type="submit">View Allocation</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="col-12">
+                                                    <table class="table table-striped" style="display: none;" id="allocationSessionTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Module Name</th>
+                                                                <th scope="col">Day</th>
+                                                                <th scope="col">Start Time</th>
+                                                                <th scope="col">End Time</th>
+                                                                <th scope="col">Session Type</th>
+                                                                <th scope="col">Location</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                    <table class="table table-striped" style="display: none;" id="allocationUserTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">User ID</th>
+                                                                <th scope="col">First Name</th>
+                                                                <th scope="col">Last Name</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-manualallocation" role="tabpanel" aria-labelledby="pills-manualallocation-tab" tabindex="0">
