@@ -41,7 +41,7 @@
                         echo '<h6 class="mt-2 mb-2">' . $row['module_name'] . ' (ID: ' . $row['module_num'] . ')</h6>';
                     echo '</div>';
                     echo '<div class="card-body">';
-                        echo '<h6 class="card-subtitle mb-2"><i class="fa-solid fa-chalkboard-user"></i> :'
+                        echo '<h6 class="card-subtitle mb-2"><i class="fa-solid fa-chalkboard-user"></i> : '
                         . $row['module_convenor'] . '</h6>';
                         echo '<p class="card-text">' . $row['module_description'] . '</p>';
                         echo '<a href="' . $row['link'] . '" class="card-link link-info" target="_blank">Canvas Page</a>';

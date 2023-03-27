@@ -130,3 +130,7 @@ tbody th {
 .input-group .btn {
     border-radius: var(--bs-btn-border-radius) !important;
 }
+
+td {
+    vertical-align: middle;
+}

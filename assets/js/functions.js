@@ -61,10 +61,12 @@ function formHandler(id) {
     url: actionUrl,
     data: $.param(formData),
     beforeSend: function () {
+      try {
       // Disable button
       document
         .getElementById(id)
         .querySelector('button[type="submit"]').disabled = true;
+      } catch (err) {}
     },
     success: function (data) {
       // Convert JSON data into an array
@@ -152,6 +154,8 @@ function formHandler(id) {
             cell5.innerHTML = array[i][4];
             var cell6 = newRow.insertCell();
             cell6.innerHTML = array[i][5];
+            var cell7 = newRow.insertCell();
+            cell7.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][6] + ',' + array[i][7] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
           }
 
           // Display Table
@@ -295,6 +299,24 @@ function date() {
   let date = new Date();
   document.getElementById("date").innerText = date.toDateString();
   setTimeout(time, 1000);
+}
+
+/* Remove Allocation Function */
+function removeAlloc(var1, var2) {
+  var form = document.createElement('form');
+  form.id = "removeAlloc";
+  var ta_numInput = document.createElement('input');
+  ta_numInput.name = "ta_num";
+  ta_numInput.value = var1;
+  form.appendChild(ta_numInput);
+  var module_session_numInput = document.createElement('input');
+  module_session_numInput.name = "module_session_num";
+  module_session_numInput.value = var2;
+  form.appendChild(module_session_numInput);
+  form.style.display = 'hidden';
+  document.body.appendChild(form);
+  formHandler("removeAlloc");
+  document.body.removeChild(form);
 }
 
 /* Clock Function */

@@ -606,7 +606,15 @@
                     // Prepare MySQL Statement
                     $stmt = $con->prepare('DELETE FROM module_sessions WHERE module_session_num=?');
                     $stmt->bind_param('i', $deleteSessionSelect);
-
+                    
+                    // Execute MySQL Statement
+                    if (!$stmt->execute()) {
+                        echo "Database Deletion Failed";
+                        exit();
+                    } else {
+                        echo "Session Successfully Deleted";
+                        exit();
+                    }
 
                 } else {
                     echo "Invalid Session ID Format";
@@ -628,7 +636,7 @@
                     } 
 
                     // Prepare MySQL Statement
-                    $stmt = $con->prepare('SELECT teaching_assistants.ta_num, teaching_assistants.fname, teaching_assistants.lname FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?');
+                    $stmt = $con->prepare('SELECT teaching_assistants.ta_num, teaching_assistants.fname, teaching_assistants.lname, assigned_to.ta_num, assigned_to.module_session_num FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?');
                     $stmt->bind_param('i', $viewAllocSessionSelect);
 
                     // Execute MySQL Statement
@@ -641,7 +649,7 @@
                     } else {
                         $i = 0;
                         while($row = $result->fetch_array(MYSQLI_ASSOC)) {
-                            $rows[$i] = [$row["ta_num"], $row["fname"], $row["lname"]];
+                            $rows[$i] = [$row["ta_num"], $row["fname"], $row["lname"], $row["ta_num"], $row["module_session_num"]];
                             $i++;
                         }
                         echo json_encode($rows);
@@ -668,7 +676,7 @@
                     } 
 
                     // Prepare MySQL Statement
-                    $stmt = $con->prepare('SELECT modules.module_name, module_sessions.session_day, module_sessions.session_start, module_sessions.session_end, module_sessions.session_type, module_sessions.session_location FROM modules, module_sessions, assigned_to WHERE modules.module_num = module_sessions.module_num AND module_sessions.module_session_num = assigned_to.module_session_num AND assigned_to.ta_num=?');
+                    $stmt = $con->prepare('SELECT modules.module_name, module_sessions.session_day, module_sessions.session_start, module_sessions.session_end, module_sessions.session_type, module_sessions.session_location, assigned_to.ta_num, assigned_to.module_session_num FROM modules, module_sessions, assigned_to WHERE modules.module_num = module_sessions.module_num AND module_sessions.module_session_num = assigned_to.module_session_num AND assigned_to.ta_num=?');
                     $stmt->bind_param('i', $viewAllocUserSelect);
 
                     // Execute MySQL Statement
@@ -681,7 +689,7 @@
                     } else {
                         $i = 0;
                         while($row = $result->fetch_array(MYSQLI_ASSOC)) {
-                            $rows[$i] = [$row["module_name"], $row["session_day"], $row["session_start"], $row["session_end"], $row["session_type"], $row["session_location"]];
+                            $rows[$i] = [$row["module_name"], $row["session_day"], $row["session_start"], $row["session_end"], $row["session_type"], $row["session_location"], $row["ta_num"], $row["module_session_num"]];
                             $i++;
                         }
                         echo json_encode($rows);
@@ -693,6 +701,56 @@
                     exit();
                 }
 
+            // Remove Allocation Form
+            case "removeAlloc":
+
+                $ta_num = $_POST['ta_num'];
+                $module_session_num = $_POST['module_session_num'];
+
+                // Validate Input
+                if (validateInput($ta_num, inputType::Number) && $ta_num > 0) {
+                    if (validateInput($module_session_num, inputType::Number) && $module_session_num > 0) {
+                    
+                        // Prepare MySQL Statement
+                        $stmt = $con->prepare('SELECT * FROM assigned_to WHERE assigned_to.ta_num = ? AND assigned_to.module_session_num = ?');
+                        $stmt->bind_param('ii', $ta_num, $module_session_num);
+
+                        // Execute MySQL Statement
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        if ($result->num_rows == 0) {
+                            echo "No Allocation Exists";
+                            exit();
+                        } else {
+
+                            // Prepare MySQL Statement
+                            $stmt = $con->prepare('DELETE FROM assigned_to WHERE assigned_to.ta_num = ? AND assigned_to.module_session_num = ?');
+                            $stmt->bind_param('ii', $ta_num, $module_session_num);
+
+                            // Execute MySQL Statement
+                            if (!$stmt->execute()) {
+                                echo "Allocation Removal Failed";
+                                exit();
+                            } else {
+                                echo "Allocation Successfully Removed";
+                                exit();
+                            }
+                        }
+                        
+                    } else {
+                        echo "Invalid Session ID Format";
+                        exit();
+                    }
+                } else {
+                    echo "Invalid User ID Format";
+                    exit();
+                }
+
+            // Manual Allocation Form
+            // Make sure user is not already allocated. Make sure allocation does not exceed ta limit
+            case "manualAlloc":
+                exit();
             // Unknown Form ID
             default:
                 echo "Unknown Form Submitted";

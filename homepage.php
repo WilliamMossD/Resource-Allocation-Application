@@ -703,7 +703,7 @@ session_start();
                                                         <label for="sessionSelect" class="form-label">Select Session</label>
                                                         <div class="input-group mb-3">
                                                             <select type="session" class="form-control custom-input" id="sessionSelect" name="sessionSelect" required>
-                                                            <?php include('assets/php/getSessionList.php') ?>
+                                                                <?php include('assets/php/getSessionList.php') ?>
                                                             </select>
                                                             <button type="submit" class="btn btn-primary ms-2">Select</button>
                                                         </div>
@@ -713,7 +713,7 @@ session_start();
                                                     <input type="hidden" id="editSessionSelect" name="editSessionSelect" value="">
                                                     <div class="col-12 mb-2">
                                                         <label for="editSessionModuleNameInput" class="form-label">Module Name</label>
-                                                        <select type="module" class="form-control custom-input" id="editSessionModuleNameInput" name="editSessionModuleNameInput" required disabled>           
+                                                        <select type="module" class="form-control custom-input" id="editSessionModuleNameInput" name="editSessionModuleNameInput" required disabled>
                                                             <?php include('assets/php/getModuleList.php') ?>
                                                         </select>
                                                     </div>
@@ -742,7 +742,7 @@ session_start();
                                                             Session</label>
                                                         <select class="form-select custom-input" aria-label="Select Session Day" id="editSessionDaySelect" name="editSessionDaySelect" required disabled>
                                                             <option value="">Select Day of Week</option>
-                                                                <option value="Monday">Monday</option>
+                                                            <option value="Monday">Monday</option>
                                                             <option value="Tuesday">Tuesday</option>
                                                             <option value="Wednesday">Wednesday</option>
                                                             <option value="Thursday">Thursday</option>
@@ -814,7 +814,7 @@ session_start();
                                                     <div class="col-12 mb-2">
                                                         <label for="viewAllocUserSelect" class="form-label">Select User</label>
                                                         <div class="input-group mb-3">
-                                                            <select type="user" class="form-control custom-input" id="," name="viewAllocUserSelect" required>
+                                                            <select type="user" class="form-control custom-input" id="viewAllocUserSelect" name="viewAllocUserSelect" required>
                                                                 <?php include('assets/php/getUserList.php') ?>
                                                             </select>
                                                             <button class="btn ms-3 btn-primary" type="submit">View Allocation</button>
@@ -831,6 +831,7 @@ session_start();
                                                                 <th scope="col">End Time</th>
                                                                 <th scope="col">Session Type</th>
                                                                 <th scope="col">Location</th>
+                                                                <th scope="col">Actions</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -842,6 +843,7 @@ session_start();
                                                                 <th scope="col">User ID</th>
                                                                 <th scope="col">First Name</th>
                                                                 <th scope="col">Last Name</th>
+                                                                <th scope="col">Actions</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -852,7 +854,20 @@ session_start();
                                         </div>
                                         <div class="tab-pane fade" id="pills-manualallocation" role="tabpanel" aria-labelledby="pills-manualallocation-tab" tabindex="0">
                                             <div class="container">
-                                               
+                                                <form id="manualAlloc" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="manualAllocSessionSelect" class="form-label">Select Session</label>
+                                                        <select type="session" class="form-control custom-input" id="manualAllocSessionSelect" name="manualAllocSessionSelect" required>
+                                                            <?php include('assets/php/getSessionList.php') ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12 mb-2">
+                                                        <label for="manualAllocUserSelect" class="form-label">Select User(s)</label>
+                                                        <select type="user" class="form-control custom-input" id="manualAllocUserSelect" name="manualAllocUserSelect" multiple required>
+                                                            <?php include('assets/php/getUserList.php') ?>
+                                                        </select>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-autoallocation" role="tabpanel" aria-labelledby="pills-autoallocation-tab" tabindex="0">
@@ -872,5 +887,6 @@ session_start();
                 </div>
             </div>
         </div>
-    </body>
+</body>
+
 </html>
