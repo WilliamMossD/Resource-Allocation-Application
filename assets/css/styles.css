@@ -134,3 +134,11 @@ tbody th {
 td {
     vertical-align: middle;
 }
+
+select optgroup {
+    background-color: rgb(52,86,131);
+}
+
+select option {
+    background-color: rgb(52,86,131);
+}

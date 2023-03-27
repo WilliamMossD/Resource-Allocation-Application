@@ -668,7 +668,7 @@ session_start();
                                                     <div class="col-2 mb-2">
                                                         <label for="sessionTAInput" class="form-label">TA
                                                             Allocation</label>
-                                                        <input type="number" class="form-control custom-input" id="sessionTAInput" name="sessionTAInput" min="1" required>
+                                                        <input type="number" class="form-control custom-input" id="sessionTAInput" name="sessionTAInput" min="1" max="5" required>
                                                     </div>
                                                     <div class="col-6 mb-2">
                                                         <label for="sessionDaySelect" class="form-label">Day of
@@ -863,10 +863,11 @@ session_start();
                                                     </div>
                                                     <div class="col-12 mb-2">
                                                         <label for="manualAllocUserSelect" class="form-label">Select User(s)</label>
-                                                        <select type="user" class="form-control custom-input" id="manualAllocUserSelect" name="manualAllocUserSelect" multiple required>
+                                                        <select type="user" class="form-control custom-input" id="manualAllocUserSelect" name="manualAllocUserSelect[]" multiple required>
                                                             <?php include('assets/php/getUserList.php') ?>
                                                         </select>
                                                     </div>
+                                                    <button type="submit" class="btn btn-primary">Allocate</button>
                                                 </form>
                                             </div>
                                         </div>

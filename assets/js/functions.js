@@ -123,6 +123,9 @@ function formHandler(id) {
             cell2.innerHTML = array[i][1];
             var cell3 = newRow.insertCell();
             cell3.innerHTML = array[i][2];
+            var cell4 = newRow.insertCell();
+            cell4.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][3] + ',' + array[i][4] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
+
           }
 
           // Display Table

@@ -750,7 +750,80 @@
             // Manual Allocation Form
             // Make sure user is not already allocated. Make sure allocation does not exceed ta limit
             case "manualAlloc":
-                exit();
+                
+                $sessionSelect = $_POST['manualAllocSessionSelect'];
+                $usersSelect = $_POST['manualAllocUserSelect'];
+
+                // Validate Input
+                if (validateInput($sessionSelect, inputType::Number) && $sessionSelect > 0) { 
+                    if (sessionExists($sessionSelect, $con)) {
+                        // Checks that there are 1-5 users entered
+                        if (count($usersSelect) > 0 && count($usersSelect) < 6) {
+                            // Makes sure all users entered are unique and its an array of numbers
+                            if (count($usersSelect) === count(array_flip($usersSelect))) {
+                                foreach ($usersSelect as $user) {
+                                    // Validates each user entered is in the correct format, exists and isn't already allocated 
+                                    if (validateInput($user, inputType::Number) && $user > 0) {
+                                        if (userExists($user, $con)) {
+
+                                            // Prepare MySQL Statement
+                                            $stmt = $con->prepare('SELECT * FROM `assigned_to` WHERE ta_num=? AND module_session_num=?');
+                                            $stmt->bind_param('ii', $user, $sessionSelect);
+
+                                            // Execute MySQL Statement
+                                            $stmt->execute();
+                                            $result = $stmt->get_result();
+
+                                            // Execute MySQL Statement
+                                            if (!$result->num_rows == 0) {
+                                                echo "User ID " . $user . " Already Allocated";
+                                                exit();
+                                            }
+
+                                        } else {
+                                            echo "No User Exists With ID " . $user;
+                                            exit();
+                                        } 
+                                    } else {
+                                        echo "Invalid User ID Format";
+                                        exit();
+                                    }
+                                }
+
+                                // If all checks are valid assign each user to the session
+                                foreach ($usersSelect as $user) { 
+
+                                    // Prepare MySQL Statment
+                                    $stmt = $con->prepare('INSERT INTO `assigned_to` (`ta_num`, `module_session_num`) VALUES (?, ?)');
+                                    $stmt->bind_param('ii', $user, $sessionSelect);
+
+                                    // Execute MySQL Statement
+                                    if (!$stmt->execute()) {
+                                        echo "Allocation Error. Some Users May Have Been Allocated!";
+                                        exit();
+                                    } 
+                                }
+
+                                echo "Allocation Successful";
+                                exit();
+
+                            } else {
+                                echo "Duplicate Users Entered";
+                                exit();
+                            }
+                        } else {
+                            echo "Invalid Number of Users Entered";
+                            exit();
+                        }
+                    } else {
+                        echo "Invalid Session ID";
+                        exit();
+                    }
+                } else {
+                    echo "Invalid Session ID Format";
+                    exit();
+                }
+
             // Unknown Form ID
             default:
                 echo "Unknown Form Submitted";
