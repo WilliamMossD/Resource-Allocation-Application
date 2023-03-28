@@ -99,7 +99,7 @@
 
     // Gets session data by ID
     function getSessionData($id, $conn) {
-        $stmt = $conn->prepare('SELECT module_session_num, module_num, session_location, session_type, num_of_ta, session_day, session_start, session_end FROM module_sessions WHERE module_session_num = ?');
+        $stmt = $conn->prepare("SELECT module_session_num, module_num, session_location, session_type, num_of_ta, session_day, DATE_FORMAT(session_start, '%H:%i') AS session_start, DATE_FORMAT(session_end, '%H:%i') AS session_end FROM module_sessions WHERE module_session_num = ?");
         $stmt->bind_param('i', $id);
 
         // Executes the statement and stores the result
