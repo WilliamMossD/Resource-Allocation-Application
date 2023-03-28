@@ -30,7 +30,7 @@
         }
 
         // Get rows from table 
-        $stmt = $con->prepare('SELECT module_sessions.module_session_num, modules.module_name, module_sessions.session_day, module_sessions.session_start, module_sessions.session_end FROM modules, module_sessions WHERE modules.module_num = module_sessions.module_num ORDER BY module_sessions.module_num ASC');
+        $stmt = $con->prepare("SELECT module_sessions.module_session_num, modules.module_name, module_sessions.session_day, DATE_FORMAT(module_sessions.session_start, '%H:%i') AS session_start, DATE_FORMAT(module_sessions.session_end, '%H:%i') AS session_end FROM modules, module_sessions WHERE modules.module_num = module_sessions.module_num ORDER BY module_sessions.module_num ASC");
         $stmt->execute();
         $sessionrows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
