@@ -748,6 +748,9 @@
                                             // Checks user exists
                                             if (userExists($user, $con)) {
 
+                                                // Checks if user is busy
+                                                if (isAvailable())
+
                                                 // Checks user isnt already allocated to session
                                                 if (isAssigned($user, $sessionSelect, $con)) {
                                                     echo "User ID " . $user . " Already Allocated";
