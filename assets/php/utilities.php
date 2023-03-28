@@ -41,7 +41,7 @@
                 }
             case inputType::Number:
                 // Checks to see that input is a number
-                if (is_numeric($input)) {
+                if (filter_var($input, FILTER_VALIDATE_INT)) {
                     return true;
                 } else {
                     return false;
@@ -133,4 +133,40 @@
         return true;
     }
 
+    // Returns the TA limit of a session
+    function sessionTALimit($sessionID, $conn) {
+        $stmt = $conn->prepare('SELECT num_of_ta FROM module_sessions WHERE module_session_num = ?');
+        $stmt->bind_param('i', $sessionID);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result;
+    }
+
+    // Returns the number of TAs currently allocated
+    function sessionTAAllocation($sessionID, $conn) {
+        $stmt = $conn->prepare('SELECT module_session_num FROM assigned_to WHERE module_session_num=?');
+        $stmt->bind_param('i', $sessionID);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows;
+    }
+
+    // Checks if user is assigned to a session
+    function isAssigned($userID, $sessionID, $conn) {
+        $stmt = $conn->prepare('SELECT * FROM assigned_to WHERE ta_num=? AND module_session_num=?');
+        $stmt->bind_param('ii', $userID, $sessionID);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0) {
+            return false;
+        }
+        return true;
+    }
  ?>
