@@ -32,7 +32,6 @@
 
     try {
         switch ($_POST["formID"]) {
-            // addUser Form - [firstNameInput, lastNameInput, emailInput] / [Text, Text, Email] / [50,50,100]
             case "addUser":
 
                 // Sanitize Inputs
@@ -79,7 +78,7 @@
             // selectUser Form 
             case "selectUser":
 
-                $userSelect = $_POST['userSelect'];
+                $userSelect = filter_var($_POST['userSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 if (validateInput($userSelect, inputType::Number) && $userSelect > 0) {
                     // Gets user data
@@ -99,6 +98,7 @@
                     echo "Invalid User ID Format";
                     exit();
                 }
+
             // updateUser Form
             case "updateUser":
             
@@ -106,7 +106,7 @@
                 $editFirstNameInput = sanitizeInput($_POST['editFirstNameInput']);
                 $editLastNameInput = sanitizeInput($_POST['editLastNameInput']);
                 $editEmailInput = sanitizeInput($_POST['editEmailInput']);
-                $editUserSelect = $_POST['editUserSelect'];
+                $editUserSelect = filter_var($_POST['editUserSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Inputs
                 if (validateInput($editUserSelect, inputType::Number) && $editUserSelect > 0) {
@@ -117,7 +117,6 @@
                         exit();
                     } 
 
-                    // Validates that the user entered refrences an actual user in the database
                     if (validateInput($editFirstNameInput, inputType::Name)){
                         if (validateInput($editLastNameInput, inputType::Name)) {
                             if (validateInput($editEmailInput, inputType::Email)) {
@@ -156,10 +155,11 @@
                     echo "Invalid User ID Format";
                     exit();
                 }
-            // selectModule Case
+
+            // selectModule Form
             case "selectModule":
 
-                $moduleSelect = $_POST['moduleSelect'];
+                $moduleSelect = filter_var($_POST['moduleSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 if (validateInput($moduleSelect, inputType::Number) && $moduleSelect > 0) {
 
@@ -189,7 +189,7 @@
                 $editModuleConInput = sanitizeInput($_POST['editModuleConInput']);
                 $editModuleDesInput = sanitizeInput($_POST['editModuleDesInput']);
                 $editModuleLinkInput = sanitizeInput($_POST['editModuleLinkInput']);
-                $editModuleSelect = $_POST['editModuleSelect'];
+                $editModuleSelect = filter_var($_POST['editModuleSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Inputs
                 if (validateInput($editModuleSelect, inputType::Number) && $editModuleSelect > 0) {
@@ -239,10 +239,11 @@
                     exit();
                 }
 
-            // deleteUser Form - [deleteUserSelect] / [Num]
+            // deleteUser Form 
             case "deleteUser":
 
-                $deleteUserSelect = $_POST['deleteUserSelect'];
+                // Sanitize Input
+                $deleteUserSelect = filter_var($_POST['deleteUserSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
                 if (validateInput($deleteUserSelect, inputType::Number) && $deleteUserSelect > 0) {
@@ -271,7 +272,7 @@
                     exit();
                 }
 
-            // addModule Form - [moduleNameInput, moduleConInput, moduleDesInput, moduleLinkInput] / [Text, Text, Text, URL] / [50, 50, 100, 2048]
+            // addModule Form 
             case "addModule":
 
                 // Sanitize Inputs
@@ -316,10 +317,11 @@
                     exit();
                 }
 
-            // deleteModule Form -  [deleteModuleSelect] / [Text] / [50]
+            // deleteModule Form 
             case "deleteModule":
 
-                $deleteModuleSelect = $_POST['deleteModuleSelect'];
+                // Santize Input
+                $deleteModuleSelect = filter_var($_POST['deleteModuleSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
                 if (validateInput($deleteModuleSelect, inputType::Number) && $deleteModuleSelect > 0) {
@@ -348,23 +350,16 @@
                     exit();
                 }
 
-            // viewSession Form - [sessionsModuleSelect] / [Num] / [N/A]
+            // viewSession Form 
             case "viewSession":
 
-                $sessionsModuleSelect = $_POST['sessionsModuleSelect'];
+                $sessionsModuleSelect = filter_var($_POST['sessionsModuleSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
                 if (validateInput($sessionsModuleSelect, inputType::Number) && $sessionsModuleSelect > 0) {
 
-                    // Validates that the module_num entered refrences an actual module in the database
-                    $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
-                    $stmt->bind_param('i', $sessionsModuleSelect);
-
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
+                    // Checks that module exists
+                    if (!moduleExists($sessionsModuleSelect, $con)) {
                         echo "Invalid Module ID";
                         exit();
                     } 
@@ -395,38 +390,25 @@
                     exit();
                 }
 
-            // addSession Form - [sessionModuleNameInput, moduleLocInput, sessionTypeSelect, sessionTAInput, sessionDaySelect, sessionStartTimeInput, sessionEndTimeInput]
-            //                   [Number, Name, [Lab/Teaching/Other], Number, [Monday-Friday], HHMM, HHMM]
-            //                   [N/A, 50, N/A, 0 < number < 5, N/A, N/A, N/A ]
-            //                   sessionEndTimeInput must be greater than sessionStartTimeInput by atleast 30 minutes and less than 21:00
-            //                   sessionStartTimeInput must be equal to or greater than 8:00 and less than 20:30
-            //                   sessionStartTimeInput and sessionEndTimeInput must be in 30 minute blocks
+            // addSession Form
             case "addSession":
 
                 // Sanitize Inputs
-                $sessionModuleNameInput = $_POST['sessionModuleNameInput'];
+                $sessionModuleNameInput = filter_var($_POST['sessionModuleNameInput'], FILTER_SANITIZE_NUMBER_INT);
                 $moduleLocInput = sanitizeInput($_POST['moduleLocInput']);
                 $sessionTypeSelect = sanitizeInput($_POST['sessionTypeSelect']);
-                $sessionTAInput = $_POST['sessionTAInput'];
+                $sessionTAInput = filter_var($_POST['sessionTAInput'], FILTER_SANITIZE_NUMBER_INT);
                 $sessionDaySelect = sanitizeInput($_POST['sessionDaySelect']);
                 $sessionStartTimeInput = $_POST['sessionStartTimeInput'];
                 $sessionEndTimeInput = $_POST['sessionEndTimeInput'];
 
                 if (validateInput($sessionModuleNameInput, inputType::Number) && $sessionModuleNameInput > 0) {
                     
-                    // Validates that the module_num entered refrences an actual module in the database
-                    $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
-                    $stmt->bind_param('i', $sessionModuleNameInput);
-
-                    // Executes the statement and stores the result
-                    $stmt->execute();
-                    $stmt->store_result();
-                    
-                    if ($stmt->num_rows == 0) {
-                        echo "Invalid Module Number";
+                    // Checks that module exists
+                    if (!moduleExists($sessionModuleNameInput, $con)) {
+                        echo "Invalid Module ID";
                         exit();
                     } 
-
 
                     if (validateInput($moduleLocInput, inputType::Name)) {
                         if (in_array($sessionTypeSelect, ["Lab", "Teaching", "Other"])) {
@@ -479,7 +461,7 @@
 
             // Select Session Form
             case "selectSession":
-                $sessionSelect = $_POST['sessionSelect'];
+                $sessionSelect = filter_var($_POST['sessionSelect'], FILTER_SANITIZE_NUMBER_INT);
     
                 if (validateInput($sessionSelect, inputType::Number) && $sessionSelect > 0) {
 
@@ -504,11 +486,11 @@
             case "updateSession":
 
                 // Sanitize Inputs
-                $editSessionSelect = $_POST['editSessionSelect'];
-                $editSessionModuleNameInput = $_POST['editSessionModuleNameInput'];
+                $editSessionSelect = filter_var($_POST['editSessionSelect'], FILTER_SANITIZE_NUMBER_INT);
+                $editSessionModuleNameInput = filter_var($_POST['editSessionModuleNameInput'], FILTER_SANITIZE_NUMBER_INT);
                 $editSessionLocInput = sanitizeInput($_POST['editSessionLocInput']);
                 $editSessionTypeSelect = sanitizeInput($_POST['editSessionTypeSelect']);
-                $editSessionTAInput = $_POST['editSessionTAInput'];
+                $editSessionTAInput = filter_var($_POST['editSessionTAInput'], FILTER_SANITIZE_NUMBER_INT);
                 $editSessionDaySelect = sanitizeInput($_POST['editSessionDaySelect']);
                 $editSessionStartTimeInput = $_POST['editSessionStartTimeInput'];
                 $editSessionEndTimeInput = $_POST['editSessionEndTimeInput'];
@@ -523,19 +505,11 @@
 
                     if (validateInput($editSessionModuleNameInput, inputType::Number) && $editSessionModuleNameInput > 0) {
                         
-                        // Validates that the module_num entered refrences an actual module in the database
-                        $stmt = $con->prepare('SELECT module_num FROM modules WHERE module_num = ?');
-                        $stmt->bind_param('i', $editSessionModuleNameInput);
-
-                        // Executes the statement and stores the result
-                        $stmt->execute();
-                        $stmt->store_result();
-                        
-                        if ($stmt->num_rows == 0) {
-                            echo "Invalid Module Number";
+                        // Checks that module exists
+                        if (!moduleExists($editSessionModuleNameInput, $con)) {
+                            echo "Invalid Module ID";
                             exit();
                         } 
-
 
                         if (validateInput($editSessionLocInput, inputType::Name)) {
                             if (in_array($editSessionTypeSelect, ["Lab", "Teaching", "Other"])) {
@@ -592,7 +566,8 @@
             // Delete Session Form
             case "deleteSession":
 
-                $deleteSessionSelect = $_POST['deleteSessionSelect'];
+                // Sanitize Input
+                $deleteSessionSelect = filter_var($_POST['deleteSessionSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
                 if (validateInput($deleteSessionSelect, inputType::Number) && $deleteSessionSelect > 0) {
@@ -624,7 +599,8 @@
             // View Allocation by Session Form
             case "viewAllocationBySession":
 
-                $viewAllocSessionSelect = $_POST['viewAllocSessionSelect'];
+                // Sanitize Input
+                $viewAllocSessionSelect = filter_var($_POST['viewAllocSessionSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
                 if (validateInput($viewAllocSessionSelect, inputType::Number) && $viewAllocSessionSelect > 0) {
@@ -664,7 +640,8 @@
             // View Allocation by User Form
             case "viewAllocationByUser":
 
-                $viewAllocUserSelect = $_POST['viewAllocUserSelect'];
+                // Sanitize Input
+                $viewAllocUserSelect = filter_var($_POST['viewAllocUserSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
                 if (validateInput($viewAllocUserSelect, inputType::Number) && $viewAllocUserSelect > 0) {
@@ -704,8 +681,8 @@
             // Remove Allocation Form
             case "removeAlloc":
 
-                $ta_num = $_POST['ta_num'];
-                $module_session_num = $_POST['module_session_num'];
+                $ta_num = filter_var($_POST['ta_num'], FILTER_SANITIZE_NUMBER_INT);
+                $module_session_num = filter_var($_POST['module_session_num'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
                 if (validateInput($ta_num, inputType::Number) && $ta_num > 0) {
@@ -748,7 +725,6 @@
                 }
 
             // Manual Allocation Form
-            // Make sure user is not already allocated. Make sure allocation does not exceed ta limit
             case "manualAlloc":
                 
                 // Sanitize Inputs
@@ -764,12 +740,15 @@
                             if (count($usersSelect) === count(array_flip($usersSelect))) {
                                 // Checks that the allocation does not exceed the session ta num
                                 if ((sessionTAAllocation($sessionSelect, $con) + count($usersSelect)) >= sessionTALimit($sessionSelect, $con)) {
+
+                                    // Iterates the usersSelect array
                                     foreach ($usersSelect as $user) {
-                                        // Validates each user entered is in the correct format, exists and isn't already allocated 
+                                        // Validates input
                                         if (validateInput($user, inputType::Number) && $user > 0) {
+                                            // Checks user exists
                                             if (userExists($user, $con)) {
 
-                                                // Execute MySQL Statement
+                                                // Checks user isnt already allocated to session
                                                 if (isAssigned($user, $sessionSelect, $con)) {
                                                     echo "User ID " . $user . " Already Allocated";
                                                     exit();
@@ -796,11 +775,11 @@
                                         if (!$stmt->execute()) {
                                             echo "Allocation Error. Some Users May Have Been Allocated!";
                                             exit();
+                                        } else  {
+                                            echo "Allocation Successful";
+                                            exit();        
                                         } 
                                     }
-
-                                    echo "Allocation Successful";
-                                    exit();
 
                                 } else {
                                     echo 'Allocation Will Exceed TA Limit';

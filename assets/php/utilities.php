@@ -19,7 +19,7 @@
 
     // Sanitize Function 
     function sanitizeInput($input){
-        return htmlentities($input, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
     }
 
     // Validation Function

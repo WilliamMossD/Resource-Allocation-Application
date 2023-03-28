@@ -822,7 +822,7 @@ session_start();
                                                     </div>
                                                 </form>
                                                 <div class="col-12">
-                                                    <table class="table table-striped" style="display: none;" id="allocationSessionTable">
+                                                    <table class="table table-striped" style="display: none; text-align: center" id="allocationSessionTable">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Module Name</th>
@@ -837,7 +837,7 @@ session_start();
                                                         <tbody>
                                                         </tbody>
                                                     </table>
-                                                    <table class="table table-striped" style="display: none;" id="allocationUserTable">
+                                                    <table class="table table-striped" style="display: none; text-align: center" id="allocationUserTable">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">User ID</th>
