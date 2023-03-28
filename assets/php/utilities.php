@@ -169,4 +169,26 @@
         }
         return true;
     }
+
+    // Checks to see if user is available between a set time by checking current sessions they are assigned to     
+    function isAvailable($userID, $starttime, $endtime, $day, $conn) {
+        $stmt = $conn->prepare('SET @start = ?; SET @end = ?; SELECT CASE WHEN (module_sessions.session_start > @start AND module_sessions.session_start < @end) or (module_sessions.session_end > @start AND module_sessions.session_end < @end) or (module_sessions.session_start < @start AND module_sessions.session_end > @end) or (module_sessions.session_start > @start AND module_sessions.session_end < @end) THEN "true" ELSE "false" END AS overlap FROM module_sessions, assigned_to WHERE module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.session_day = ? AND assigned_to.ta_num = ?');
+        $stmt->bind_param('sssi', $starttime, $endtime, $day, $userID);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $overlap = $result->fetch_all(MYSQLI_ASSOC);
+
+        if ($result->num_rows == 0) {
+            return false;
+        } 
+
+        foreach ($overlap as $row) {
+            if ($row['overlap'] == 'true') {
+                return true;
+            }
+        }
+
+        return false;
+    }
  ?>
