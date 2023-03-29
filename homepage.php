@@ -23,7 +23,7 @@ session_start();
     <meta name="author" content="William Moss">
 
     <!-- Primary Stylesheets -->
-    <link href="assets/css/styles.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/styles.css?version=2" rel="stylesheet" type="text/css">
 
     <!-- Third Party Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
@@ -59,17 +59,17 @@ session_start();
                     </div>
                 </div>
                 <div class="col-4 text-center user-button">
-                    <button type="button" class="btn btn-primary me-4"><i class="fa-solid fa-message fa-2xl"></i><br>
-                        <p class="mb-1 mt-2">Messages</p>
+                    <button type="button" class="btn btn-primary me-3"><i class="fa-solid fa-message fa-2xl"></i><br>
+                        <p class="mb-1 mt-2 fs-6 text-wrap">Messages</p>
                     </button>
                     <button type="button" class="btn btn-primary"><i class="fa-solid fa-right-from-bracket fa-2xl"></i><br>
-                        <p class="mb-1 mt-2">Logout</p>
+                        <p class="mb-1 mt-2 fs-6 text-wrap">Logout</p>
                     </button>
                 </div>
             </div>
-            <div class="col-12 p-0 mt-5 mb-5 d-flex">
-                <div class="col-2 rounded shadow bg-lightblue p-3" style="height: fit-content;">
-                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="col-12 p-0 mt-5 mb-5 d-lg-flex">
+                <div class="col-lg-2 rounded shadow bg-lightblue p-3 mb-5" style="height: fit-content;">
+                    <div class="nav flex-lg-column nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button>
                         <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
                         <button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false">Availability</button>
@@ -78,7 +78,7 @@ session_start();
                         <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
                     </div>
                 </div>
-                <div class="col-95 offset-05 shadow rounded bg-lightblue p-3">
+                <div class="col-lg-9 offset-lg-1 shadow rounded bg-lightblue p-3">
                     <div class="tab-content" id="v-pills-tabContent">
                         <div class="tab-pane fade show active" id="v-pills-timetable" role="tabpanel" aria-labelledby="v-pills-timetable-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Timetable</h1>
