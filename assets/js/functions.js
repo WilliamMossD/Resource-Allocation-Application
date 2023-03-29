@@ -11,7 +11,7 @@ for (var i = 0; i < document.forms.length; i++) {
   });
 }
 
-// Add event listener to avaliability table cells
+// Add event listener to availability table cells
 document.querySelectorAll("#avaltable td").forEach((e) =>
   e.addEventListener("click", function () {
     if (e.classList.contains("active")) {
@@ -22,7 +22,7 @@ document.querySelectorAll("#avaltable td").forEach((e) =>
   })
 );
 
-// Add Event Listeners to avaliability buttons
+// Add Event Listeners to availability buttons
 document.getElementById("clearAval").addEventListener("click", function () {
   // Removes active class from all cells in the avaltable table
   document
@@ -211,7 +211,7 @@ function formHandler(id) {
       getSessionList();
     },
     error: function () {
-      alert("Unknown Error Occured");
+      alert("Unknown Error Occurred");
     },
 
     complete: function () {

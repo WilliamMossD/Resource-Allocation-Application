@@ -85,6 +85,19 @@
         return $result;
     }
 
+    // Gets user name by user ID
+    function getUserName($id, $conn) {
+        $stmt = $conn->prepare('SELECT fname, lname FROM teaching_assistants WHERE ta_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_array(MYSQLI_NUM);
+
+        return $result[0] . "" . $result[1];
+
+    }
+
     // Gets module data by ID
     function getModuleData($id, $conn) {
         $stmt = $conn->prepare('SELECT * FROM modules WHERE module_num = ?');
@@ -170,25 +183,45 @@
         return true;
     }
 
-    // Checks to see if user is available between a set time by checking current sessions they are assigned to     
+    // Checks to see if user is available between a set time by checking current sessions they are assigned to   
+    // True if they are available, false if not   
     function isAvailable($userID, $starttime, $endtime, $day, $conn) {
-        $stmt = $conn->prepare('SET @start = ?; SET @end = ?; SELECT CASE WHEN (module_sessions.session_start > @start AND module_sessions.session_start < @end) or (module_sessions.session_end > @start AND module_sessions.session_end < @end) or (module_sessions.session_start < @start AND module_sessions.session_end > @end) or (module_sessions.session_start > @start AND module_sessions.session_end < @end) THEN "true" ELSE "false" END AS overlap FROM module_sessions, assigned_to WHERE module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.session_day = ? AND assigned_to.ta_num = ?');
-        $stmt->bind_param('sssi', $starttime, $endtime, $day, $userID);
+        
+        $stmt = $conn->prepare('SET @start = ?');
+        $stmt->bind_param('s', $starttime);
+        $stmt->execute();
+
+        $stmt = $conn->prepare('SET @end = ?');
+        $stmt->bind_param('s', $endtime);
+        $stmt->execute();
+
+        $stmt = $conn->prepare('SELECT CASE WHEN (module_sessions.session_start > @start AND module_sessions.session_start < @end) or (module_sessions.session_end > @start AND module_sessions.session_end < @end) or (module_sessions.session_start < @start AND module_sessions.session_end > @end) or (module_sessions.session_start > @start AND module_sessions.session_end < @end) THEN "true" ELSE "false" END AS overlap FROM module_sessions, assigned_to WHERE module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.session_day = ? AND assigned_to.ta_num = ?');
+        $stmt->bind_param('si', $day, $userID);
 
         $stmt->execute();
         $result = $stmt->get_result();
         $overlap = $result->fetch_all(MYSQLI_ASSOC);
 
         if ($result->num_rows == 0) {
-            return false;
+            return true;
         } 
 
         foreach ($overlap as $row) {
             if ($row['overlap'] == 'true') {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
+    }
+
+    // Allocates user to session
+    function allocateUser($userID, $sessionID, $conn) {
+
+        // Prepare MySQL Statement
+        $stmt = $conn->prepare('INSERT INTO assigned_to (ta_num, module_session_num) VALUES (?, ?)');
+        $stmt->bind_param('ii', $userID, $sessionID);
+
+        return $stmt->execute();
     }
  ?>

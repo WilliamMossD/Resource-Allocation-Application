@@ -44,7 +44,7 @@
                     if (validateInput($lastNameInput, inputType::Name)) {
                         if (validateInput($emailInput, inputType::Email)) {
                             
-                            // Prepare MySQL Statment
+                            // Prepare MySQL Statement
                             $stmt = $con->prepare('INSERT INTO teaching_assistants (fname, lname, email, admin) VALUES (?, ?, ?, ?)');
                             if (is_null($_POST['adminCheck'])) {
                                 $admin = 0;
@@ -121,7 +121,7 @@
                         if (validateInput($editLastNameInput, inputType::Name)) {
                             if (validateInput($editEmailInput, inputType::Email)) {
                                 
-                                // Prepare MySQL Statment
+                                // Prepare MySQL Statement
                                 $stmt = $con->prepare('UPDATE teaching_assistants SET fname=?, lname=?, email=?, admin=? WHERE ta_num=?');
                                 if (is_null($_POST['editAdminCheck'])) {
                                     $admin = 0;
@@ -205,7 +205,7 @@
                             if (validateInput($editModuleDesInput, inputType::Text)) {
                                 if (validateInput($editModuleLinkInput, inputType::URL)) {
                                 
-                                    // Prepare MySQL Statment
+                                    // Prepare MySQL Statement
                                     $stmt = $con->prepare('UPDATE modules SET module_name=?, module_convenor=?, module_description=?, link=? WHERE module_num=?');
                                     $stmt->bind_param('ssssi', $editModuleNameInput, $editModuleConInput, $editModuleDesInput, $editModuleLinkInput, $editModuleSelect);
 
@@ -287,7 +287,7 @@
                         if (validateInput($moduleDesInput, inputType::Text)) {
                             if (validateInput($moduleLinkInput, inputType::URL)) {
                             
-                                // Prepare MySQL Statment
+                                // Prepare MySQL Statement
                                 $stmt = $con->prepare('INSERT INTO modules (module_name	, module_convenor, module_description, link) VALUES (?, ?, ?, ?)');
                                 $stmt->bind_param('ssss', $moduleNameInput, $moduleConInput, $moduleDesInput, $moduleLinkInput);
 
@@ -320,7 +320,7 @@
             // deleteModule Form 
             case "deleteModule":
 
-                // Santize Input
+                // Sanitize Input
                 $deleteModuleSelect = filter_var($_POST['deleteModuleSelect'], FILTER_SANITIZE_NUMBER_INT);
 
                 // Validate Input
@@ -417,7 +417,7 @@
                                     if (validateInput($sessionStartTimeInput, inputType::HHMM) && (strtotime("08:00") <= strtotime($sessionStartTimeInput)) && (strtotime($sessionStartTimeInput) <= strtotime("20:30"))) {
                                         if (validateInput($sessionEndTimeInput, inputType::HHMM) && (strtotime("08:30") <= strtotime($sessionEndTimeInput)) && (strtotime($sessionEndTimeInput) <= strtotime("21:00")) && (strtotime($sessionEndTimeInput) > strtotime($sessionStartTimeInput))) {
                                             
-                                            // Prepare MySQL Statment
+                                            // Prepare MySQL Statement
                                             $stmt = $con->prepare('INSERT INTO module_sessions (module_num, num_of_ta, session_day, session_start, session_end, session_type, session_location) VALUES (?, ?, ?, ?, ?, ?, ?)');
                                             $stmt->bind_param('issssss', $sessionModuleNameInput, $sessionTAInput, $sessionDaySelect, $sessionStartTimeInput, $sessionEndTimeInput, $sessionTypeSelect, $moduleLocInput);
 
@@ -518,7 +518,7 @@
                                         if (validateInput($editSessionStartTimeInput, inputType::HHMM) && (strtotime("08:00") <= strtotime($editSessionStartTimeInput)) && (strtotime($editSessionStartTimeInput) <= strtotime("20:30"))) {
                                             if (validateInput($editSessionEndTimeInput, inputType::HHMM) && (strtotime("08:30") <= strtotime($editSessionEndTimeInput)) && (strtotime($editSessionEndTimeInput) <= strtotime("21:00")) && (strtotime($editSessionEndTimeInput) > strtotime($editSessionStartTimeInput))) {
                                                 
-                                                // Prepare MySQL Statment
+                                                // Prepare MySQL Statement
                                                 $stmt = $con->prepare('UPDATE module_sessions SET module_num=?, num_of_ta=?, session_day=?, session_start=?, session_end=?, session_type=?, session_location=? WHERE module_session_num=?');
                                                 $stmt->bind_param('issssssi', $editSessionModuleNameInput, $editSessionTAInput, $editSessionDaySelect, $editSessionStartTimeInput, $editSessionEndTimeInput, $editSessionTypeSelect, $editSessionLocInput, $editSessionSelect);
 
@@ -572,7 +572,7 @@
                 // Validate Input
                 if (validateInput($deleteSessionSelect, inputType::Number) && $deleteSessionSelect > 0) {
 
-                    // Checks session exisits
+                    // Checks session exists
                     if (!sessionExists($deleteSessionSelect, $con)) {
                         echo "Invalid Session ID";
                         exit();
@@ -605,7 +605,7 @@
                 // Validate Input
                 if (validateInput($viewAllocSessionSelect, inputType::Number) && $viewAllocSessionSelect > 0) {
 
-                    // Checks session exisits
+                    // Checks session exists
                     if (!sessionExists($viewAllocSessionSelect, $con)) {
                         echo "Invalid Session ID";
                         exit();
@@ -646,14 +646,14 @@
                 // Validate Input
                 if (validateInput($viewAllocUserSelect, inputType::Number) && $viewAllocUserSelect > 0) {
 
-                    // Checks session exisits
+                    // Checks session exists
                     if (!userExists($viewAllocUserSelect, $con)) {
                         echo "Invalid User ID";
                         exit();
                     } 
 
                     // Prepare MySQL Statement
-                    $stmt = $con->prepare('SELECT modules.module_name, module_sessions.session_day, module_sessions.session_start, module_sessions.session_end, module_sessions.session_type, module_sessions.session_location, assigned_to.ta_num, assigned_to.module_session_num FROM modules, module_sessions, assigned_to WHERE modules.module_num = module_sessions.module_num AND module_sessions.module_session_num = assigned_to.module_session_num AND assigned_to.ta_num=?');
+                    $stmt = $con->prepare("SELECT modules.module_name, module_sessions.session_day, DATE_FORMAT(module_sessions.session_start, '%H:%i') AS session_start, DATE_FORMAT(module_sessions.session_end, '%H:%i') AS session_end, module_sessions.session_type, module_sessions.session_location, assigned_to.ta_num, assigned_to.module_session_num FROM modules, module_sessions, assigned_to WHERE modules.module_num = module_sessions.module_num AND module_sessions.module_session_num = assigned_to.module_session_num AND assigned_to.ta_num=?");
                     $stmt->bind_param('i', $viewAllocUserSelect);
 
                     // Execute MySQL Statement
@@ -748,21 +748,26 @@
                                             // Checks user exists
                                             if (userExists($user, $con)) {
 
-                                                // Checks if user is busy
-                                                if (isAvailable())
+                                                $sessionInfo = getSessionData($sessionSelect, $con)->fetch_array(MYSQLI_NUM);
 
-                                                // Checks user isnt already allocated to session
+                                                // Checks user isn't already allocated to session
                                                 if (isAssigned($user, $sessionSelect, $con)) {
-                                                    echo "User ID " . $user . " Already Allocated";
+                                                    echo getUserName($user, $con) . " is already allocated to this session";
+                                                    exit();
+                                                }
+
+                                                // Checks if user is free to be allocated to this session
+                                                if (!isAvailable($user, $sessionInfo[6], $sessionInfo[7], $sessionInfo[5], $con)) {
+                                                    echo getUserName($user, $con) . " is unavailable to be allocated to this session";
                                                     exit();
                                                 }
 
                                             } else {
-                                                echo "No User Exists With ID " . $user;
+                                                echo "One or more users entered do not exist";
                                                 exit();
                                             } 
                                         } else {
-                                            echo "Invalid User ID Format";
+                                            echo "One or more users entered have an invalid ID format";
                                             exit();
                                         }
                                     }
@@ -770,22 +775,18 @@
                                     // If all checks are valid assign each user to the session
                                     foreach ($usersSelect as $user) { 
 
-                                        // Prepare MySQL Statment
-                                        $stmt = $con->prepare('INSERT INTO `assigned_to` (`ta_num`, `module_session_num`) VALUES (?, ?)');
-                                        $stmt->bind_param('ii', $user, $sessionSelect);
-
                                         // Execute MySQL Statement
-                                        if (!$stmt->execute()) {
-                                            echo "Allocation Error. Some Users May Have Been Allocated!";
+                                        if (!allocateUser($user, $sessionSelect, $con)) {
+                                            echo "Allocation Error. Some users may have been allocated!";
                                             exit();
-                                        } else  {
-                                            echo "Allocation Successful";
-                                            exit();        
                                         } 
                                     }
 
+                                    echo "Allocation Successful";
+                                    exit();    
+
                                 } else {
-                                    echo 'Allocation Will Exceed TA Limit';
+                                    echo 'Unable to allocate users as it will exceed TA limit of session';
                                     exit();
                                 }
 
@@ -797,6 +798,109 @@
                             echo "Invalid Number of Users Entered";
                             exit();
                         }
+                    } else {
+                        echo "Invalid Session ID";
+                        exit();
+                    }
+                } else {
+                    echo "Invalid Session ID Format";
+                    exit();
+                }
+
+            // Auto Allocate Form
+            case "autoAlloc":
+
+                // Sanitize Inputs
+                $sessionSelect = filter_var($_POST['autoAllocSessionSelect'], FILTER_SANITIZE_NUMBER_INT);
+
+                // Validate Input
+                if (validateInput($sessionSelect, inputType::Number) && $sessionSelect > 0) { 
+                    // Checks session exists
+                    if (sessionExists($sessionSelect, $con)) { 
+
+                        // Get session data
+                        $sessionInfo = getSessionData($sessionSelect, $con)->fetch_array(MYSQLI_NUM);
+
+                        // Get all users from database
+                        $stmt = $con->prepare('SELECT ta_num from teaching_assistants ORDER BY ta_num ASC');
+                        $stmt->execute();
+                        $userrows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+                        $aval = [];
+                        // Check each user from database if they are available
+                        foreach ($userrows as $row) {
+                            if(isAvailable($row['ta_num'], $sessionInfo[6], $sessionInfo[7], $sessionInfo[5], $con)) {
+                                // If they are available add the user to a list
+                                array_push($aval, $row['ta_num']);
+                            }
+                        }
+
+                        // If list of users available is equal to or less than zero echo error message and exit
+                        if (count($aval) <= 0) {
+                            echo "No users are available to be allocated to this module";
+                            exit();
+                        }
+
+                        // Get session TA limit
+                        $stmt = $con->prepare('SELECT * FROM assigned_to WHERE module_session_num = ?');
+                        $stmt->bind_param('i', $sessionSelect);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        // If session is already fully allocated echo error message
+                        if ($result->num_rows >= $sessionInfo[4]) {
+                            echo "Session is already fully allocated";
+                            exit();
+                        } 
+
+                        // Session ta allocation minus users already allocated to session
+                        $spaceLeft = $sessionInfo[4] - $result->num_rows;
+
+                        // If list of users available is greater than remaining session space randomly allocate
+                        if (count($aval) > $spaceLeft) {
+                            // Loops for the amount of time there is space left
+                            for ($i = 0 ; $i < $spaceLeft; $i++){ 
+                                // Selects random user from aval array and allocates them to the module
+                                if (!allocateUser($aval[rand(0, (count($aval) - 1))], $sessionSelect, $con)) {
+                                    echo "Allocation Error. Some users may have been allocated!";
+                                    exit();
+                                } 
+    
+                            }
+
+                            // Echo successful allocation of all remaining spaces of session
+                            echo "Automatic Allocation Successful";
+                            exit();
+                        }
+                        // If list of users available is equal to remaining session space. Allocate those users
+                        else if (count($aval) == $spaceLeft) {
+                            foreach ($aval as $user) {
+                                // Allocate user to module
+                                if (!allocateUser($aval[rand(0, (count($aval) - 1))], $sessionSelect, $con)) {
+                                    echo "Allocation Error. Some users may have been allocated!";
+                                    exit();
+                                } 
+                            }
+
+                            // Echo successful allocation of all remaining spaces of session
+                            echo "Automatic Allocation Successful";
+                            exit();
+                        } 
+                        // List of users available is less than remaining session space. Allocate the users and echo message explaining
+                        else {
+                            foreach ($aval as $user) {
+                                // Allocate user to module
+                                if (!allocateUser($aval[rand(0, (count($aval) - 1))], $sessionSelect, $con)) {
+                                    echo "Allocation Error. Some users may have been allocated!";
+                                    exit();
+                                } 
+                            }
+
+                            // Echo successful allocation of all remaining spaces of session
+                            echo "Allocation partially successful. Unable to fill all spaces due to limited availability of users";
+                            exit();
+                        }
+
                     } else {
                         echo "Invalid Session ID";
                         exit();

@@ -72,7 +72,7 @@ session_start();
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button>
                         <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
-                        <button class="nav-link" id="v-pills-avaliability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-avaliability" type="button" role="tab" aria-controls="v-pills-avaliability" aria-selected="false">Avaliability</button>
+                        <button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false">availability</button>
                         <button class="nav-link" id="v-pills-timesheets-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timesheets" type="button" role="tab" aria-controls="v-pills-timesheets" aria-selected="false">Timesheets</button>
                         <button class="nav-link" id="v-pills-admin-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admin" type="button" role="tab" aria-controls="v-pills-admin" aria-selected="false">Admin Menu</button>
                         <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
@@ -222,10 +222,10 @@ session_start();
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="v-pills-avaliability" role="tabpanel" aria-labelledby="v-pills-avaliability-tab" tabindex="0">
-                            <h1 class="display-6 ps-3">Avaliability</h1>
+                        <div class="tab-pane fade" id="v-pills-availability" role="tabpanel" aria-labelledby="v-pills-availability-tab" tabindex="0">
+                            <h1 class="display-6 ps-3">availability</h1>
                             <hr>
-                            <p class="ps-3">Adjust your avaliability by clicking cells within the table to mark yourself as free/busy. A stripped cell means you are free.</p>
+                            <p class="ps-3">Adjust your availability by clicking cells within the table to mark yourself as free/busy. A stripped cell means you are free.</p>
                             <div class="container">
                                 <div class="row p-3">
                                     <div class="col-12">
@@ -873,7 +873,15 @@ session_start();
                                         </div>
                                         <div class="tab-pane fade" id="pills-autoallocation" role="tabpanel" aria-labelledby="pills-autoallocation-tab" tabindex="0">
                                             <div class="container">
-
+                                                <form id="autoAlloc" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="autoAllocSessionSelect" class="form-label">Select Session</label>
+                                                        <select type="session" class="form-control custom-input" id="autoAllocSessionSelect" name="autoAllocSessionSelect" required>
+                                                            <?php include('assets/php/getSessionList.php') ?>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Auto Allocate</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
