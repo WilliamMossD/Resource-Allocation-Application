@@ -365,7 +365,7 @@
                     } 
 
                     // Prepare MySQL Statement
-                    $stmt = $con->prepare("SELECT module_session_num, num_of_ta, session_day, DATE_FORMAT(module_sessions.session_start, '%H:%i') AS session_start, DATE_FORMAT(module_sessions.session_end, '%H:%i') AS session_end, session_type, session_location FROM module_sessions WHERE module_num=?");
+                    $stmt = $con->prepare("SELECT module_session_num AS 'Session ID', num_of_ta AS 'TA Limit', session_day as 'Day', DATE_FORMAT(module_sessions.session_start, '%H:%i') AS 'Start Time', DATE_FORMAT(module_sessions.session_end, '%H:%i') AS 'End Time', session_type AS 'Session Type', session_location AS 'Location' FROM module_sessions WHERE module_num=?");
                     $stmt->bind_param('i', $sessionsModuleSelect);
 
                     // Execute MySQL Statement
@@ -376,12 +376,7 @@
                         echo "No Sessions Exist";
                         exit();
                     } else {
-                        $i = 0;
-                        while($row = $result->fetch_array(MYSQLI_ASSOC)) {
-                            $rows[$i] = [$row["module_session_num"], $row["num_of_ta"], $row["session_day"], $row["session_start"], $row["session_end"], $row["session_type"], $row["session_location"]];
-                            $i++;
-                        }
-                        echo json_encode($rows);
+                        echo generateTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields());
                         exit();
                     }
 
@@ -612,7 +607,7 @@
                     } 
 
                     // Prepare MySQL Statement
-                    $stmt = $con->prepare('SELECT teaching_assistants.ta_num, teaching_assistants.fname, teaching_assistants.lname, assigned_to.ta_num, assigned_to.module_session_num FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?');
+                    $stmt = $con->prepare("SELECT teaching_assistants.ta_num AS 'User ID', teaching_assistants.fname AS 'First Name', teaching_assistants.lname AS 'Last Name', assigned_to.ta_num, assigned_to.module_session_num FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?");
                     $stmt->bind_param('i', $viewAllocSessionSelect);
 
                     // Execute MySQL Statement
@@ -623,12 +618,7 @@
                         echo "No Allocation Exists";
                         exit();
                     } else {
-                        $i = 0;
-                        while($row = $result->fetch_array(MYSQLI_ASSOC)) {
-                            $rows[$i] = [$row["ta_num"], $row["fname"], $row["lname"], $row["ta_num"], $row["module_session_num"]];
-                            $i++;
-                        }
-                        echo json_encode($rows);
+                        echo generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields());
                         exit();
                     }
 
@@ -653,7 +643,7 @@
                     } 
 
                     // Prepare MySQL Statement
-                    $stmt = $con->prepare("SELECT modules.module_name, module_sessions.session_day, DATE_FORMAT(module_sessions.session_start, '%H:%i') AS session_start, DATE_FORMAT(module_sessions.session_end, '%H:%i') AS session_end, module_sessions.session_type, module_sessions.session_location, assigned_to.ta_num, assigned_to.module_session_num FROM modules, module_sessions, assigned_to WHERE modules.module_num = module_sessions.module_num AND module_sessions.module_session_num = assigned_to.module_session_num AND assigned_to.ta_num=?");
+                    $stmt = $con->prepare("SELECT modules.module_name AS 'Module Name', module_sessions.session_day AS 'Day', DATE_FORMAT(module_sessions.session_start, '%H:%i') AS 'Session Start', DATE_FORMAT(module_sessions.session_end, '%H:%i') AS 'Session End', module_sessions.session_type AS 'Session Type', module_sessions.session_location AS 'Location', assigned_to.ta_num, assigned_to.module_session_num FROM modules, module_sessions, assigned_to WHERE modules.module_num = module_sessions.module_num AND module_sessions.module_session_num = assigned_to.module_session_num AND assigned_to.ta_num=?");
                     $stmt->bind_param('i', $viewAllocUserSelect);
 
                     // Execute MySQL Statement
@@ -664,12 +654,7 @@
                         echo "No Allocation Exists";
                         exit();
                     } else {
-                        $i = 0;
-                        while($row = $result->fetch_array(MYSQLI_ASSOC)) {
-                            $rows[$i] = [$row["module_name"], $row["session_day"], $row["session_start"], $row["session_end"], $row["session_type"], $row["session_location"], $row["ta_num"], $row["module_session_num"]];
-                            $i++;
-                        }
-                        echo json_encode($rows);
+                        echo generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields());
                         exit();
                     }
 

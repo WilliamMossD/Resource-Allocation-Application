@@ -104,124 +104,53 @@ function formHandler(id) {
 
       } else if (["viewSession", "viewAllocationBySession", "viewAllocationByUser"].includes(id)) {
 
-        // Check if data contains a HTML table
-        try {
-          var array = JSON.parse(data);
-          
-          // Add table to DOM
-          switch (id) {
-            case "viewSession":
-              // Get table by ID
-              var table = document.getElementById("sessionsTable");
+        if ("viewSession" == id) {
 
-              // Remove existing rows
-              for (var i = table.rows.length - 1; i > 0; i--) {
-                table.deleteRow(i);
-              }
+          // Parses HTML string to HTML DOM
+          var table = new DOMParser().parseFromString(data, "text/xml");
 
-              // Add new rows and populate
-              for (var i = 0; i < array.length; i++) {
-                var newRow = table.insertRow();
-                var cell1 = newRow.insertCell();
-                cell1.innerHTML = array[i][0];
-                var cell2 = newRow.insertCell();
-                cell2.innerHTML = array[i][2];
-                var cell3 = newRow.insertCell();
-                cell3.innerHTML = array[i][3];
-                var cell4 = newRow.insertCell();
-                cell4.innerHTML = array[i][4];
-                var cell5 = newRow.insertCell();
-                cell5.innerHTML = array[i][5];
-                var cell6 = newRow.insertCell();
-                cell6.innerHTML = array[i][6];
-                var cell7 = newRow.insertCell();
-                cell7.innerHTML = array[i][1];
-              }
-
-              // Display Table
-              table.style.display = "table";
-              document.getElementById("sessionsTablePrint").style.display = "initial";
-
-              break;
-            case "viewAllocationBySession":
-              // Get table by ID
-              var table = document.getElementById("allocationUserTable");
-
-              // Hide other table
-              document.getElementById("allocationSessionTable").style.display = "none";
-
-              // Remove existing rows
-              for (var i = table.rows.length - 1; i > 0; i--) {
-                table.deleteRow(i);
-              }
-
-              // Add new rows and populate
-              for (var i = 0; i < array.length; i++) {
-                var newRow = table.insertRow();
-                var cell1 = newRow.insertCell();
-                cell1.innerHTML = array[i][0];
-                var cell2 = newRow.insertCell();
-                cell2.innerHTML = array[i][1];
-                var cell3 = newRow.insertCell();
-                cell3.innerHTML = array[i][2];
-                var cell4 = newRow.insertCell();
-                cell4.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][3] + ',' + array[i][4] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
-
-              }
-
-              // Display Table
-              table.style.display = "table";
-              document.getElementById("allocationDivPrint").style.display = "initial";
-
-              break;
-            case "viewAllocationByUser":
-              // Get table by ID
-              var table = document.getElementById("allocationSessionTable");
-
-              // Hide other table
-              document.getElementById("allocationUserTable").style.display = "none";
-
-              // Remove existing rows
-              for (var i = table.rows.length - 1; i > 0; i--) {
-                table.deleteRow(i);
-              }
-
-              // Add new rows and populate
-              for (var i = 0; i < array.length; i++) {
-                var newRow = table.insertRow();
-                var cell1 = newRow.insertCell();
-                cell1.innerHTML = array[i][0];
-                var cell2 = newRow.insertCell();
-                cell2.innerHTML = array[i][1];
-                var cell3 = newRow.insertCell();
-                cell3.innerHTML = array[i][2];
-                var cell4 = newRow.insertCell();
-                cell4.innerHTML = array[i][3];
-                var cell5 = newRow.insertCell();
-                cell5.innerHTML = array[i][4];
-                var cell6 = newRow.insertCell();
-                cell6.innerHTML = array[i][5];
-                var cell7 = newRow.insertCell();
-                cell7.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][6] + ',' + array[i][7] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
-              }
-
-              // Display Table
-              table.style.display = "table";
-              document.getElementById("allocationDivPrint").style.display = "initial";
-
-              break;
-          }
-
-          return false;
-
-        } catch (e) {
-          if (["viewAllocationByUser", "viewAllocationBySession"].includes(id)) {
-            document.getElementById("allocationSessionTable").style.display = "none";
-            document.getElementById("allocationUserTable").style.display = "none";
-            document.getElementById("allocationDivPrint").style.display = "none";
-            } else if ("viewSession" == id) {
-            document.getElementById("sessionsTable").style.display = "none";
+          // Check if parser worked
+          if (table.querySelector("parsererror")) {
+            // Parsing Failed
+            document.getElementById("sessionsDiv").innerHTML = "";
             document.getElementById("sessionsTablePrint").style.display = "none";
+          } else {
+            // Parsing Succeeded
+            document.getElementById("sessionsDiv").innerHTML = data
+            document.getElementById("sessionsTablePrint").style.display = "initial";
+            return false;
+          }
+        } else if ("viewAllocationBySession" == id) {
+
+          // Parses HTML string to HTML DOM
+          var table = new DOMParser().parseFromString(data, "text/xml");
+
+          // Check if parser worked
+          if (table.querySelector("parsererror")) {
+            // Parsing Failed
+            document.getElementById("allocationDiv").innerHTML = "";
+            document.getElementById("allocationDivPrint").style.display = "none";
+          } else {
+            // Parsing Succeeded
+            document.getElementById("allocationDiv").innerHTML = data
+            document.getElementById("allocationDivPrint").style.display = "initial";
+            return false;
+          }
+        } else if ("viewAllocationByUser" == id) {
+
+          // Parses HTML string to HTML DOM
+          var table = new DOMParser().parseFromString(data, "text/xml");
+
+          // Check if parser worked
+          if (table.querySelector("parsererror")) {
+            // Parsing Failed
+            document.getElementById("allocationDiv").innerHTML = "";
+            document.getElementById("allocationDivPrint").style.display = "none";
+          } else {
+            // Parsing Succeeded
+            document.getElementById("allocationDiv").innerHTML = data
+            document.getElementById("allocationDivPrint").style.display = "initial";
+            return false;
           }
         }
       }

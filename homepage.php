@@ -30,7 +30,7 @@ session_start();
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- JavaScript -->
-    <script defer src="assets/js/functions.js?version=8"></script>
+    <script defer src="assets/js/functions.js?version=16"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script defer src="assets/js/brands.js"></script>
     <script defer src="assets/js/solid.js"></script>
@@ -622,21 +622,6 @@ session_start();
                                                         </form>
                                                     </div>
                                                     <div class="col-12" id="sessionsDiv">
-                                                        <table class="table table-striped" style="display: none;" id="sessionsTable">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">Session ID</th>
-                                                                    <th scope="col">Day</th>
-                                                                    <th scope="col">Start Time</th>
-                                                                    <th scope="col">End Time</th>
-                                                                    <th scope="col">Session Type</th>
-                                                                    <th scope="col">Location</th>
-                                                                    <th scope="col">Num of TA</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
                                                     </div>
                                                     <button type="button" class="btn btn-primary" style="display: none;" onclick="printTable('sessionsDiv')" id="sessionsTablePrint">Print</button>
                                                 </div>
@@ -823,33 +808,6 @@ session_start();
                                                     </div>
                                                 </form>
                                                 <div class="col-12" id="allocationDiv">
-                                                    <table class="table table-striped text-center" style="display: none;" id="allocationSessionTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">Module Name</th>
-                                                                <th scope="col">Day</th>
-                                                                <th scope="col">Start Time</th>
-                                                                <th scope="col">End Time</th>
-                                                                <th scope="col">Session Type</th>
-                                                                <th scope="col">Location</th>
-                                                                <th scope="col">Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                    </table>
-                                                    <table class="table table-striped text-center" style="display: none;" id="allocationUserTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">User ID</th>
-                                                                <th scope="col">First Name</th>
-                                                                <th scope="col">Last Name</th>
-                                                                <th scope="col">Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                    </table>
                                                 </div>
                                                 <button type="button" class="btn btn-primary" style="display: none;" onclick="printTable('allocationDiv')" id="allocationDivPrint">Print</button>
                                             </div>

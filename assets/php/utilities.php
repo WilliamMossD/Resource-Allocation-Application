@@ -242,7 +242,7 @@
         }
 
         // Generate HTML table
-        $table = '<table class="table">';
+        $table = '<table class="table text-center">';
 
         // Add header row to table
         $table = $table . '<thead><tr>';
@@ -268,4 +268,60 @@
         return $table;
 
     }
+
+        /**
+     * Generates a HTML table from an associative array and adds the removal button to the end which uses the last two keys
+     *
+     * @param  mixed $associativeArray Must be an array containing array(s) which contain (key,value) pairs and the keys being the column headers
+     * @param  mixed $fields Must be an 1D array containing the keys in the associative array
+     * @return string String containing a HTML table
+     */    
+    function generateAllocTable($associativeArray, $fields) {
+        
+        $keys = array();
+
+        // Get names of keys
+        foreach($fields as $field) {
+            array_push($keys, $field->name);
+        }
+
+        // Pop last two keys
+        array_pop($keys);
+        array_pop($keys);
+
+        // Push actions col
+        array_push($keys, 'Actions');
+
+        // Generate HTML table
+        $table = '<table class="table text-center">';
+
+        // Add header row to table
+        $table = $table . '<thead><tr>';
+        foreach($keys as $key) {
+            $table = $table . '<th scope="col">' . $key . '</th>';
+        }
+        $table = $table . '</tr></thead>';
+
+        // Add row data to table
+        $table = $table . '<tbody>';
+        foreach($associativeArray as $row){
+            $table = $table . '<tr>';
+            foreach($keys as $key) {
+                if ($key == 'Actions') {
+                    $table = $table . '<td><button type="button" title="Remove Allocation" onclick="removeAlloc(' . $row['ta_num']  . ',' . $row['module_session_num'] . ')' . '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button></td>';
+                } else {
+                    $table = $table . '<td>'.$row[$key].'</td>';
+                }
+            }
+            $table = $table . '</tr>';
+        }
+        $table = $table . '</tbody>';
+
+        // Close table
+        $table = $table . '</table>';
+        
+        return $table;
+
+    }
+
  ?>
