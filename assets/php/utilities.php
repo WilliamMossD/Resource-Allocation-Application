@@ -224,4 +224,48 @@
 
         return $stmt->execute();
     }
+    
+    /**
+     * Generates a HTML table from an associative array
+     *
+     * @param  mixed $associativeArray Must be an array containing array(s) which contain (key,value) pairs and the keys being the column headers
+     * @param  mixed $fields Must be an 1D array containing the keys in the associative array
+     * @return string String containing a HTML table
+     */    
+    function generateTable($associativeArray, $fields) {
+        
+        $keys = array();
+
+        // Get names of keys
+        foreach($fields as $field) {
+            array_push($keys, $field->name);
+        }
+
+        // Generate HTML table
+        $table = '<table class="table">';
+
+        // Add header row to table
+        $table = $table . '<thead><tr>';
+        foreach($keys as $key) {
+            $table = $table . '<th scope="col">' . $key . '</th>';
+        }
+        $table = $table . '</tr></thead>';
+
+        // Add row data to table
+        $table = $table . '<tbody>';
+        foreach($associativeArray as $row){
+            $table = $table . '<tr>';
+            foreach($keys as $key) {
+                $table = $table . '<td>'.$row[$key].'</td>';
+            }
+            $table = $table . '</tr>';
+        }
+        $table = $table . '</tbody>';
+
+        // Close table
+        $table = $table . '</table>';
+        
+        return $table;
+
+    }
  ?>
