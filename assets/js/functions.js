@@ -69,137 +69,165 @@ function formHandler(id) {
       } catch (err) {}
     },
     success: function (data) {
-      // Convert JSON data into an array
-      try {
-        var array = JSON.parse(data);
-        if (id == "viewSession") {
-          // Get table by ID
-          var table = document.getElementById("sessionsTable");
+        if (["selectUser", "selectModule", "selectSession"].includes(id)) {
 
-          // Remove existing rows
-          for (var i = table.rows.length - 1; i > 0; i--) {
-            table.deleteRow(i);
-          }
+          // Convert JSON data into an array
+          try {
+            var array = JSON.parse(data);
 
-          // Add new rows and populate
-          for (var i = 0; i < array.length; i++) {
-            var newRow = table.insertRow();
-            var cell1 = newRow.insertCell();
-            cell1.innerHTML = array[i][0];
-            var cell2 = newRow.insertCell();
-            cell2.innerHTML = array[i][2];
-            var cell3 = newRow.insertCell();
-            cell3.innerHTML = array[i][3];
-            var cell4 = newRow.insertCell();
-            cell4.innerHTML = array[i][4];
-            var cell5 = newRow.insertCell();
-            cell5.innerHTML = array[i][5];
-            var cell6 = newRow.insertCell();
-            cell6.innerHTML = array[i][6];
-            var cell7 = newRow.insertCell();
-            cell7.innerHTML = array[i][1];
-          }
+            switch (id) {
+              case "selectUser":
+                var form = 'updateUser';
+                break;
+              case "selectModule":
+                var form = 'updateModule';
+                break;
+              case "selectSession":
+                var form = 'updateSession';
+                break;
+            }
 
-          // Display Table
-          table.style.display = "table";
-        } else if (id == "viewAllocationBySession") {
-          // Get table by ID
-          var table = document.getElementById("allocationUserTable");
+            // Update Values
+            setFormValues(form, Object.values(array));
 
-          // Hide other table
-          document.getElementById("allocationSessionTable").style.display = "none";
+            // Enable Inputs
+            formDisable(form, false);
 
-          // Remove existing rows
-          for (var i = table.rows.length - 1; i > 0; i--) {
-            table.deleteRow(i);
-          }
+            return false;
 
-          // Add new rows and populate
-          for (var i = 0; i < array.length; i++) {
-            var newRow = table.insertRow();
-            var cell1 = newRow.insertCell();
-            cell1.innerHTML = array[i][0];
-            var cell2 = newRow.insertCell();
-            cell2.innerHTML = array[i][1];
-            var cell3 = newRow.insertCell();
-            cell3.innerHTML = array[i][2];
-            var cell4 = newRow.insertCell();
-            cell4.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][3] + ',' + array[i][4] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
+          } catch (e){}
+            
+      } else if (["updateUser", "updateModule", "updateSession"].includes(id)) {
 
-          }
+        // Disable form inputs
+        formDisable(id, true);
 
-          // Display Table
-          table.style.display = "table";
-        } else if (id == "viewAllocationByUser") {
-          // Get table by ID
-          var table = document.getElementById("allocationSessionTable");
+      } else if (["viewSession", "viewAllocationBySession", "viewAllocationByUser"].includes(id)) {
 
-          // Hide other table
-          document.getElementById("allocationUserTable").style.display = "none";
-
-          // Remove existing rows
-          for (var i = table.rows.length - 1; i > 0; i--) {
-            table.deleteRow(i);
-          }
-
-          // Add new rows and populate
-          for (var i = 0; i < array.length; i++) {
-            var newRow = table.insertRow();
-            var cell1 = newRow.insertCell();
-            cell1.innerHTML = array[i][0];
-            var cell2 = newRow.insertCell();
-            cell2.innerHTML = array[i][1];
-            var cell3 = newRow.insertCell();
-            cell3.innerHTML = array[i][2];
-            var cell4 = newRow.insertCell();
-            cell4.innerHTML = array[i][3];
-            var cell5 = newRow.insertCell();
-            cell5.innerHTML = array[i][4];
-            var cell6 = newRow.insertCell();
-            cell6.innerHTML = array[i][5];
-            var cell7 = newRow.insertCell();
-            cell7.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][6] + ',' + array[i][7] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
-          }
-
-          // Display Table
-          table.style.display = "table";
-        } else if (
-          ["selectUser", "selectModule", "selectSession"].includes(id)
-        ) {
-          var form;
-
+        // Check if data contains a HTML table
+        try {
+          var array = JSON.parse(data);
+          
+          // Add table to DOM
           switch (id) {
-            case "selectUser":
-              form = "updateUser";
+            case "viewSession":
+              // Get table by ID
+              var table = document.getElementById("sessionsTable");
+
+              // Remove existing rows
+              for (var i = table.rows.length - 1; i > 0; i--) {
+                table.deleteRow(i);
+              }
+
+              // Add new rows and populate
+              for (var i = 0; i < array.length; i++) {
+                var newRow = table.insertRow();
+                var cell1 = newRow.insertCell();
+                cell1.innerHTML = array[i][0];
+                var cell2 = newRow.insertCell();
+                cell2.innerHTML = array[i][2];
+                var cell3 = newRow.insertCell();
+                cell3.innerHTML = array[i][3];
+                var cell4 = newRow.insertCell();
+                cell4.innerHTML = array[i][4];
+                var cell5 = newRow.insertCell();
+                cell5.innerHTML = array[i][5];
+                var cell6 = newRow.insertCell();
+                cell6.innerHTML = array[i][6];
+                var cell7 = newRow.insertCell();
+                cell7.innerHTML = array[i][1];
+              }
+
+              // Display Table
+              table.style.display = "table";
+              document.getElementById("sessionsTablePrint").style.display = "initial";
+
               break;
-            case "selectModule":
-              form = "updateModule";
+            case "viewAllocationBySession":
+              // Get table by ID
+              var table = document.getElementById("allocationUserTable");
+
+              // Hide other table
+              document.getElementById("allocationSessionTable").style.display = "none";
+
+              // Remove existing rows
+              for (var i = table.rows.length - 1; i > 0; i--) {
+                table.deleteRow(i);
+              }
+
+              // Add new rows and populate
+              for (var i = 0; i < array.length; i++) {
+                var newRow = table.insertRow();
+                var cell1 = newRow.insertCell();
+                cell1.innerHTML = array[i][0];
+                var cell2 = newRow.insertCell();
+                cell2.innerHTML = array[i][1];
+                var cell3 = newRow.insertCell();
+                cell3.innerHTML = array[i][2];
+                var cell4 = newRow.insertCell();
+                cell4.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][3] + ',' + array[i][4] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
+
+              }
+
+              // Display Table
+              table.style.display = "table";
+              document.getElementById("allocationDivPrint").style.display = "initial";
+
               break;
-            case "selectSession":
-              form = "updateSession";
+            case "viewAllocationByUser":
+              // Get table by ID
+              var table = document.getElementById("allocationSessionTable");
+
+              // Hide other table
+              document.getElementById("allocationUserTable").style.display = "none";
+
+              // Remove existing rows
+              for (var i = table.rows.length - 1; i > 0; i--) {
+                table.deleteRow(i);
+              }
+
+              // Add new rows and populate
+              for (var i = 0; i < array.length; i++) {
+                var newRow = table.insertRow();
+                var cell1 = newRow.insertCell();
+                cell1.innerHTML = array[i][0];
+                var cell2 = newRow.insertCell();
+                cell2.innerHTML = array[i][1];
+                var cell3 = newRow.insertCell();
+                cell3.innerHTML = array[i][2];
+                var cell4 = newRow.insertCell();
+                cell4.innerHTML = array[i][3];
+                var cell5 = newRow.insertCell();
+                cell5.innerHTML = array[i][4];
+                var cell6 = newRow.insertCell();
+                cell6.innerHTML = array[i][5];
+                var cell7 = newRow.insertCell();
+                cell7.innerHTML = '<button type="button" title="Remove Allocation" onclick="removeAlloc(' + array[i][6] + ',' + array[i][7] + ')' + '" class="btn btn-danger"><i class="fa-solid fa-x"></i></button>';
+              }
+
+              // Display Table
+              table.style.display = "table";
+              document.getElementById("allocationDivPrint").style.display = "initial";
+
               break;
           }
 
-          // Update form values
-          setFormValues(form, Object.values(array));
-          // Enable Inputs
-          formDisable(form, false);
-        } 
-      } catch (e) {
-        if (
-          ["updateUser", "updateModule", "updateSession"].includes(id)
-        ) {
-          // Disable form inputs
-          formDisable(id, true);
-        } else if (["viewAllocationByUser", "viewAllocationBySession"].includes(id)) {
-          document.getElementById("allocationSessionTable").style.display = "none";
-          document.getElementById("allocationUserTable").style.display = "none";
-        } else if ("viewSession" == id) {
-          document.getElementById("sessionsTable").style.display = "none";
+          return false;
+
+        } catch (e) {
+          if (["viewAllocationByUser", "viewAllocationBySession"].includes(id)) {
+            document.getElementById("allocationSessionTable").style.display = "none";
+            document.getElementById("allocationUserTable").style.display = "none";
+            document.getElementById("allocationDivPrint").style.display = "none";
+            } else if ("viewSession" == id) {
+            document.getElementById("sessionsTable").style.display = "none";
+            document.getElementById("sessionsTablePrint").style.display = "none";
+          }
         }
-        // Alert Data
-        alert(data);
       }
+
+      // Alert Data
+      alert(data);
 
       // Reset Form
       document.getElementById(id).reset();
@@ -209,6 +237,7 @@ function formHandler(id) {
       getUserList();
       getModuleList();
       getSessionList();
+      
     },
     error: function () {
       alert("Unknown Error Occurred");
@@ -335,4 +364,11 @@ function time() {
   }
   document.getElementById("time").innerText = hr + ":" + mn;
   setTimeout(time, 1000);
+}
+
+function printTable(var1) {
+  var printWindow = window.open();
+  printWindow.document.write(document.getElementById(var1).innerHTML);
+  printWindow.print();
+  printWindow.close();
 }

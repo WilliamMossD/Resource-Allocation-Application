@@ -365,7 +365,7 @@
                     } 
 
                     // Prepare MySQL Statement
-                    $stmt = $con->prepare('SELECT module_session_num, num_of_ta, session_day, session_start, session_end, session_type, session_location FROM module_sessions WHERE module_num=?');
+                    $stmt = $con->prepare("SELECT module_session_num, num_of_ta, session_day, DATE_FORMAT(module_sessions.session_start, '%H:%i') AS session_start, DATE_FORMAT(module_sessions.session_end, '%H:%i') AS session_end, session_type, session_location FROM module_sessions WHERE module_num=?");
                     $stmt->bind_param('i', $sessionsModuleSelect);
 
                     // Execute MySQL Statement
@@ -646,7 +646,7 @@
                 // Validate Input
                 if (validateInput($viewAllocUserSelect, inputType::Number) && $viewAllocUserSelect > 0) {
 
-                    // Checks session exists
+                    // Checks user exists
                     if (!userExists($viewAllocUserSelect, $con)) {
                         echo "Invalid User ID";
                         exit();

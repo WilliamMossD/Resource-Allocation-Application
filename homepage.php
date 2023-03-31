@@ -30,7 +30,7 @@ session_start();
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- JavaScript -->
-    <script defer src="assets/js/functions.js"></script>
+    <script defer src="assets/js/functions.js?version=8"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script defer src="assets/js/brands.js"></script>
     <script defer src="assets/js/solid.js"></script>
@@ -621,7 +621,7 @@ session_start();
                                                             </div>
                                                         </form>
                                                     </div>
-                                                    <div class="col-12">
+                                                    <div class="col-12" id="sessionsDiv">
                                                         <table class="table table-striped" style="display: none;" id="sessionsTable">
                                                             <thead>
                                                                 <tr>
@@ -638,6 +638,7 @@ session_start();
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    <button type="button" class="btn btn-primary" style="display: none;" onclick="printTable('sessionsDiv')" id="sessionsTablePrint">Print</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -821,8 +822,8 @@ session_start();
                                                         </div>
                                                     </div>
                                                 </form>
-                                                <div class="col-12">
-                                                    <table class="table table-striped" style="display: none; text-align: center" id="allocationSessionTable">
+                                                <div class="col-12" id="allocationDiv">
+                                                    <table class="table table-striped text-center" style="display: none;" id="allocationSessionTable">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Module Name</th>
@@ -837,7 +838,7 @@ session_start();
                                                         <tbody>
                                                         </tbody>
                                                     </table>
-                                                    <table class="table table-striped" style="display: none; text-align: center" id="allocationUserTable">
+                                                    <table class="table table-striped text-center" style="display: none;" id="allocationUserTable">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">User ID</th>
@@ -850,6 +851,7 @@ session_start();
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <button type="button" class="btn btn-primary" style="display: none;" onclick="printTable('allocationDiv')" id="allocationDivPrint">Print</button>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-manualallocation" role="tabpanel" aria-labelledby="pills-manualallocation-tab" tabindex="0">
