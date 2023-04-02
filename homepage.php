@@ -782,6 +782,20 @@ session_start();
                                     <div class="tab-content" id="pills-tabContent">
                                         <div class="tab-pane fade show active" id="pills-viewallocation" role="tabpanel" aria-labelledby="pills-viewallocation-tab" tabindex="0">
                                             <div class="container">
+                                                <form id="viewAllocationByModule" class="row g-3 pt-2 pb-2">
+                                                    <div class="col-12 mb-2">
+                                                        <label for="viewAllocModuleSelect" class="form-label">Select Module</label>
+                                                        <div class="input-group mb-3">
+                                                            <select type="module" class="form-control custom-input" id="viewAllocModuleSelect" name="viewAllocModuleSelect" required>
+                                                                <?php include('assets/php/getModuleList.php') ?>
+                                                            </select>
+                                                            <button class="btn ms-3 btn-primary" type="submit">View Allocation</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="col-12 mb-2">
+                                                    <p class="mb-0 text-center"> or </p>
+                                                </div>
                                                 <form id="viewAllocationBySession" class="row g-3 pt-2 pb-2">
                                                     <div class="col-12 mb-2">
                                                         <label for="viewAllocSessionSelect" class="form-label">Select Session</label>

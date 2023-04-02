@@ -102,56 +102,32 @@ function formHandler(id) {
         // Disable form inputs
         formDisable(id, true);
 
-      } else if (["viewSession", "viewAllocationBySession", "viewAllocationByUser"].includes(id)) {
+      } else if (["viewSession", "viewAllocationByModule" , "viewAllocationBySession", "viewAllocationByUser"].includes(id)) {
 
-        if ("viewSession" == id) {
+        // Parses HTML string to HTML DOM
+        var table = new DOMParser().parseFromString(data, "text/xml");
 
-          // Parses HTML string to HTML DOM
-          var table = new DOMParser().parseFromString(data, "text/xml");
+        switch (id) {
+          case "viewSession":
+            var div = 'updateUser';
+            var button = 'sessionsTablePrint';
+            break;
+          default:
+            var div = 'allocationDiv';
+            var button = 'allocationDivPrint';
+            break;
+        }
 
-          // Check if parser worked
-          if (table.querySelector("parsererror")) {
-            // Parsing Failed
-            document.getElementById("sessionsDiv").innerHTML = "";
-            document.getElementById("sessionsTablePrint").style.display = "none";
-          } else {
-            // Parsing Succeeded
-            document.getElementById("sessionsDiv").innerHTML = data
-            document.getElementById("sessionsTablePrint").style.display = "initial";
-            return false;
-          }
-        } else if ("viewAllocationBySession" == id) {
-
-          // Parses HTML string to HTML DOM
-          var table = new DOMParser().parseFromString(data, "text/xml");
-
-          // Check if parser worked
-          if (table.querySelector("parsererror")) {
-            // Parsing Failed
-            document.getElementById("allocationDiv").innerHTML = "";
-            document.getElementById("allocationDivPrint").style.display = "none";
-          } else {
-            // Parsing Succeeded
-            document.getElementById("allocationDiv").innerHTML = data
-            document.getElementById("allocationDivPrint").style.display = "initial";
-            return false;
-          }
-        } else if ("viewAllocationByUser" == id) {
-
-          // Parses HTML string to HTML DOM
-          var table = new DOMParser().parseFromString(data, "text/xml");
-
-          // Check if parser worked
-          if (table.querySelector("parsererror")) {
-            // Parsing Failed
-            document.getElementById("allocationDiv").innerHTML = "";
-            document.getElementById("allocationDivPrint").style.display = "none";
-          } else {
-            // Parsing Succeeded
-            document.getElementById("allocationDiv").innerHTML = data
-            document.getElementById("allocationDivPrint").style.display = "initial";
-            return false;
-          }
+        // Check if parser worked
+        if (table.querySelector("parsererror")) {
+          // Parsing Failed
+          document.getElementById(div).innerHTML = "";
+          document.getElementById(button).style.display = "none";
+        } else {
+          // Parsing Succeeded
+          document.getElementById(div).innerHTML = data
+          document.getElementById(button).style.display = "initial";
+          return false;
         }
       }
 
@@ -299,5 +275,7 @@ function printTable(var1) {
   var printWindow = window.open();
   printWindow.document.write(document.getElementById(var1).innerHTML);
   printWindow.print();
-  printWindow.close();
+  printWindow.onafterprint = (event) => {
+    printWindow.close();
+  };
 }

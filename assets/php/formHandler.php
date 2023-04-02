@@ -590,6 +590,47 @@
                     echo "Invalid Session ID Format";
                     exit();
                 }
+
+            // View Allocation by Module Form
+            case "viewAllocationByModule":
+
+                // Sanitize Input
+                $viewAllocModuleSelect = filter_var($_POST['viewAllocModuleSelect'], FILTER_SANITIZE_NUMBER_INT);
+
+                // Validate Input
+                if (validateInput($viewAllocModuleSelect, inputType::Number) && $viewAllocModuleSelect > 0) {
+
+                    // Checks session exists
+                    if (!moduleExists($viewAllocModuleSelect, $con)) {
+                        echo "Invalid Module ID";
+                        exit();
+                    } 
+
+                    // Gets sessions assigned to module
+                    $sessions = getModuleSessions($viewAllocModuleSelect, $con);
+
+                    // Makes sure module has sessions
+                    if ($sessions->num_rows == 0) {
+                        echo "No Sessions Exist";
+                        exit();
+                    } 
+
+                    // Iterate through each session and generate HTML
+                    $sessions = $sessions->fetch_all(MYSQLI_ASSOC);
+                    echo '<div>';
+                    echo generateText(getModuleName($viewAllocModuleSelect, $con), 3);
+                    foreach ($sessions as $session) {
+                        $result = getSessionAllocation($session['module_session_num'], $con);
+                        $sessionInfo = getSessionData($session['module_session_num'], $con)->fetch_array(MYSQLI_ASSOC);
+                        echo generateText($sessionInfo['session_day'] . ' ' . $sessionInfo['session_start'] . ' - ' . $sessionInfo['session_end'] , 4) . generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields()) ;
+                    }
+                    echo '</div>';
+                    exit();
+
+                } else {
+                    echo "Invalid Module ID Format";
+                    exit();
+                }
             
             // View Allocation by Session Form
             case "viewAllocationBySession":
@@ -606,19 +647,14 @@
                         exit();
                     } 
 
-                    // Prepare MySQL Statement
-                    $stmt = $con->prepare("SELECT teaching_assistants.ta_num AS 'User ID', teaching_assistants.fname AS 'First Name', teaching_assistants.lname AS 'Last Name', assigned_to.ta_num, assigned_to.module_session_num FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?");
-                    $stmt->bind_param('i', $viewAllocSessionSelect);
-
-                    // Execute MySQL Statement
-                    $stmt->execute();
-                    $result = $stmt->get_result();
+                    $result = getSessionAllocation($viewAllocSessionSelect, $con);
 
                     if ($result->num_rows == 0) {
                         echo "No Allocation Exists";
                         exit();
                     } else {
-                        echo generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields());
+                        $sessionInfo = getSessionData($viewAllocSessionSelect, $con)->fetch_array(MYSQLI_ASSOC);
+                        echo '<div>' .  generateText(getModuleName(getModuleNumBySession($viewAllocSessionSelect, $con), $con) . ': ' . $sessionInfo['session_day'] . ' ' . $sessionInfo['session_start'] . ' - ' . $sessionInfo['session_end'] , 4) . generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields()) . '</div>';
                         exit();
                     }
 
@@ -654,7 +690,7 @@
                         echo "No Allocation Exists";
                         exit();
                     } else {
-                        echo generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields());
+                        echo '<div>' . generateText(getUserName($viewAllocUserSelect, $con), 4) . generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields()) . '</div>';
                         exit();
                     }
 

@@ -94,8 +94,20 @@
         $stmt->execute();
         $result = $stmt->get_result()->fetch_array(MYSQLI_NUM);
 
-        return $result[0] . "" . $result[1];
+        return $result[0] . " " . $result[1];
 
+    }
+
+    // Gets module name by ID
+    function getModuleName($id, $conn) {
+        $stmt = $conn->prepare('SELECT module_name FROM modules WHERE module_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_array(MYSQLI_NUM);
+
+        return $result[0];
     }
 
     // Gets module data by ID
@@ -108,6 +120,18 @@
         $result = $stmt->get_result();
         
         return $result;
+    }
+
+    // Returns the module num of the session by the session ID
+    function getModuleNumBySession($id, $conn) {
+        $stmt = $conn->prepare('SELECT module_num FROM module_sessions WHERE module_session_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_array(MYSQLI_NUM);
+
+        return $result[0];
     }
 
     // Gets session data by ID
@@ -158,16 +182,29 @@
         return $result;
     }
 
-    // Returns the number of TAs currently allocated
+    // Returns the number of TAs currently allocated to a session
     function sessionTAAllocation($sessionID, $conn) {
-        $stmt = $conn->prepare('SELECT module_session_num FROM assigned_to WHERE module_session_num=?');
+        return getSessionAllocation($sessionID, $conn)->num_rows;
+    }
+
+    // Returns session allocation by ID
+    function getSessionAllocation($sessionID, $conn) {
+        // Prepare MySQL Statement
+        $stmt = $conn->prepare("SELECT teaching_assistants.ta_num AS 'User ID', teaching_assistants.fname AS 'First Name', teaching_assistants.lname AS 'Last Name', assigned_to.ta_num, assigned_to.module_session_num FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?");
         $stmt->bind_param('i', $sessionID);
 
+        // Execute MySQL Statement
         $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->num_rows;
+        return $stmt->get_result();
     }
+
+    // Returns an array containing the session IDs of sessions assigned to a module
+    function getModuleSessions($moduleID, $conn) {
+        $stmt = $conn->prepare("SELECT module_session_num FROM module_sessions WHERE module_num = ? ORDER BY module_session_num ASC");
+        $stmt->bind_param('i', $moduleID);
+        $stmt->execute();
+        return $stmt->get_result();
+    } 
 
     // Checks if user is assigned to a session
     function isAssigned($userID, $sessionID, $conn) {
@@ -226,12 +263,23 @@
     }
     
     /**
+     * Generates a HTML title using the string as the title
+     *
+     * @param string $string String of text
+     * @param int $font_size Font size variable from 1 to 6
+     * @return string String containing a HTML title
+     */
+    function generateText($string, $font_size) {
+        return '<p class="fs-' . $font_size .'">' . $string . '</p>';
+    }
+    
+    /**
      * Generates a HTML table from an associative array
      *
      * @param  mixed $associativeArray Must be an array containing array(s) which contain (key,value) pairs and the keys being the column headers
      * @param  mixed $fields Must be an 1D array containing the keys in the associative array
      * @return string String containing a HTML table
-     */    
+     */        
     function generateTable($associativeArray, $fields) {
         
         $keys = array();
