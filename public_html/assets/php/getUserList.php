@@ -7,25 +7,12 @@
  * Supports GET requests and returns a data list of users
  */
 
+    require_once(__DIR__ . '/../../../src/inc/utilities.php');
+
     try {
-
-        // Database Connection Info
-        $HOST = 'localhost';
-        $USER = 'mossfree_admin';
-        $PASSWORD = 'Btf7@w&7Dhi1';
-        $DATABASE = 'mossfree_tutordatabase';
-
         try {
-            $con = mysqli_connect($HOST, $USER, $PASSWORD, $DATABASE);
-        } catch (Exception $e) {
-            // Redirect back to root
-            header('Location: index.html');
-            exit();
-        }
-
-        if (mysqli_connect_errno()) {
-            // Redirect back to root
-            header('Location: index.html');
+            $con = mysqliConnect();
+        } catch (Exception $e) { 
             exit();
         }
 

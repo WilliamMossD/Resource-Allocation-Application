@@ -10,19 +10,23 @@
     // Start PHP Session 
     session_start();
 
-    require_once realpath('vendor/autoload.php');
-    require('assets/php/utilities.php');
-    
-    // Database Connection Info
-    $HOST = 'localhost';
-    $USER = 'mossfree_admin';
-    $PASSWORD = 'Btf7@w&7Dhi1';
-    $DATABASE = 'mossfree_tutordatabase';
+    require_once ('../vendor/autoload.php');
+    require_once ('../src/inc/utilities.php');
 
+    // Load .env file
+    $dotenv = Dotenv\Dotenv::createImmutable('../config');
+    $dotenv->load();
+    $dotenv->required(['CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI', 'TENANT_ID']);
+
+    echo $_ENV['CLIENT_ID'];
+    echo $_ENV['CLIENT_SECRET'];
+    echo $_ENV['REDIRECT_URI'];
+    exit();
+    
     $provider = new TheNetworg\OAuth2\Client\Provider\Azure([
-        'clientId'          => '7b0feefa-d830-4aac-b302-ee754ac66acf',
-        'clientSecret'      => 'jXK8Q~uZ.RTJGpWH23bGFmgmyRLTVF.S-PiRWaQ8',
-        'redirectUri'       => 'https://www.mossfreelancing.co.uk/taallocation/login.php',
+        'clientId'          => $_ENV['CLIENT_ID'],
+        'clientSecret'      => $_ENV['CLIENT_SECRET'],
+        'redirectUri'       => $_ENV['REDIRECT_URI'],
         'scopes'            => ['openid'],
         'defaultEndPointVersion' => '2.0'
     ]);
@@ -50,13 +54,13 @@
 
             // Connect to database
             try {
-                $con = mysqli_connect($HOST, $USER, $PASSWORD, $DATABASE);
+                $con = mysqliConnect();
                 if ($con->connect_error) {
-                    header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=3');
+                    header('Location: index.html?errorcode=3');
                     exit();
                 } 
             } catch (Exception $e) {
-                header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=4');
+                header('Location: index.html?errorcode=4');
                 exit();
             }
 
@@ -80,12 +84,12 @@
                 $_SESSION['email'] = $email;
                 session_write_close();
 
-                header('Location: https://www.mossfreelancing.co.uk/taallocation/homepage.php');
+                header('Location: homepage.php');
                 exit();
 
             } else {
                 // User is not authorized to access this app. Redirect to index with message
-                header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=1');
+                header('Location: index.html?errorcode=1');
                 exit();
             }
         
@@ -93,7 +97,7 @@
 
         } else {
             // OAuth2.0 State mismatch. Redirect to index with message
-            header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=2');
+            header('Location: index.html?errorcode=2');
             exit();
         }
     } else {

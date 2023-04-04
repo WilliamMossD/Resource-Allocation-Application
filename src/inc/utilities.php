@@ -7,6 +7,8 @@
  * Contains utility functions used by multiple php files
  */
 
+    require_once(__DIR__ . '/../../vendor/autoload.php');
+
     enum inputType {
         case Name;
         case Text;
@@ -16,6 +18,20 @@
         case HHMM;
     }
 
+    // Load .env file
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../config');
+    $dotenv->load();
+    $dotenv->required(['HOST', 'USER', 'PASSWORD', 'DATABASE']);
+
+    function mysqliConnect() {
+        try {
+            return mysqli_connect($_ENV['HOST'], $_ENV['USER'], $_ENV['PASSWORD'], $_ENV['DATABASE']);
+        } catch (Exception $e) {
+            // Redirect back to root
+            header('Location: index.html');
+            exit();
+        }
+    }
 
     // Sanitize Function 
     function sanitizeInput($input){

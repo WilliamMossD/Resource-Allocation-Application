@@ -1,6 +1,7 @@
 {
     "require": {
-        "thenetworg/oauth2-azure": "^2.1",
-        "microsoft/microsoft-graph": "^1.92"
+        "microsoft/microsoft-graph": "^1.93",
+        "vlucas/phpdotenv": "^5.5",
+        "thenetworg/oauth2-azure": "^2.1"
     }
 }
