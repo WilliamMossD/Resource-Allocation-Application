@@ -1,0 +1,9 @@
+/* 
+ * login.css file for the Individual Project (University of Sussex 2023)
+ * Author: William Moss (235319)
+*/
+
+:root {
+    /* Changing Bootstrap Variables */
+    --bs-gradient: linear-gradient(to right top, #09406b, #0e5489, #126aa9, #1480c9, #1297eb) !important;
+}

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "thenetworg/oauth2-azure": "^2.1",
+        "microsoft/microsoft-graph": "^1.92"
+    }
+}
