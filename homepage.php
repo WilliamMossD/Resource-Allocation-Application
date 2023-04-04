@@ -5,8 +5,45 @@
  * Author: William Moss (235319)  
  */
 
-// Start PHP Session 
-session_start();
+    // Start PHP Session 
+    session_start();
+
+    require('assets/php/utilities.php');
+
+    // Database Connection Info
+    $HOST = 'localhost';
+    $USER = 'mossfree_admin';
+    $PASSWORD = 'Btf7@w&7Dhi1';
+    $DATABASE = 'mossfree_tutordatabase';  
+
+    // Check is user is logged in
+    if (!$_SESSION['loggedin']) {
+        header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=5');
+        exit();
+    }
+
+    // Connect to database
+    try {
+        $con = mysqli_connect($HOST, $USER, $PASSWORD, $DATABASE);
+        if ($con->connect_error) {
+        header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=3');
+        exit();
+        } 
+    } catch (Exception $e) {
+        header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=4');
+        exit();
+    }
+
+    // Get session email and make sure its valid
+    if (!userExistsByEmail($_SESSION['email'], $con)) {
+        header('Location: https://www.mossfreelancing.co.uk/taallocation/index.html?errorcode=1');
+        exit();
+    }
+
+    // Get user data
+    $userData = getUserDataByEmail($_SESSION['email'], $con)->fetch_array(MYSQLI_ASSOC);
+    $name = getUserName($userData['ta_num'], $con);
+    $admin = $userData['admin'];
 
 ?>
 
@@ -14,11 +51,11 @@ session_start();
 <html lang="en">
 
 <head>
-    <title>Tutor Scheduling Software</title>
+    <title>Homepage - Tutor Scheduling Software</title>
 
     <!-- Meta Elements -->
     <meta charset="utf-8">
-    <meta name="description" content="Local Antique Dealer">
+    <meta name="description" content="Homepage- Tutor Scheduling Software">
     <!-- Cand No: 235319 -->
     <meta name="author" content="William Moss">
 
@@ -31,7 +68,8 @@ session_start();
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- JavaScript -->
     <script defer src="assets/js/functions.js?version=16"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=2"></script><?php endif; ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity  ="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script defer src="assets/js/brands.js"></script>
     <script defer src="assets/js/solid.js"></script>
     <script defer src="assets/js/fontawesome.js"></script>
@@ -53,16 +91,16 @@ session_start();
                 <div class="col-8 d-flex text-center">
                     <img class="profile-icon" src="assets/images/person-icon.png">
                     <div class="container ps-4 text-start">
-                        <h1 class="display-6">Welcome, John Doe</h1>
-                        <h5 class="fw-light">Position: *Insert Position Here*</h2>
-                            <h5 class="fw-light">Email: *Insert Email*</h2>
+                        <h1 class="display-6">Welcome, <?=$name?></h1>
+                        <h5 class="fw-light">Position: <?php if ($admin == '1') : ?>Admin<? else: ?>Teaching Assistant<?php endif; ?></h2>
+                        <h5 class="fw-light">Email: <?=$_SESSION['email']?></h2>
                     </div>
                 </div>
                 <div class="col-4 text-center user-button">
                     <button type="button" class="btn btn-primary me-3"><i class="fa-solid fa-message fa-2xl"></i><br>
                         <p class="mb-1 mt-2 fs-6 text-wrap">Messages</p>
                     </button>
-                    <button type="button" class="btn btn-primary"><i class="fa-solid fa-right-from-bracket fa-2xl"></i><br>
+                    <button onclick="location.href='logout.php'" type="button" class="btn btn-primary"><i class="fa-solid fa-right-from-bracket fa-2xl"></i><br>
                         <p class="mb-1 mt-2 fs-6 text-wrap">Logout</p>
                     </button>
                 </div>
@@ -74,7 +112,7 @@ session_start();
                         <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
                         <button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false">Availability</button>
                         <button class="nav-link" id="v-pills-timesheets-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timesheets" type="button" role="tab" aria-controls="v-pills-timesheets" aria-selected="false">Timesheets</button>
-                        <button class="nav-link" id="v-pills-admin-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admin" type="button" role="tab" aria-controls="v-pills-admin" aria-selected="false">Admin Menu</button>
+                        <?php if ($admin == '1') : ?><button class="nav-link" id="v-pills-admin-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admin" type="button" role="tab" aria-controls="v-pills-admin" aria-selected="false">Admin Menu</button><?php endif; ?>
                         <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
                     </div>
                 </div>
@@ -218,7 +256,7 @@ session_start();
                             <hr>
                             <div class="container p-3">
                                 <div class="row" id="moduleCards">
-                                    <?php include('assets/php/getModuleCards.php') ?>
+                                    <?php if ($admin == '1') : ?><?php include('assets/php/getModuleCards.php') ?><? else: ?><span>TBI</span><?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -371,7 +409,7 @@ session_start();
                             <h1 class="display-6 ps-3">Timesheets</h1>
                             <hr>
                         </div>
-                        <div class="tab-pane fade" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab" tabindex="0">
+                        <?php if ($admin == '1') : ?><div class="tab-pane fade" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Admin Menu</h1>
                             <hr>
                             <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
@@ -861,7 +899,7 @@ session_start();
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div><?php endif; ?>
                         <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Settings</h1>
                             <hr>

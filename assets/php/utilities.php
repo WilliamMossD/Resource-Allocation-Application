@@ -85,6 +85,18 @@
         return $result;
     }
 
+    // Gets user data by ID - Does not return password column
+    function getUserDataByEmail($email, $conn) {
+        $stmt = $conn->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE email = ?');
+        $stmt->bind_param('i', $email);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result;
+    }
+
     // Gets user name by user ID
     function getUserName($id, $conn) {
         $stmt = $conn->prepare('SELECT fname, lname FROM teaching_assistants WHERE ta_num = ?');
@@ -149,6 +161,23 @@
     // Checks if user exists
     function userExists($id, $conn) {
         if (getUserData($id, $conn)->num_rows == 0) {
+            return false;
+        } 
+        return true;
+    }
+
+    // Checks if user exists
+    function userExistsByEmail($email, $conn) {
+        $stmt = $conn->prepare("SELECT email FROM teaching_assistants WHERE email=?");
+        $stmt->bind_param('s', $email);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows;
+
+        if ($result->num_rows == 0) {
             return false;
         } 
         return true;

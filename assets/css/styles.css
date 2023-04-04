@@ -7,6 +7,7 @@
     /* Changing Bootstrap Variables */
     --bs-dark-rgb: 21, 34, 56 !important;
     --bs-body-bg-rgb: 35, 57, 93 !important;
+    --bs-gradient: linear-gradient(to right top, #09406b, #0e5489, #126aa9, #1480c9, #1297eb) !important;
 }
 
 .user-row {
