@@ -7,3 +7,7 @@
     /* Changing Bootstrap Variables */
     --bs-gradient: linear-gradient(to right top, #09406b, #0e5489, #126aa9, #1480c9, #1297eb) !important;
 }
+
+.bg-lightblue{
+    background-color: rgb(0 70 124);
+}

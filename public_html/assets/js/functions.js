@@ -12,7 +12,7 @@ for (var i = 0; i < document.forms.length; i++) {
 }
 
 // Add event listener to availability table cells
-document.querySelectorAll("#avaltable td").forEach((e) =>
+document.querySelectorAll("#availtable td").forEach((e) =>
   e.addEventListener("click", function () {
     if (e.classList.contains("active")) {
       e.classList.remove("active");
@@ -23,18 +23,18 @@ document.querySelectorAll("#avaltable td").forEach((e) =>
 );
 
 // Add Event Listeners to availability buttons
-document.getElementById("clearAval").addEventListener("click", function () {
-  // Removes active class from all cells in the avaltable table
+document.getElementById("clearAvail").addEventListener("click", function () {
+  // Removes active class from all cells in the availtable table
   document
-    .querySelectorAll("#avaltable td")
+    .querySelectorAll("#availtable td")
     .forEach((e) => e.classList.remove("active"));
 });
 
-document.getElementById("resetAval").addEventListener("click", function () {
+document.getElementById("resetAvail").addEventListener("click", function () {
   // Resets table back to last saved state
 });
 
-document.getElementById("saveAval").addEventListener("click", function () {
+document.getElementById("saveAvail").addEventListener("click", function () {
   // Turn table data into a 2D array
   // POST data to database
   // Send success alert

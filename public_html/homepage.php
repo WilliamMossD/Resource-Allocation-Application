@@ -54,7 +54,7 @@
     <meta name="author" content="William Moss">
 
     <!-- Primary Stylesheets -->
-    <link href="assets/css/styles.css?version=2" rel="stylesheet" type="text/css">
+    <link href="assets/css/styles.css?version=4" rel="stylesheet" type="text/css">
 
     <!-- Third Party Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
@@ -69,12 +69,12 @@
     <script defer src="assets/js/fontawesome.js"></script>
 </head>
 
-<body class="bg-body" onload="load()">
+<body class="bg-gradient min-vh-100" onload="load()">
     <div class="container-fluid p-0">
-        <nav class="navbar bg-dark" data-bs-theme="dark">
+        <nav class="navbar">
             <div class="container-fluid text-center">
                 <span class="col-4" id="time">HH:MM</span>
-                <a class="navbar-brand col-4">Tutor Scheduling Software</a>
+                <a class="navbar-brand col-4"><span>Tutor Scheduling Software</a></span>
                 <span class="col-4" id="date">DD:MM:YYYY</span>
             </div>
         </nav>
@@ -102,9 +102,9 @@
             <div class="col-12 p-0 mt-5 mb-5 d-lg-flex">
                 <div class="col-lg-2 rounded shadow bg-lightblue p-3 mb-5" style="height: fit-content;">
                     <div class="nav flex-lg-column nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button>
+                        <?php if ($admin == '0') : ?><button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button><?php endif; ?>
                         <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
-                        <button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false">Availability</button>
+                        <?php if ($admin == '0') : ?><button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false">Availability</button><?php endif; ?>
                         <button class="nav-link" id="v-pills-timesheets-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timesheets" type="button" role="tab" aria-controls="v-pills-timesheets" aria-selected="false">Timesheets</button>
                         <?php if ($admin == '1') : ?><button class="nav-link" id="v-pills-admin-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admin" type="button" role="tab" aria-controls="v-pills-admin" aria-selected="false">Admin Menu</button><?php endif; ?>
                         <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
@@ -112,139 +112,17 @@
                 </div>
                 <div class="col-lg-9 offset-lg-1 shadow rounded bg-lightblue p-3">
                     <div class="tab-content" id="v-pills-tabContent">
+                        <?php if ($admin == '0') : ?>
                         <div class="tab-pane fade show active" id="v-pills-timetable" role="tabpanel" aria-labelledby="v-pills-timetable-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Timetable</h1>
                             <hr>
                             <div class="container">
                                 <div class="row p-3">
-                                    <table class="table text-center fw-normal table-striped table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th class="first-cell" scope="col"></th>
-                                                <th scope="col">Monday</th>
-                                                <th scope="col">Tuesday</th>
-                                                <th scope="col">Wednesday</th>
-                                                <th scope="col">Thursday</th>
-                                                <th scope="col">Friday</th>
-                                            </tr>
-                                        </thead>
-                                        <tr>
-                                            <th scope="row">08:00</th>
-                                            <td id="08Mon"></td>
-                                            <td id="08Tue"></td>
-                                            <td id="08Wed"></td>
-                                            <td id="08Thu"></td>
-                                            <td id="08Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">09:00</th>
-                                            <td id="09Mon"></td>
-                                            <td id="09Tue"></td>
-                                            <td id="09Wed"></td>
-                                            <td id="09Thu"></td>
-                                            <td id="09Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">10:00</th>
-                                            <td id="10Mon"></td>
-                                            <td id="10Tue"></td>
-                                            <td id="10Wed"></td>
-                                            <td id="10Thu"></td>
-                                            <td id="10Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">11:00</th>
-                                            <td id="11Mon"></td>
-                                            <td id="11Tue"></td>
-                                            <td id="11Wed"></td>
-                                            <td id="11Thu"></td>
-                                            <td id="11Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">12:00</th>
-                                            <td id="12Mon"></td>
-                                            <td id="12Tue"></td>
-                                            <td id="12Wed"></td>
-                                            <td id="12Thu"></td>
-                                            <td id="12Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">13:00</th>
-                                            <td id="13Mon"></td>
-                                            <td id="13Tue"></td>
-                                            <td id="13Wed"></td>
-                                            <td id="13Thu"></td>
-                                            <td id="13Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">14:00</th>
-                                            <td id="14Mon"></td>
-                                            <td id="14Tue"></td>
-                                            <td id="14Wed"></td>
-                                            <td id="14Thu"></td>
-                                            <td id="14Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">15:00</th>
-                                            <td id="15Mon"></td>
-                                            <td id="15Tue"></td>
-                                            <td id="15Wed"></td>
-                                            <td id="15Thu"></td>
-                                            <td id="15Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">16:00</th>
-                                            <td id="16Mon"></td>
-                                            <td id="16Tue"></td>
-                                            <td id="16Wed"></td>
-                                            <td id="16Thu"></td>
-                                            <td id="16Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">17:00</th>
-                                            <td id="17Mon"></td>
-                                            <td id="17Tue"></td>
-                                            <td id="17Wed"></td>
-                                            <td id="17Thu"></td>
-                                            <td id="17Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">18:00</th>
-                                            <td id="18Mon"></td>
-                                            <td id="18Tue"></td>
-                                            <td id="18Wed"></td>
-                                            <td id="18Thu"></td>
-                                            <td id="18Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">19:00</th>
-                                            <td id="19Mon"></td>
-                                            <td id="19Tue"></td>
-                                            <td id="19Wed"></td>
-                                            <td id="19Thu"></td>
-                                            <td id="19Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">20:00</th>
-                                            <td id="20Mon"></td>
-                                            <td id="20Tue"></td>
-                                            <td id="20Wed"></td>
-                                            <td id="20Thu"></td>
-                                            <td id="20Fri"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">21:00</th>
-                                            <td id="21Mon"></td>
-                                            <td id="21Tue"></td>
-                                            <td id="21Wed"></td>
-                                            <td id="21Thu"></td>
-                                            <td id="21Fri"></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <?php include('../src/tpl/timetable.php') ?>
                                 </div>
                             </div>
                         </div>
+                        <?php endif; ?>
                         <div class="tab-pane fade" id="v-pills-work" role="tabpanel" aria-labelledby="v-pills-work-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Modules</h1>
                             <hr>
@@ -254,6 +132,7 @@
                                 </div>
                             </div>
                         </div>
+                        <?php if ($admin == '0') : ?>
                         <div class="tab-pane fade" id="v-pills-availability" role="tabpanel" aria-labelledby="v-pills-availability-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Availability</h1>
                             <hr>
@@ -261,144 +140,21 @@
                             <div class="container">
                                 <div class="row p-3">
                                     <div class="col-12">
-                                        <table id="avaltable" class="table text-center fw-normal table-striped table-bordered aval-table">
-                                            <thead>
-                                                <tr>
-                                                    <th class="first-cell" scope="col"></th>
-                                                    <th scope="col">Monday</th>
-                                                    <th scope="col">Tuesday</th>
-                                                    <th scope="col">Wednesday</th>
-                                                    <th scope="col">Thursday</th>
-                                                    <th scope="col">Friday</th>
-                                                </tr>
-                                            </thead>
-                                            <tr>
-                                                <th scope="row">08:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">09:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">10:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">11:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">12:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">13:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">14:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">15:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">16:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">17:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">18:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">19:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">20:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">21:00</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                        <?php include('../src/tpl/availtable.php') ?>
                                     </div>
                                     <div class="col-4 ps-4">
-                                        <button type="button" id="clearAval" class="btn btn-danger">Clear</button>
+                                        <button type="button" id="clearAvail" class="btn btn-danger">Clear</button>
                                     </div>
                                     <div class="col-4 text-center">
-                                        <button type="button" id="resetAval" class="btn btn-warning">Reset</button>
+                                        <button type="button" id="resetAvail" class="btn btn-warning">Reset</button>
                                     </div>
                                     <div class="col-4 text-end pe-4">
-                                        <button type="button" id="saveAval" class="btn btn-success">Save</button>
+                                        <button type="button" id="saveAvail" class="btn btn-success">Save</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <?php endif; ?>
                         <div class="tab-pane fade" id="v-pills-timesheets" role="tabpanel" aria-labelledby="v-pills-timesheets-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Timesheets</h1>
                             <hr>
@@ -886,6 +642,7 @@
                                                             <?php include('assets/php/getSessionList.php') ?>
                                                         </select>
                                                     </div>
+                                                    <p class="fw-light mt-0">NOTE: Users that are admins will not be automatically allocated to sessions</p>                                                    
                                                     <button type="submit" class="btn btn-primary">Auto Allocate</button>
                                                 </form>
                                             </div>

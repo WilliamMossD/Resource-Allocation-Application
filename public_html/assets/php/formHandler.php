@@ -837,7 +837,7 @@
                         $sessionInfo = getSessionData($sessionSelect, $con)->fetch_array(MYSQLI_NUM);
 
                         // Get all users from database
-                        $stmt = $con->prepare('SELECT ta_num from teaching_assistants ORDER BY ta_num ASC');
+                        $stmt = $con->prepare('SELECT ta_num from teaching_assistants WHERE admin=0 ORDER BY ta_num ASC');
                         $stmt->execute();
                         $userrows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
