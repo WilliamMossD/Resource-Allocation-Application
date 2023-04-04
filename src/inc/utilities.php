@@ -101,6 +101,35 @@
         return $result;
     }
 
+    // Returns true if user is admin false otherwise
+    function isUserAdmin($id, $conn) {
+        $stmt = $conn->prepare("SELECT admin FROM teaching_assistants WHERE ta_num=? AND admin=1");
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows;
+
+        if ($result->num_rows == 0) {
+            return false;
+        } 
+        return true;
+    }
+
+    // Returns the user ID associated with the email
+    function getUserIDByEmail($email, $conn) {
+        $stmt = $conn->prepare('SELECT ta_num FROM teaching_assistants WHERE email = ?');
+        $stmt->bind_param('i', $email);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_array(MYSQLI_ASSOC);
+        
+        return $result['ta_num'];
+    }
+
     // Gets user data by ID - Does not return password column
     function getUserDataByEmail($email, $conn) {
         $stmt = $conn->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE email = ?');

@@ -128,7 +128,7 @@
                             <hr>
                             <div class="container p-3">
                                 <div class="row" id="moduleCards">
-                                    <?php if ($admin == '1') : ?><?php include('assets/php/getModuleCards.php') ?><? else: ?><span>TBI</span><?php endif; ?>
+                                    <?php include('assets/php/getModuleCards.php') ?>
                                 </div>
                             </div>
                         </div>

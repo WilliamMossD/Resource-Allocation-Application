@@ -16,11 +16,29 @@
         } catch (Exception $e) {
             exit();
         }
-
-        // Get rows from module table
-        $stmt = $con->prepare('SELECT * from modules ORDER BY module_num ASC');
-        $stmt->execute();
-        $modulerows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        
+        if(isset($_SESSION['email']) && isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+            if (!isUserAdmin(getUserIDByEmail($_SESSION['email'], $con), $con)) {
+                // Get modules that user is assigned to
+                $stmt = $con->prepare('SELECT DISTINCT modules.module_num, modules.module_name, modules.module_convenor, modules.module_description, modules.link FROM modules, module_sessions, assigned_to WHERE assigned_to.ta_num = ? AND module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.module_num = modules.module_num
+                ');
+                $userID = getUserIDByEmail($_SESSION['email'], $con);
+                $stmt->bind_param('i', $userID);
+                $stmt->execute();
+                $modulerows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+                
+            } else {
+                // Get rows from module table
+                $stmt = $con->prepare('SELECT * from modules ORDER BY module_num ASC');
+                $stmt->execute();
+                $modulerows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            }
+        } else {
+            // Get rows from module table
+            $stmt = $con->prepare('SELECT * from modules ORDER BY module_num ASC');
+            $stmt->execute();
+            $modulerows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        }
 
         foreach ($modulerows as $row) {
             echo '<div class="col-4">';
