@@ -75,6 +75,20 @@ thead tr {
     border-top: none;
 }
 
+.timetable td {
+    width: 16.66%;
+    padding: 0 !important;
+}
+
+.timetable .bg-green {
+    background-color: darkcyan !important;
+}
+
+.timetable th {
+    width: 16.66%;
+}
+
+
 tbody th {
     border-left: none;
 }

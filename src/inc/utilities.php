@@ -306,7 +306,7 @@
         $stmt->bind_param('s', $endtime);
         $stmt->execute();
 
-        $stmt = $conn->prepare('SELECT CASE WHEN (module_sessions.session_start > @start AND module_sessions.session_start < @end) or (module_sessions.session_end > @start AND module_sessions.session_end < @end) or (module_sessions.session_start < @start AND module_sessions.session_end > @end) or (module_sessions.session_start > @start AND module_sessions.session_end < @end) THEN "true" ELSE "false" END AS overlap FROM module_sessions, assigned_to WHERE module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.session_day = ? AND assigned_to.ta_num = ?');
+        $stmt = $conn->prepare('SELECT CASE WHEN (module_sessions.session_start > @start AND module_sessions.session_start < @end) or (module_sessions.session_end > @start AND module_sessions.session_end < @end) or (module_sessions.session_start <= @start AND module_sessions.session_end >= @end) or (module_sessions.session_start > @start AND module_sessions.session_end < @end) THEN "true" ELSE "false" END AS overlap FROM module_sessions, assigned_to WHERE module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.session_day = ? AND assigned_to.ta_num = ?');
         $stmt->bind_param('si', $day, $userID);
 
         $stmt->execute();
@@ -324,6 +324,35 @@
         }
 
         return true;
+    }
+
+    // Checks to see if user is available between a set time by checking current sessions they are assigned to
+    // returns array containing the session_IDs of the session they are assigned to during that time   
+    function isAvailableModule($userID, $starttime, $endtime, $day, $conn) {
+        $stmt = $conn->prepare('SET @start = ?');
+        $stmt->bind_param('s', $starttime);
+        $stmt->execute();
+
+        $stmt = $conn->prepare('SET @end = ?');
+        $stmt->bind_param('s', $endtime);
+        $stmt->execute();
+
+        $stmt = $conn->prepare('SELECT CASE WHEN (module_sessions.session_start > @start AND module_sessions.session_start < @end) or (module_sessions.session_end > @start AND module_sessions.session_end < @end) or (module_sessions.session_start <= @start AND module_sessions.session_end >= @end) or (module_sessions.session_start > @start AND module_sessions.session_end < @end) THEN module_sessions.module_session_num END AS module_session_num FROM module_sessions, assigned_to WHERE module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.session_day = ? AND assigned_to.ta_num = ?');
+        $stmt->bind_param('si', $day, $userID);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $sessions = $result->fetch_all(MYSQLI_ASSOC);
+
+        $session_IDs = array();
+
+        foreach($sessions as $session) {
+            if ($session['module_session_num'] != NULL) {
+                array_push($session_IDs, $session['module_session_num']);
+            }
+        }
+
+        return $session_IDs;
     }
 
     // Allocates user to session
