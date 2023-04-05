@@ -11,6 +11,7 @@
 
     enum inputType {
         case Name;
+        case Location;
         case Text;
         case Number;
         case Email;
@@ -48,6 +49,13 @@
                 } else {
                     return false;
                 }
+            case inputType::Location:
+                // Makes sure name only contains alphabetic characters and has size range of 2 to 50
+                if (preg_match("/^[a-zA-Z -'\d]{2,50}$/", $input)) {
+                    return true;
+                } else {
+                    return false;
+                }
             case inputType::Text:
                 // Checks text uses the UTF-8 encoding and has a max size of 100
                 if (mb_check_encoding($input, 'UTF-8') && (strlen($input) <= 100)) {
@@ -79,7 +87,7 @@
             case inputType::HHMM:
                 // Validates HH:MM
                 // Checks MM is either 30 or 00
-                if (preg_match("/^([0-1]?[0-9]|2[0-3]):[03][0]$/",$input)) {
+                if (preg_match("/^([0-1]?[0-9]|2[0-3]):[0][0]$/",$input)) {
                     return true;
                 } else {
                     return false;

@@ -61,8 +61,8 @@
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- JavaScript -->
-    <script defer src="assets/js/functions.js?version=16"></script>
-    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=2"></script><?php endif; ?>
+    <script defer src="assets/js/functions.js?version=21"></script>
+    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=3"></script><?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity  ="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script defer src="assets/js/brands.js"></script>
     <script defer src="assets/js/solid.js"></script>
@@ -103,7 +103,7 @@
                 <div class="col-lg-2 rounded shadow bg-lightblue p-3 mb-5" style="height: fit-content;">
                     <div class="nav flex-lg-column nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <?php if ($admin == '0') : ?><button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button><?php endif; ?>
-                        <button class="nav-link" id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
+                        <button <?php if ($admin == '0') : ?>class="nav-link"<? else: ?>class="nav-link active"<?php endif; ?> id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
                         <?php if ($admin == '0') : ?><button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false">Availability</button><?php endif; ?>
                         <button class="nav-link" id="v-pills-timesheets-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timesheets" type="button" role="tab" aria-controls="v-pills-timesheets" aria-selected="false">Timesheets</button>
                         <?php if ($admin == '1') : ?><button class="nav-link" id="v-pills-admin-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admin" type="button" role="tab" aria-controls="v-pills-admin" aria-selected="false">Admin Menu</button><?php endif; ?>
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                         <?php endif; ?>
-                        <div class="tab-pane fade" id="v-pills-work" role="tabpanel" aria-labelledby="v-pills-work-tab" tabindex="0">
+                        <div <?php if ($admin == '0') : ?>class="tab-pane fade"<? else: ?>class="tab-pane fade active show"<?php endif; ?> id="v-pills-work" role="tabpanel" aria-labelledby="v-pills-work-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Modules</h1>
                             <hr>
                             <div class="container p-3">
@@ -459,12 +459,12 @@
                                                     <div class="col-3 mb-2">
                                                         <label for="sessionStartTimeInput" class="form-label">Start
                                                             Time</label>
-                                                        <input type="time" class="form-control custom-input" id="sessionStartTimeInput" name="sessionStartTimeInput" min="08:00" max="20:30" step="1800" required>
+                                                        <input type="time" class="form-control custom-input" id="sessionStartTimeInput" name="sessionStartTimeInput" min="08:00" max="20:00" step="3600" required>
                                                     </div>
                                                     <div class="col-3 mb-2">
                                                         <label for="sessionEndTimeInput" class="form-label">End
                                                             Time</label>
-                                                        <input type="time" class="form-control custom-input" id="sessionEndTimeInput" name="sessionEndTimeInput" min="08:30" max="21:00" step="1800" required>
+                                                        <input type="time" class="form-control custom-input" id="sessionEndTimeInput" name="sessionEndTimeInput" min="09:00" max="21:00" step="3600" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Add Session</button>
                                                 </form>

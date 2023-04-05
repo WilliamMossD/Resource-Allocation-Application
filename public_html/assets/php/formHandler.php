@@ -399,12 +399,12 @@
                         exit();
                     } 
 
-                    if (validateInput($moduleLocInput, inputType::Name)) {
+                    if (validateInput($moduleLocInput, inputType::Location)) {
                         if (in_array($sessionTypeSelect, ["Lab", "Teaching", "Other"])) {
                             if (validateInput($sessionTAInput, inputType::Number) && (0 < $sessionTAInput) && ($sessionTAInput <= 5)) {
                                 if (in_array($sessionDaySelect, ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])) {
-                                    if (validateInput($sessionStartTimeInput, inputType::HHMM) && (strtotime("08:00") <= strtotime($sessionStartTimeInput)) && (strtotime($sessionStartTimeInput) <= strtotime("20:30"))) {
-                                        if (validateInput($sessionEndTimeInput, inputType::HHMM) && (strtotime("08:30") <= strtotime($sessionEndTimeInput)) && (strtotime($sessionEndTimeInput) <= strtotime("21:00")) && (strtotime($sessionEndTimeInput) > strtotime($sessionStartTimeInput))) {
+                                    if (validateInput($sessionStartTimeInput, inputType::HHMM) && (strtotime("08:00") <= strtotime($sessionStartTimeInput)) && (strtotime($sessionStartTimeInput) <= strtotime("20:00"))) {
+                                        if (validateInput($sessionEndTimeInput, inputType::HHMM) && (strtotime("09:00") <= strtotime($sessionEndTimeInput)) && (strtotime($sessionEndTimeInput) <= strtotime("21:00")) && (strtotime($sessionEndTimeInput) > strtotime($sessionStartTimeInput))) {
                                             
                                             // Prepare MySQL Statement
                                             $stmt = $con->prepare('INSERT INTO module_sessions (module_num, num_of_ta, session_day, session_start, session_end, session_type, session_location) VALUES (?, ?, ?, ?, ?, ?, ?)');
@@ -500,7 +500,7 @@
                             exit();
                         } 
 
-                        if (validateInput($editSessionLocInput, inputType::Name)) {
+                        if (validateInput($editSessionLocInput, inputType::Location)) {
                             if (in_array($editSessionTypeSelect, ["Lab", "Teaching", "Other"])) {
                                 if (validateInput($editSessionTAInput, inputType::Number) && (0 < $editSessionTAInput) && ($editSessionTAInput <= 5)) {
                                     if (in_array($editSessionDaySelect, ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])) {

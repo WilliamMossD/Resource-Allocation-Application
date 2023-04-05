@@ -11,7 +11,7 @@ var logout = new URLSearchParams(window.location.search).get('logout');
  */
 if (logout) {
     alert("Logged Out Successfully");
-    window.history.replaceState({}, document.title, "/" + "taallocation/index.html");
+    window.history.replaceState({}, document.title, "/" + "index.html");
 }
 
 
@@ -20,7 +20,7 @@ if (logout) {
  */
 if (error) {
     alert(getErrorText(error));
-    window.history.replaceState({}, document.title, "/" + "taallocation/index.html");
+    window.history.replaceState({}, document.title, "/" + "index.html");
 }
 
 /*

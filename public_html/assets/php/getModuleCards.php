@@ -41,7 +41,7 @@
         }
 
         foreach ($modulerows as $row) {
-            echo '<div class="col-4">';
+            echo '<div class="col-4 pt-2">';
                 echo '<div class="card bg-primary">';
                     echo '<div class="card-header">';
                         echo '<h6 class="mt-2 mb-2">' . $row['module_name'] . ' (ID: ' . $row['module_num'] . ')</h6>';

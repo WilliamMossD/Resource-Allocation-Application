@@ -66,7 +66,7 @@ function formHandler(id) {
   
           switch (id) {
             case "viewSession":
-              var div = 'updateUser';
+              var div = 'sessionsDiv';
               var button = 'sessionsTablePrint';
               break;
             default:
