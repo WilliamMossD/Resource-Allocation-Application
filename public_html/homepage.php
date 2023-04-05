@@ -11,7 +11,18 @@
     require_once('../src/inc/utilities.php');
 
     // Check is user is logged in
-    if (isset($_SESSION['loggedin']) && !$_SESSION['loggedin'] && isset($_SESSION['email'])) {
+    if (empty($_SESSION['loggedin'])) {
+        header('Location: index.html?errorcode=5');
+        echo 'No session ID';
+        exit();
+    }
+
+    if (!$_SESSION['loggedin']) {
+        header('Location: index.html?errorcode=5');
+        exit();
+    }
+
+    if (empty($_SESSION['email'])) {
         header('Location: index.html?errorcode=5');
         exit();
     }
