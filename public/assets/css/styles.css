@@ -106,19 +106,21 @@ tbody th {
     margin-top: .25rem !important;
 }
 
-.aval-table td:hover{
-    background-color: rgba(0,0,0,.075);
-    ;
+.avail-table td {
+    width: 16.66%;
 }
 
-.aval-table td.active {
-    background-image: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(0,0,0,.55) 10px,
-        rgba(0,0,0,.55) 15px
-    );
+.avail-table td.active::after{
+    content: "Available";
+}
+
+.avail-table td:hover{
+    background-color: rgba(0,0,0,.075);
+    cursor: pointer;
+}
+
+.avail-table td.active {
+    background-image: repeating-linear-gradient( -45deg, transparent 0px 10px, #198754 10px 18px);
 }
 
 .nav {

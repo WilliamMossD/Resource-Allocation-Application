@@ -60,12 +60,23 @@
 
     <!-- Meta Elements -->
     <meta charset="utf-8">
-    <meta name="description" content="Homepage- Tutor Scheduling Software">
+    <meta name="description" content="TALL - Homepage">
     <!-- Cand No: 235319 -->
     <meta name="author" content="William Moss">
 
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#02345a">
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
     <!-- Primary Stylesheets -->
-    <link href="assets/css/styles.css?version=4" rel="stylesheet" type="text/css">
+    <link href="assets/css/styles.css?version=8" rel="stylesheet" type="text/css">
 
     <!-- Third Party Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
@@ -85,7 +96,7 @@
         <nav class="navbar">
             <div class="container-fluid text-center">
                 <span class="col-4" id="time">HH:MM</span>
-                <a class="navbar-brand col-4"><span>Tutor Scheduling Software</a></span>
+                <a class="navbar-brand col-4"><img src="assets/images/TALL.png" style="height: 1.8em;"></a>
                 <span class="col-4" id="date">DD:MM:YYYY</span>
             </div>
         </nav>
@@ -147,7 +158,7 @@
                         <div class="tab-pane fade" id="v-pills-availability" role="tabpanel" aria-labelledby="v-pills-availability-tab" tabindex="0">
                             <h1 class="display-6 ps-3">Availability</h1>
                             <hr>
-                            <p class="ps-3">Adjust your availability by clicking cells within the table to mark yourself as free/busy. A stripped cell means you are free.</p>
+                            <p class="ps-3">Adjust your availability by clicking cells within the table to mark yourself as free/busy. A green stripped cell means you are available.</p>
                             <div class="container">
                                 <div class="row p-3">
                                     <div class="col-12">
