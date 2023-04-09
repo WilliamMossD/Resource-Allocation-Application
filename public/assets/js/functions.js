@@ -40,6 +40,14 @@ document.getElementById("saveAvail").addEventListener("click", function () {
   // Send success alert
 });
 
+// Add events listeners to timesheet time inputs
+var inputs = document.forms["submitTimesheet"].getElementsByTagName("input");
+for(var i = 0; i < inputs.length; i++) {
+  if(inputs[i].type.toLowerCase() == 'time') {
+      inputs[i].addEventListener("input", updateHours);
+  }
+}
+
 /* OnLoad Function */
 function load() {
   date();
@@ -68,6 +76,7 @@ function date() {
   setTimeout(time, 1000);
 }
 
+// Print function
 function printTable(var1) {
   var printWindow = window.open();
   printWindow.document.write(document.getElementById(var1).innerHTML);
@@ -76,3 +85,32 @@ function printTable(var1) {
     printWindow.close();
   };
 }
+
+// Timesheet Hours Function 
+function updateHours(e) {
+  var day = e.target.id.slice(0,3);
+  var startTime = document.getElementById(day + "StartTime").value;
+  var endTime = document.getElementById(day + "EndTime").value;
+  if (startTime !== "" && endTime !== "") {
+    startTime = startTime.split(':');
+    var startTimeMinutes = (parseInt(startTime[0]) * 60) + parseInt(startTime[1]);
+    endTime = endTime.split(':');
+    var endTimeMinutes = (parseInt(endTime[0]) * 60) + parseInt(endTime[1]);
+    var diff = endTimeMinutes - startTimeMinutes;
+    if (diff < 0) {
+      e.target.value = "--:--";
+      alert("End time must be greater than start time");
+    } else {
+      var m = (diff % 60).toString();
+      var h = ((diff - m) / 60).toString();
+      if (m < 10) {
+        var m = '0' + m;
+      }
+      if (h < 10) {
+        var h = '0' + h;
+      }
+      document.getElementById(day + "Hours").innerHTML = h + ':' + m;
+    }
+  }
+}
+

@@ -163,3 +163,11 @@ select optgroup {
 select option {
     background-color: rgb(28 65 112);
 }
+
+table.timesheet-table tbody {
+    vertical-align: middle;
+}
+
+table.timesheet-table tbody, table.timesheet-table td, table.timesheet-table tfoot, table.timesheet-table th, table.timesheet-table thead, table.timesheet-table tr {
+    border-style: none !important;
+}
