@@ -410,7 +410,7 @@
         }
 
         // Generate HTML table
-        $table = '<table class="table text-center">';
+        $table = '<table id="table" class="table text-center">';
 
         // Add header row to table
         $table = $table . '<thead><tr>';
