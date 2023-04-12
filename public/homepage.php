@@ -76,7 +76,7 @@ $admin = $userData['admin'];
     <meta name="theme-color" content="#ffffff">
 
     <!-- Primary Stylesheets -->
-    <link href="assets/css/styles.css?version=13" rel="stylesheet" type="text/css">
+    <link href="assets/css/styles.css?version=15" rel="stylesheet" type="text/css">
 
     <!-- Third Party Stylesheets -->
     <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">

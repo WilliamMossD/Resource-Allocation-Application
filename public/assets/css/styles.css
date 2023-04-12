@@ -171,3 +171,12 @@ table.timesheet-table tbody {
 table.timesheet-table tbody, table.timesheet-table td, table.timesheet-table tfoot, table.timesheet-table th, table.timesheet-table thead, table.timesheet-table tr {
     border-style: none !important;
 }
+
+table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:last-child {
+    border-right-width: 0px !important;
+}
+
+table.table-bordered.dataTable thead tr:first-child th, table.table-bordered.dataTable thead tr:first-child td {
+    border-top-width: 0px !important;
+    text-align: center;
+}
