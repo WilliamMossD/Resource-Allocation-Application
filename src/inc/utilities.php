@@ -16,6 +16,7 @@
         case Number;
         case Email;
         case URL;
+        case HHMMHour;
         case HHMM;
     }
 
@@ -84,10 +85,18 @@
                 } else {
                     return false;
                 }
-            case inputType::HHMM:
+            case inputType::HHMMHour:
                 // Validates HH:MM
                 // Checks MM is either 30 or 00
                 if (preg_match("/^([0-1]?[0-9]|2[0-3]):[0][0]$/",$input)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case inputType::HHMM:
+                // Validates HH:MM
+                // Checks MM is either 30 or 00
+                if (preg_match("/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/",$input)) {
                     return true;
                 } else {
                     return false;

@@ -3,13 +3,11 @@
  * Author: William Moss (235319)
  */
 
-// Add event listener to all forms
-for (var i = 0; i < document.forms.length; i++) {
-  document.forms[i].addEventListener("submit", (event) => {
-    event.preventDefault();
-    formHandler(event.target.id);
-  });
-}
+// Add event listener to submit timesheet form
+document.getElementById("submitTimesheet").addEventListener("submit", (event) => {
+  event.preventDefault();
+  submitTimesheet(event.target.id);
+});
 
 // Add event listener to availability table cells
 document.querySelectorAll("#availtable td").forEach((e) =>
@@ -44,7 +42,8 @@ document.getElementById("saveAvail").addEventListener("click", function () {
 var inputs = document.forms["submitTimesheet"].getElementsByTagName("input");
 for(var i = 0; i < inputs.length; i++) {
   if(inputs[i].type.toLowerCase() == 'time') {
-      inputs[i].addEventListener("input", updateHours);
+      inputs[i].addEventListener("change", updateHours);
+      inputs[i].addEventListener("reset", updateHours);
   }
 }
 
@@ -52,6 +51,67 @@ for(var i = 0; i < inputs.length; i++) {
 function load() {
   date();
   time();
+  $('#timesheets').dataTable({
+    searching: false,
+    ordering:  false
+  });
+  $('#timetable').dataTable({
+        dom: 'Bfrtip',
+        searching: false,
+        ordering:  false,
+        paging: false,
+        buttons: {
+            buttons: [
+                { extend: 'print', className: 'btn-primary mb-2' }
+            ],
+           dom: {
+    		  button: {
+    		  className: 'btn'
+    	         }
+           }
+        }
+    });
+}
+
+
+function submitTimesheet(id) {
+  var actionUrl = "assets/php/timesheetSubmission.php";
+  if (document.getElementById(id).tagName == "FORM") {
+    var formData = $("#" + id).serializeArray(); // Convert form to array
+    formData.unshift({ name: "formID", value: id });
+  } else {
+    return;
+  }
+
+  $.ajax({
+    type: "POST",
+    url: actionUrl,
+    data: $.param(formData),
+    beforeSend: function () {
+      try {
+      // Disable button
+      document
+        .getElementById(id)
+        .querySelector('button[type="submit"]').disabled = true;
+      } catch (err) {}
+    },
+    success: function (data) {
+      alert(data);
+
+      // Reload Page
+      location.reload();
+    },
+    error: function () {
+      alert("Unknown Error Occurred");
+    },
+
+    complete: function () {
+      // Enable button
+      document
+        .getElementById(id)
+        .querySelector('button[type="submit"]').disabled = false;
+    },
+  });
 }
 
 /* Clock Function */

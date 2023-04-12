@@ -21,7 +21,7 @@
 
             // Echo table div and table head
             echo '
-            <table class="table timetable text-center fw-normal table-striped table-bordered table-hover">
+            <table id="timetable" class="table timetable text-center fw-normal table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th class="first-cell" scope="col"></th>

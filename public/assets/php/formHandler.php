@@ -403,8 +403,8 @@
                         if (in_array($sessionTypeSelect, ["Lab", "Teaching", "Other"])) {
                             if (validateInput($sessionTAInput, inputType::Number) && (0 < $sessionTAInput) && ($sessionTAInput <= 5)) {
                                 if (in_array($sessionDaySelect, ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])) {
-                                    if (validateInput($sessionStartTimeInput, inputType::HHMM) && (strtotime("08:00") <= strtotime($sessionStartTimeInput)) && (strtotime($sessionStartTimeInput) <= strtotime("20:00"))) {
-                                        if (validateInput($sessionEndTimeInput, inputType::HHMM) && (strtotime("09:00") <= strtotime($sessionEndTimeInput)) && (strtotime($sessionEndTimeInput) <= strtotime("21:00")) && (strtotime($sessionEndTimeInput) > strtotime($sessionStartTimeInput))) {
+                                    if (validateInput($sessionStartTimeInput, inputType::HHMMHour) && (strtotime("08:00") <= strtotime($sessionStartTimeInput)) && (strtotime($sessionStartTimeInput) <= strtotime("20:00"))) {
+                                        if (validateInput($sessionEndTimeInput, inputType::HHMMHour) && (strtotime("09:00") <= strtotime($sessionEndTimeInput)) && (strtotime($sessionEndTimeInput) <= strtotime("21:00")) && (strtotime($sessionEndTimeInput) > strtotime($sessionStartTimeInput))) {
                                             
                                             // Prepare MySQL Statement
                                             $stmt = $con->prepare('INSERT INTO module_sessions (module_num, num_of_ta, session_day, session_start, session_end, session_type, session_location) VALUES (?, ?, ?, ?, ?, ?, ?)');
@@ -504,8 +504,8 @@
                             if (in_array($editSessionTypeSelect, ["Lab", "Teaching", "Other"])) {
                                 if (validateInput($editSessionTAInput, inputType::Number) && (0 < $editSessionTAInput) && ($editSessionTAInput <= 5)) {
                                     if (in_array($editSessionDaySelect, ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])) {
-                                        if (validateInput($editSessionStartTimeInput, inputType::HHMM) && (strtotime("08:00") <= strtotime($editSessionStartTimeInput)) && (strtotime($editSessionStartTimeInput) <= strtotime("20:30"))) {
-                                            if (validateInput($editSessionEndTimeInput, inputType::HHMM) && (strtotime("08:30") <= strtotime($editSessionEndTimeInput)) && (strtotime($editSessionEndTimeInput) <= strtotime("21:00")) && (strtotime($editSessionEndTimeInput) > strtotime($editSessionStartTimeInput))) {
+                                        if (validateInput($editSessionStartTimeInput, inputType::HHMMHour) && (strtotime("08:00") <= strtotime($editSessionStartTimeInput)) && (strtotime($editSessionStartTimeInput) <= strtotime("20:00"))) {
+                                            if (validateInput($editSessionEndTimeInput, inputType::HHMMHour) && (strtotime("09:00") <= strtotime($editSessionEndTimeInput)) && (strtotime($editSessionEndTimeInput) <= strtotime("21:00")) && (strtotime($editSessionEndTimeInput) > strtotime($editSessionStartTimeInput))) {
                                                 
                                                 // Prepare MySQL Statement
                                                 $stmt = $con->prepare('UPDATE module_sessions SET module_num=?, num_of_ta=?, session_day=?, session_start=?, session_end=?, session_type=?, session_location=? WHERE module_session_num=?');

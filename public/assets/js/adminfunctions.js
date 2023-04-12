@@ -3,6 +3,14 @@
  * Author: William Moss (235319)
  */
 
+// Add event listener to all forms
+for (var i = 0; i < document.forms.length; i++) {
+  document.forms[i].addEventListener("submit", (event) => {
+    event.preventDefault();
+    formHandler(event.target.id);
+  });
+}
+
 /* Form Handler */
 function formHandler(id) {
     var actionUrl = "assets/php/formHandler.php";
