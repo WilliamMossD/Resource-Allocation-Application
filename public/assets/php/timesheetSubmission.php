@@ -66,7 +66,7 @@
                             if (validateInput($yearInput, inputType::Number) && $yearInput == date("Y")) {
 
                                 // Check that a timesheet with the same week number and year doesn't already exist for the user 
-                                $stmt = $con->prepare('SELECT ta_num, week_num, year FROM timesheets WHERE ta_num = ? AND week_num = ? AND year = ? AND (status = "Pending Approval" OR status = "Approved")');
+                                $stmt = $con->prepare('SELECT ta_num, week_num, year FROM timesheets WHERE ta_num = ? AND week_num = ? AND year = ? AND (status = "Pending" OR status = "Approved")');
                                 $stmt->bind_param('iii', $idInput, $weekInput, $yearInput);
                         
                                 // Executes the statement and stores the result

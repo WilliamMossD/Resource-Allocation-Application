@@ -922,6 +922,114 @@
                     exit();
                 }
 
+            // Approve Timesheet Case
+            case "approveTimesheet":
+
+                $timesheet_id = filter_var($_POST['timesheet_id'], FILTER_SANITIZE_NUMBER_INT);
+
+                // Validate Input
+                if (validateInput($timesheet_id, inputType::Number) && $timesheet_id > 0) { 
+                    // Validates timesheet exists
+                    if (timesheetExists($timesheet_id, $con)){
+                        // Checks current status
+                        $status = getTimesheetStatus($timesheet_id, $con)->fetch_array(MYSQLI_ASSOC);
+                        if ($status['status'] != "Approved"){
+                            // Change timesheet status to approved
+                            $stmt = $con->prepare('UPDATE timesheets SET status="Approved", update_datetime=CURRENT_TIMESTAMP WHERE timesheet_num=?');
+                            $stmt->bind_param('i', $timesheet_id);
+
+                            // Execute MySQL Statement
+                            if (!$stmt->execute()) {
+                                echo "Timesheet Update Failed";
+                                exit();
+                            } else {
+                                echo "Timesheet Successfully Approved";
+                                exit();
+                            }
+
+                        } else {
+                            echo 'Timesheet Already Approved';
+                            exit();
+                        }
+                    } else {
+                        echo 'Invalid Timesheet ID';
+                        exit();
+                    }
+                } else {
+                    echo 'Invalid Timesheet ID Format';
+                    exit();
+                }
+
+            // Deny Timesheet Case
+            case "denyTimesheet":
+
+                $timesheet_id = filter_var($_POST['timesheet_id'], FILTER_SANITIZE_NUMBER_INT);
+
+                // Validate Input
+                if (validateInput($timesheet_id, inputType::Number) && $timesheet_id > 0) { 
+                    // Validates timesheet exists
+                    if (timesheetExists($timesheet_id, $con)){
+                        // Checks current status
+                        $status = getTimesheetStatus($timesheet_id, $con)->fetch_array(MYSQLI_ASSOC);
+                        if ($status['status'] != "Denied"){
+                            // Change timesheet status to denied
+                            $stmt = $con->prepare('UPDATE timesheets SET status="Denied", update_datetime=CURRENT_TIMESTAMP WHERE timesheet_num=?');
+                            $stmt->bind_param('i', $timesheet_id);
+
+                            // Execute MySQL Statement
+                            if (!$stmt->execute()) {
+                                echo "Timesheet Update Failed";
+                                exit();
+                            } else {
+                                echo "Timesheet Successfully Denied";
+                                exit();
+                            }
+
+                        } else {
+                            echo 'Timesheet Already Denied';
+                            exit();
+                        }
+                    } else {
+                        echo 'Invalid Timesheet ID';
+                        exit();
+                    }
+                } else {
+                    echo 'Invalid Timesheet ID Format';
+                    exit();
+                }
+
+            // Delete Timesheet Case
+            case "deleteTimesheet":
+
+                $timesheet_id = filter_var($_POST['timesheet_id'], FILTER_SANITIZE_NUMBER_INT);
+
+                // Validate Input
+                if (validateInput($timesheet_id, inputType::Number) && $timesheet_id > 0) { 
+                    // Validates timesheet exists
+                    if (timesheetExists($timesheet_id, $con)){
+
+                        // Delete timesheet
+                        $stmt = $con->prepare('DELETE FROM timesheets WHERE timesheet_num=?');
+                        $stmt->bind_param('i', $timesheet_id);
+
+                        // Execute MySQL Statement
+                        if (!$stmt->execute()) {
+                            echo "Timesheet Deletion Failed";
+                            exit();
+                        } else {
+                            echo "Timesheet Successfully Deleted";
+                            exit();
+                        }
+
+                    } else {
+                        echo 'Invalid Timesheet ID';
+                        exit();
+                    }
+                } else {
+                    echo 'Invalid Timesheet ID Format';
+                    exit();
+                }
+
             // Unknown Form ID
             default:
                 echo "Unknown Form Submitted";
@@ -929,5 +1037,5 @@
         }
     } catch (Exception $e) {
         echo "Unknown Error";
+        echo $e;
     }
-?>

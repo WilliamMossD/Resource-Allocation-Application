@@ -260,6 +260,31 @@
         } 
         return true;
     }
+    
+    function timesheetExists($id, $conn) {
+        $stmt = $conn->prepare('SELECT timesheet_num FROM timesheets WHERE timesheet_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0) {
+            return false;
+        } 
+        return true;
+    }
+
+    function getTimesheetStatus($id, $conn) {
+        $stmt = $conn->prepare('SELECT status FROM timesheets WHERE timesheet_num = ?');
+        $stmt->bind_param('i', $id);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result;
+    }
 
     // Returns the TA limit of a session
     function sessionTALimit($sessionID, $conn) {
