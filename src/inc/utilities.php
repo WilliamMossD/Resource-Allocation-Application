@@ -437,7 +437,7 @@
 
     }
 
-        /**
+    /**
      * Generates a HTML table from an associative array and adds the removal button to the end which uses the last two keys
      *
      * @param  mixed $associativeArray Must be an array containing array(s) which contain (key,value) pairs and the keys being the column headers
@@ -452,13 +452,6 @@
         foreach($fields as $field) {
             array_push($keys, $field->name);
         }
-
-        // Pop last two keys
-        array_pop($keys);
-        array_pop($keys);
-
-        // Push actions col
-        array_push($keys, 'Actions');
 
         // Generate HTML table
         $table = '<table class="table text-center">';

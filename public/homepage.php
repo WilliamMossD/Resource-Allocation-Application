@@ -76,24 +76,28 @@ $admin = $userData['admin'];
     <meta name="theme-color" content="#ffffff">
 
     <!-- Primary Stylesheets -->
-    <link href="assets/css/styles.css?version=15" rel="stylesheet" type="text/css">
+    <link href="assets/css/styles.css?version=18" rel="stylesheet" type="text/css">
 
     <!-- Third Party Stylesheets -->
     <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/select/1.6.2/css/select.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <!-- JavaScript -->
     <script defer src="assets/js/functions.js?version=58"></script>
-    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=9"></script><?php endif; ?>
+    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=22"></script><?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
     <script defer src="assets/js/brands.js"></script>
     <script defer src="assets/js/solid.js"></script>
     <script defer src="assets/js/fontawesome.js"></script>
@@ -642,7 +646,6 @@ $admin = $userData['admin'];
                                                     </form>
                                                     <div class="col-12" id="allocationDiv">
                                                     </div>
-                                                    <button type="button" class="btn btn-primary" style="display: none;" onclick="printTable('allocationDiv')" id="allocationDivPrint">Print</button>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="pills-manualallocation" role="tabpanel" aria-labelledby="pills-manualallocation-tab" tabindex="0">

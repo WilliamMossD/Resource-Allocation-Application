@@ -180,3 +180,8 @@ table.table-bordered.dataTable thead tr:first-child th, table.table-bordered.dat
     border-top-width: 0px !important;
     text-align: center;
 }
+
+table.dataTable tr.dtrg-group th {
+    background-color: rgb(2 52 90) !important;
+    text-align: center !important;
+}

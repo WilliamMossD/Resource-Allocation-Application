@@ -600,8 +600,10 @@
                         exit();
                     } 
 
-                    // Gets sessions assigned to module
-                    $sessions = getModuleSessions($viewAllocModuleSelect, $con);
+                    $stmt = $con->prepare("SELECT assigned_to.ta_num AS 'User ID', CONCAT(teaching_assistants.fname, ' ' , teaching_assistants.lname) AS 'Name', teaching_assistants.email AS 'Email', CONCAT(module_sessions.session_day, ' ' , DATE_FORMAT(module_sessions.session_start, '%H:%i'), ' - ', DATE_FORMAT(module_sessions.session_end, '%H:%i')) AS 'Session', assigned_to.module_session_num AS 'Session ID' FROM assigned_to, module_sessions, teaching_assistants WHERE assigned_to.ta_num = teaching_assistants.ta_num  AND assigned_to.module_session_num = module_sessions.module_session_num AND module_sessions.module_num = ?");
+                    $stmt->bind_param('i', $viewAllocModuleSelect);
+                    $stmt->execute();
+                    $sessions = $stmt->get_result();
 
                     // Makes sure module has sessions
                     if ($sessions->num_rows == 0) {
@@ -610,14 +612,9 @@
                     } 
 
                     // Iterate through each session and generate HTML
-                    $sessions = $sessions->fetch_all(MYSQLI_ASSOC);
                     echo '<div>';
                     echo generateText(getModuleName($viewAllocModuleSelect, $con), 3);
-                    foreach ($sessions as $session) {
-                        $result = getSessionAllocation($session['module_session_num'], $con);
-                        $sessionInfo = getSessionData($session['module_session_num'], $con)->fetch_array(MYSQLI_ASSOC);
-                        echo generateText($sessionInfo['session_day'] . ' ' . $sessionInfo['session_start'] . ' - ' . $sessionInfo['session_end'] , 4) . generateAllocTable($result->fetch_all(MYSQLI_ASSOC), $result->fetch_fields()) ;
-                    }
+                    echo generateAllocTable($sessions->fetch_all(MYSQLI_ASSOC), $sessions->fetch_fields()) ;
                     echo '</div>';
                     exit();
 

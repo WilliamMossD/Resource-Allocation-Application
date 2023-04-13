@@ -79,7 +79,6 @@ function formHandler(id) {
             break;
           default:
             var div = "allocationDiv";
-            var button = "allocationDivPrint";
             break;
         }
 
@@ -87,7 +86,9 @@ function formHandler(id) {
         if (table.querySelector("parsererror")) {
           // Parsing Failed
           document.getElementById(div).innerHTML = "";
-          document.getElementById(button).style.display = "none";
+          try {
+            document.getElementById(button).style.display = "none";
+          } catch (e) {}
         } else {
           // Parsing Succeeded
           document.getElementById(div).innerHTML = data;
@@ -104,10 +105,96 @@ function formHandler(id) {
                 },
               },
             });
+          } else if (id == "viewAllocationByModule") {
+            $('div#allocationDiv table').dataTable({
+              dom: "Bfrtip",
+              paging: false,
+              select: true,
+              select: 'single',
+              ordering: false,
+              buttons: {
+                buttons: [{ text: 'Print Table', extend: "print", className: "btn-primary" },             
+                {
+                text: 'Unallocate User',
+                className: "btn-danger",
+                action: function () {
+                    var data = this.rows({ selected: true }).data()[0];
+                    removeAlloc(data[0], data[4]);
+                }
+            }],
+                dom: {
+                  button: {
+                    className: "btn",
+                  },
+                },
+              },
+              order: [[3, 'asc']],
+              rowGroup: {
+                  dataSrc: 3,
+              },
+              columnDefs: [
+                { "visible": false, "searching": false, "targets": [3,4] }
+              ],
+            });
+          } else if (id == "viewAllocationBySession") {
+            $('div#allocationDiv table').dataTable({
+              dom: "Bfrtip",
+              paging: false,
+              select: true,
+              select: 'single',
+              ordering: false,
+              buttons: {
+                buttons: [{ text: 'Print Table', extend: "print", className: "btn-primary" },             
+                {
+                text: 'Unallocate User',
+                className: "btn-danger",
+                action: function () {
+                    var data = this.rows({ selected: true }).data()[0];
+                    removeAlloc(data[3], data[4]);
+                }
+              }],
+                dom: {
+                  button: {
+                    className: "btn",
+                  },
+                },
+              },
+              columnDefs: [
+                { "visible": false, "searching": false, "targets": [3,4] }
+              ],
+            });
+          } else if (id == "viewAllocationByUser") {
+            $('div#allocationDiv table').dataTable({
+              dom: "Bfrtip",
+              paging: false,
+              select: true,
+              select: 'single',
+              ordering: false,
+              buttons: {
+                buttons: [{ text: 'Print Table', extend: "print", className: "btn-primary" },             
+                {
+                text: 'Unallocate User',
+                className: "btn-danger",
+                action: function () {
+                    var data = this.rows({ selected: true }).data()[0];
+                    removeAlloc(data[6], data[7]);
+                }
+              }],
+                dom: {
+                  button: {
+                    className: "btn",
+                  },
+                },
+              },
+              order: [[0, 'asc']],
+              rowGroup: {
+                  dataSrc: 0,
+              },
+              columnDefs: [
+                { "visible": false, "searching": false, "targets": [0,6,7] }
+              ],
+            });
           }
-          try {
-            document.getElementById(button).style.display = "initial";
-          } catch (e) {}
           return false;
         }
       }
