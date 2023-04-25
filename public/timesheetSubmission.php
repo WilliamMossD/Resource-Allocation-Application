@@ -7,7 +7,7 @@
  * Handles user timesheet submissions
  */
 
-    require_once(__DIR__ . '/../../../src/inc/utilities.php');
+    require_once('../src/inc/utilities.php');
 
     session_start();
 
@@ -44,7 +44,7 @@
     }
 
     // Verify CSRF token exists and is valid
-    if (!isset($_POST['token']) or !isset($_SESSION['token']) or !(hash_equals($_SESSION['token'], $_POST['token']))) {
+    if (!isset($_POST['CSRFToken']) or !isset($_SESSION['token']) or !(hash_equals($_SESSION['token'], $_POST['CSRFToken']))) {
         returnHTTPResponse(400, 'HTTP Status 400: Invalid CSRF Token!');
         exit();
     }
@@ -143,7 +143,6 @@
                                         exit();
                                     } else {
                                         returnHTTPResponse(201, 'Timesheet Successfully Submitted');
-                                        http_response_code(201);
                                         exit();
                                     }
 

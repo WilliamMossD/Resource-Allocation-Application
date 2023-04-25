@@ -96,7 +96,7 @@ if ($admin == '1') {
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
     <!-- JavaScript -->
-    <script defer src="assets/js/functions.js?version=62"></script>
+    <script defer src="assets/js/functions.js?version=64"></script>
     <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=67"></script><?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -156,7 +156,7 @@ if ($admin == '1') {
                         <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
                     </div>
                 </div>
-                <div class="col-lg ms-4 shadow rounded bg-lightblue p-3">
+                <div class="col-lg ms-lg-4 shadow rounded bg-lightblue p-3">
                     <div class="tab-content" id="v-pills-tabContent">
                         <?php if ($admin == '0') : ?>
                             <div class="tab-pane fade show active" id="v-pills-timetable" role="tabpanel" aria-labelledby="v-pills-timetable-tab" tabindex="0">

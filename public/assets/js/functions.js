@@ -57,6 +57,7 @@ function load() {
   });
   $('#timetable').dataTable({
         dom: 'Bfrtip',
+        "info" : false,
         searching: false,
         ordering:  false,
         paging: false,
@@ -79,6 +80,12 @@ function submitTimesheet(id) {
   if (document.getElementById(id).tagName == "FORM") {
     var formData = $("#" + id).serializeArray(); // Convert form to array
     formData.unshift({ name: "formID", value: id });
+    var csrf = document.getElementById("CSRFToken").value
+    formData.unshift({
+      name: "CSRFToken",
+      value: csrf,
+    });
+    
   } else {
     return;
   }
