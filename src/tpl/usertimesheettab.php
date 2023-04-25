@@ -16,6 +16,7 @@ try {
     exit();
 }
 
+// Verifies user is logged in and there is a valid session
 if (isset($_SESSION['email']) && isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
     $userID = getUserIDByEmail($_SESSION['email'], $con);
     if (userExists($userID, $con)) {
@@ -26,7 +27,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['loggedin']) && $_SESSION['logg
         $stmt->execute();
         $timesheets = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-}
+} 
 
 ?>
 
@@ -172,6 +173,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['loggedin']) && $_SESSION['logg
                     <textarea class="form-control custom-textarea" id="timesheetTextInput" name="timesheetTextInput" rows="2" maxlength="100"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit Timesheet</button>
+                <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['token'] ?>" />
             </form>
         </div>
     </div>

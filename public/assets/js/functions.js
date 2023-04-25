@@ -75,7 +75,7 @@ function load() {
 
 
 function submitTimesheet(id) {
-  var actionUrl = "assets/php/timesheetSubmission.php";
+  var actionUrl = "/timesheetSubmission.php";
   if (document.getElementById(id).tagName == "FORM") {
     var formData = $("#" + id).serializeArray(); // Convert form to array
     formData.unshift({ name: "formID", value: id });
@@ -96,13 +96,31 @@ function submitTimesheet(id) {
       } catch (err) {}
     },
     success: function (data) {
-      alert(data);
+      if (data['status'] == 201) {
+        alert(data);
+      }
 
       // Reload Page
       location.reload();
     },
-    error: function () {
-      alert("Unknown Error Occurred");
+    error: function (data) {
+      if (data['status'] == 400) {
+        if (data == null) {
+          alert("Unknown Error Occurred");        
+        } else {
+          alert(data['responseText']);
+        }
+      } else if (data['status'] == 401){ 
+        window.location.href="/"
+      } else if (data['status'] == 401) {
+        if (data == null) {
+          alert("Unknown Server Error");        
+        } else {
+          alert(data['responseText']);
+        }
+      } else {
+        alert("Unknown Error Occurred"); 
+      }
     },
 
     complete: function () {

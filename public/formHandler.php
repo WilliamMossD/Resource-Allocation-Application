@@ -6,21 +6,54 @@
  *
  * Handles form submissions
  */
+ 
+    require_once('../src/inc/utilities.php');
 
-    require_once(__DIR__ . '/../../../src/inc/utilities.php');
-
-    // DEBUGGING ONLY
-    // echo(print_r($_POST));
+    session_start();
 
     // Connect to database
     try {
         $con = mysqliConnect();
         if ($con->connect_error) {
-            echo "Connection Failed";
+            returnHTTPResponse(500, 'Database Connection Failed');
             exit();
         } 
     } catch (Exception $e) {
-        echo "Unknown Error. Please try again";
+        returnHTTPResponse(500, 'Database Connection Failed');
+        exit();
+    }
+
+    // formHandler only accepts POST requests
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        returnHTTPResponse(400, 'HTTP Status 400: GET Requests not supported');
+        exit();
+    }
+
+    // Check origin request came from server domain name
+    if(!isset($_SERVER['HTTP_ORIGIN']) or $_SERVER['HTTP_ORIGIN'] != getDomainName()) {
+        returnHTTPResponse(400, 'HTTP Status 400: Invalid request origin!');
+        exit();
+    }
+
+    // Verify user is logged in 
+    if (!isset($_SESSION['loggedin']) or !$_SESSION['loggedin'] or !isset($_SESSION['email'])) {
+        // User is not logged in. Send bad request
+        returnHTTPResponse(401, 'HTTP Status 401: You are not permitted to access this resource!');
+        session_destroy();
+        exit();
+    }
+
+    // Verify user is admin (Only admins can submit these forms)
+    if (!isUserAdmin(getUserIDByEmail($_SESSION['email'], $con), $con)) {
+        // User is not logged in. Send bad request
+        returnHTTPResponse(401, 'HTTP Status 401: You are not permitted to access this resource!');
+        session_destroy();
+        exit();
+    }
+
+    // Verify CSRF token exists and is valid
+    if (!isset($_POST['CSRFToken']) or !isset($_SESSION['token']) or !(hash_equals($_SESSION['token'], $_POST['CSRFToken']))) {
+        returnHTTPResponse(400, 'HTTP Status 400: Invalid CSRF Token!');
         exit();
     }
 
@@ -40,7 +73,7 @@
                             
                             // Prepare MySQL Statement
                             $stmt = $con->prepare('INSERT INTO teaching_assistants (fname, lname, email, admin) VALUES (?, ?, ?, ?)');
-                            if (is_null($_POST['adminCheck'])) {
+                            if (!array_key_exists('adminCheck', $_POST)) {
                                 $admin = 0;
                             } else {
                                 $admin = 1;
@@ -1032,10 +1065,10 @@
 
             // Unknown Form ID
             default:
-                echo "Unknown Form Submitted";
+                returnHTTPResponse(400, 'Incorrect Form ID');
                 exit();
         }
     } catch (Exception $e) {
-        echo "Unknown Error";
-        echo $e;
+        returnHTTPResponse(500, 'Unknown Error');
+        exit();
     }

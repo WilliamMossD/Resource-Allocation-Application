@@ -11,21 +11,17 @@ session_start();
 require_once('../src/inc/utilities.php');
 
 // Check is user is logged in
-if (empty($_SESSION['loggedin'])) {
-    header('Location: index.html?errorcode=5');
-    echo 'No session ID';
-    exit();
-}
-
-if (!$_SESSION['loggedin']) {
+if (empty($_SESSION['loggedin']) or !$_SESSION['loggedin'] or empty($_SESSION['email'])) {
     header('Location: index.html?errorcode=5');
     exit();
 }
 
-if (empty($_SESSION['email'])) {
-    header('Location: index.html?errorcode=5');
-    exit();
+// Generate CSRF token to attach to forms
+if (empty($_SESSION['token'])) {
+    $_SESSION['token'] = bin2hex(random_bytes(32));
 }
+
+$token = $_SESSION['token'];
 
 // Connect to database
 try {
@@ -45,10 +41,20 @@ if (!userExistsByEmail($_SESSION['email'], $con)) {
     exit();
 }
 
+
 // Get user data
 $userData = getUserDataByEmail($_SESSION['email'], $con)->fetch_array(MYSQLI_ASSOC);
 $name = getUserName($userData['ta_num'], $con);
 $admin = $userData['admin'];
+
+if ($admin == '1') {
+    $userList = generateUserList(getAllUsers($con));
+    $moduleList = generateModuleList(getAllModules($con));
+    $sessionList = generateSessionList(getAllSessions($con));
+    $moduleCards = generateModuleHTML(getAllModules($con));
+} else if ($admin == '0') {
+    $moduleCards = generateModuleHTML(getModulesAssignedToUser(getUserIDByEmail($_SESSION['email'], $con), $con));
+}
 
 ?>
 
@@ -84,12 +90,14 @@ $admin = $userData['admin'];
     <link href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/select/1.6.2/css/select.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
     <!-- JavaScript -->
-    <script defer src="assets/js/functions.js?version=58"></script>
-    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=57"></script><?php endif; ?>
+    <script defer src="assets/js/functions.js?version=62"></script>
+    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=67"></script><?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
@@ -104,6 +112,9 @@ $admin = $userData['admin'];
 </head>
 
 <body class="bg-gradient min-vh-100" onload="load()">
+    <form>
+        <input type="hidden" id="CSRFToken" name="CSRFToken" value="<?php echo $token ?>" />
+    </form>
     <div class="container-fluid p-0">
         <nav class="navbar">
             <div class="container-fluid text-center">
@@ -126,7 +137,7 @@ $admin = $userData['admin'];
                     </div>
                 </div>
                 <div class="col-4 text-center user-button">
-                    <button type="button" class="btn btn-primary me-3"><i class="fa-solid fa-message fa-2xl"></i><br>
+                    <button type="button" class="btn btn-primary me-3" disabled><i class="fa-solid fa-message fa-2xl"></i><br>
                         <p class="mb-1 mt-2 fs-6 text-wrap">Messages</p>
                     </button>
                     <button onclick="location.href='logout.php'" type="button" class="btn btn-primary"><i class="fa-solid fa-right-from-bracket fa-2xl"></i><br>
@@ -134,18 +145,18 @@ $admin = $userData['admin'];
                     </button>
                 </div>
             </div>
-            <div class="col-12 p-0 mt-5 mb-5 d-lg-flex">
+            <div class="col-12 p-0 mt-4 mb-4 d-lg-flex">
                 <div class="col-lg-2 rounded shadow bg-lightblue p-3 mb-5" style="height: fit-content;">
                     <div class="nav flex-lg-column nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <?php if ($admin == '0') : ?><button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button><?php endif; ?>
                         <button <?php if ($admin == '0') : ?>class="nav-link" <? else : ?>class="nav-link active" <?php endif; ?> id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
-                        <?php if ($admin == '0') : ?><button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false">Availability</button><?php endif; ?>
+                        <?php if ($admin == '0') : ?><button class="nav-link" id="v-pills-availability-tab" data-bs-toggle="pill" data-bs-target="#v-pills-availability" type="button" role="tab" aria-controls="v-pills-availability" aria-selected="false" disabled>Availability</button><?php endif; ?>
                         <button class="nav-link" id="v-pills-timesheets-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timesheets" type="button" role="tab" aria-controls="v-pills-timesheets" aria-selected="false">Timesheets</button>
                         <?php if ($admin == '1') : ?><button class="nav-link" id="v-pills-admin-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admin" type="button" role="tab" aria-controls="v-pills-admin" aria-selected="false">Admin Menu</button><?php endif; ?>
                         <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
                     </div>
                 </div>
-                <div class="col-lg-9 offset-lg-1 shadow rounded bg-lightblue p-3">
+                <div class="col-lg ms-4 shadow rounded bg-lightblue p-3">
                     <div class="tab-content" id="v-pills-tabContent">
                         <?php if ($admin == '0') : ?>
                             <div class="tab-pane fade show active" id="v-pills-timetable" role="tabpanel" aria-labelledby="v-pills-timetable-tab" tabindex="0">
@@ -163,7 +174,7 @@ $admin = $userData['admin'];
                             <hr>
                             <div class="container p-3">
                                 <div class="row" id="moduleCards">
-                                    <?php include('assets/php/getModuleCards.php') ?>
+                                    <?php echo $moduleCards; ?>
                                 </div>
                             </div>
                         </div>
@@ -263,7 +274,7 @@ $admin = $userData['admin'];
                                                             <label for="userSelect" class="form-label">Select User</label>
                                                             <div class="input-group mb-3">
                                                                 <select type="user" class="form-control custom-input" id="userSelect" name="userSelect" required>
-                                                                    <?php include('assets/php/getUserList.php') ?>
+                                                                    <?php echo $userList; ?>
                                                                 </select>
                                                                 <button type="submit" class="btn btn-primary ms-2">Select</button>
                                                             </div>
@@ -302,7 +313,7 @@ $admin = $userData['admin'];
                                                         <div class="col-12 mb-2">
                                                             <label for="deleteUserSelect" class="form-label">Select User</label>
                                                             <select type="user" class="form-control custom-input" id="deleteUserSelect" name="deleteUserSelect" required>
-                                                                <?php include('assets/php/getUserList.php') ?>
+                                                                <?php echo $userList; ?>
                                                             </select>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Delete User</button>
@@ -361,7 +372,7 @@ $admin = $userData['admin'];
                                                             <label for="moduleSelect" class="form-label">Select Module</label>
                                                             <div class="input-group mb-3">
                                                                 <select type="module" class="form-control custom-input" id="moduleSelect" name="moduleSelect" required>
-                                                                    <?php include('assets/php/getModuleList.php') ?>
+                                                                    <?php echo $moduleList; ?>
                                                                 </select>
                                                                 <button type="submit" class="btn btn-primary ms-2">Select</button>
                                                             </div>
@@ -400,7 +411,7 @@ $admin = $userData['admin'];
                                                         <div class="col-12 mb-2">
                                                             <label for="deleteModuleSelect" class="form-label">Select Module</label>
                                                             <select type="module" class="form-control custom-input" id="deleteModuleSelect" name="deleteModuleSelect" required>
-                                                                <?php include('assets/php/getModuleList.php') ?>
+                                                                <?php echo $moduleList; ?>
                                                             </select>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Delete Module</button>
@@ -438,7 +449,7 @@ $admin = $userData['admin'];
                                                                     <label for="sessionsModuleSelect" class="form-label">Select Module</label>
                                                                     <div class="input-group mb-3">
                                                                         <select type="module" class="form-control custom-input" id="sessionsModuleSelect" name="sessionsModuleSelect" required>
-                                                                            <?php include('assets/php/getModuleList.php') ?>
+                                                                            <?php echo $moduleList; ?>
                                                                         </select>
                                                                         <button class="btn ms-3 btn-primary" type="submit">View Sessions</button>
                                                                     </div>
@@ -456,7 +467,7 @@ $admin = $userData['admin'];
                                                         <div class="col-12 mb-2">
                                                             <label for="sessionModuleNameInput" class="form-label">Module Name</label>
                                                             <select type="module" class="form-control custom-input" id="sessionModuleNameInput" name="sessionModuleNameInput" required>
-                                                                <?php include('assets/php/getModuleList.php') ?>
+                                                                <?php echo $moduleList; ?>
                                                             </select>
                                                         </div>
                                                         <div class="col-5 mb-2">
@@ -512,7 +523,7 @@ $admin = $userData['admin'];
                                                             <label for="sessionSelect" class="form-label">Select Session</label>
                                                             <div class="input-group mb-3">
                                                                 <select type="session" class="form-control custom-input" id="sessionSelect" name="sessionSelect" required>
-                                                                    <?php include('assets/php/getSessionList.php') ?>
+                                                                    <?php echo $sessionList; ?>
                                                                 </select>
                                                                 <button type="submit" class="btn btn-primary ms-2">Select</button>
                                                             </div>
@@ -523,7 +534,7 @@ $admin = $userData['admin'];
                                                         <div class="col-12 mb-2">
                                                             <label for="editSessionModuleNameInput" class="form-label">Module Name</label>
                                                             <select type="module" class="form-control custom-input" id="editSessionModuleNameInput" name="editSessionModuleNameInput" required disabled>
-                                                                <?php include('assets/php/getModuleList.php') ?>
+                                                                <?php echo $moduleList; ?>
                                                             </select>
                                                         </div>
                                                         <div class="col-5 mb-2">
@@ -578,7 +589,7 @@ $admin = $userData['admin'];
                                                         <div class="col-12 mb-2">
                                                             <label for="deleteSessionSelect" class="form-label">Select Session</label>
                                                             <select type="session" class="form-control custom-input" id="deleteSessionSelect" name="deleteSessionSelect" required>
-                                                                <?php include('assets/php/getSessionList.php') ?>
+                                                                <?php echo $sessionList; ?>
                                                             </select>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Delete Session</button>
@@ -610,7 +621,7 @@ $admin = $userData['admin'];
                                                             <label for="viewAllocModuleSelect" class="form-label">Select Module</label>
                                                             <div class="input-group mb-3">
                                                                 <select type="module" class="form-control custom-input" id="viewAllocModuleSelect" name="viewAllocModuleSelect" required>
-                                                                    <?php include('assets/php/getModuleList.php') ?>
+                                                                    <?php echo $moduleList; ?>
                                                                 </select>
                                                                 <button class="btn ms-3 btn-primary" type="submit">View Allocation</button>
                                                             </div>
@@ -624,7 +635,7 @@ $admin = $userData['admin'];
                                                             <label for="viewAllocSessionSelect" class="form-label">Select Session</label>
                                                             <div class="input-group mb-3">
                                                                 <select type="session" class="form-control custom-input" id="viewAllocSessionSelect" name="viewAllocSessionSelect" required>
-                                                                    <?php include('assets/php/getSessionList.php') ?>
+                                                                    <?php echo $sessionList; ?>
                                                                 </select>
                                                                 <button class="btn ms-3 btn-primary" type="submit">View Allocation</button>
                                                             </div>
@@ -638,7 +649,7 @@ $admin = $userData['admin'];
                                                             <label for="viewAllocUserSelect" class="form-label">Select User</label>
                                                             <div class="input-group mb-3">
                                                                 <select type="user" class="form-control custom-input" id="viewAllocUserSelect" name="viewAllocUserSelect" required>
-                                                                    <?php include('assets/php/getUserList.php') ?>
+                                                                    <?php echo $userList; ?>
                                                                 </select>
                                                                 <button class="btn ms-3 btn-primary" type="submit">View Allocation</button>
                                                             </div>
@@ -654,13 +665,13 @@ $admin = $userData['admin'];
                                                         <div class="col-12 mb-2">
                                                             <label for="manualAllocSessionSelect" class="form-label">Select Session</label>
                                                             <select type="session" class="form-control custom-input" id="manualAllocSessionSelect" name="manualAllocSessionSelect" required>
-                                                                <?php include('assets/php/getSessionList.php') ?>
+                                                                <?php echo $sessionList; ?>
                                                             </select>
                                                         </div>
                                                         <div class="col-12 mb-2">
                                                             <label for="manualAllocUserSelect" class="form-label">Select User(s)</label>
                                                             <select type="user" class="form-control custom-input" id="manualAllocUserSelect" name="manualAllocUserSelect[]" multiple required>
-                                                                <?php include('assets/php/getUserList.php') ?>
+                                                                <?php echo $userList; ?>
                                                             </select>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Allocate</button>
@@ -673,7 +684,7 @@ $admin = $userData['admin'];
                                                         <div class="col-12 mb-2">
                                                             <label for="autoAllocSessionSelect" class="form-label">Select Session</label>
                                                             <select type="session" class="form-control custom-input" id="autoAllocSessionSelect" name="autoAllocSessionSelect" required>
-                                                                <?php include('assets/php/getSessionList.php') ?>
+                                                                <?php echo $sessionList; ?>
                                                             </select>
                                                         </div>
                                                         <p class="fw-light mt-0">NOTE: Users that are admins will not be automatically allocated to sessions</p>
@@ -693,6 +704,7 @@ $admin = $userData['admin'];
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

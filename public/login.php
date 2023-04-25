@@ -18,11 +18,6 @@
     $dotenv->load();
     $dotenv->required(['CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI', 'TENANT_ID']);
 
-    echo $_ENV['CLIENT_ID'];
-    echo $_ENV['CLIENT_SECRET'];
-    echo $_ENV['REDIRECT_URI'];
-    exit();
-    
     $provider = new TheNetworg\OAuth2\Client\Provider\Azure([
         'clientId'          => $_ENV['CLIENT_ID'],
         'clientSecret'      => $_ENV['CLIENT_SECRET'],

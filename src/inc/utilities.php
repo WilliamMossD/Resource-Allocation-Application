@@ -21,9 +21,9 @@
     }
 
     // Load .env file
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../config');
+    $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/../config');
     $dotenv->load();
-    $dotenv->required(['HOST', 'USER', 'PASSWORD', 'DATABASE']);
+    $dotenv->required(['HOST', 'USER', 'PASSWORD', 'DATABASE', 'DOMAIN_NAME']);
 
     function mysqliConnect() {
         try {
@@ -104,6 +104,11 @@
             default:
                 return false;
         }
+    }
+
+    // Returns the Domain name in the env config
+    function getDomainName() {
+        return $_ENV['DOMAIN_NAME'];
     }
 
     // Gets user data by ID - Does not return password column
@@ -260,7 +265,29 @@
         } 
         return true;
     }
+
+    // Gets total seconds for timesheet
+    function getTotalSeconds($monStartTime, $monEndTime, $tueStartTime, $tueEndTime, $wedStartTime, $wedEndTime, $thuStartTime, $thuEndTime, $friStartTime, $friEndTime) {
+        return (strtotime($monEndTime) - strtotime($monStartTime)) + (strtotime($tueEndTime) - strtotime($tueStartTime)) + (strtotime($wedEndTime) - strtotime($wedStartTime)) + (strtotime($thuEndTime) - strtotime($thuStartTime)) + (strtotime($friEndTime) - strtotime($friStartTime));
+    }
     
+    // Gets total time for timesheet
+    function getTotalTime($seconds) {
+        $minutes = (int) (($seconds / 60) % 60);
+        $hours = (int) (($seconds / 60) - $minutes) / 60;
+
+        if ($minutes < 10) {
+            $minutes = '0' . strval($minutes);
+        }
+
+        if ($hours < 10) {
+            $hours = '0' . strval($hours);
+        }
+
+        return $hours . ':' . $minutes;
+    }
+
+    // Checks timesheet exists by ID
     function timesheetExists($id, $conn) {
         $stmt = $conn->prepare('SELECT timesheet_num FROM timesheets WHERE timesheet_num = ?');
         $stmt->bind_param('i', $id);
@@ -275,6 +302,7 @@
         return true;
     }
 
+    // Gets current status of timesheet
     function getTimesheetStatus($id, $conn) {
         $stmt = $conn->prepare('SELECT status FROM timesheets WHERE timesheet_num = ?');
         $stmt->bind_param('i', $id);
@@ -284,6 +312,33 @@
         $result = $stmt->get_result();
 
         return $result;
+    }
+    
+    // Checks to see if a timesheet for the week and year already exists for the user. Returns true or false
+    function timesheetExistsForWeekAndYearForUser($weekInput, $yearInput, $idInput, $conn){
+        $stmt = $conn->prepare('SELECT ta_num, week_num, year FROM timesheets WHERE ta_num = ? AND week_num = ? AND year = ? AND (status = "Pending" OR status = "Approved")');
+        $stmt->bind_param('iii', $idInput, $weekInput, $yearInput);
+
+        // Executes the statement and stores the result
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // If rows equals 0 no timesheets exist
+        if ($result->num_rows != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Inserts new timesheet in database. Returns !$stmt->execute()
+    function insertTimesheet($idInput, $weekInput, $yearInput, $monStartTime, $monEndTime, $tueStartTime, $tueEndTime, $wedStartTime, $wedEndTime, $thuStartTime, $thuEndTime, $friStartTime, $friEndTime, $totalTime, $timesheetTextInput, $conn) {
+
+        $stmt = $conn->prepare('INSERT INTO timesheets (ta_num, week_num, year, monStart, monEnd, tueStart, tueEnd, wedStart, wedEnd, thuStart, thuEnd, friStart, friEnd, total, comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->bind_param('iiissssssssssss', $idInput, $weekInput, $yearInput, $monStartTime, $monEndTime, $tueStartTime, $tueEndTime, $wedStartTime, $wedEndTime, $thuStartTime, $thuEndTime, $friStartTime, $friEndTime, $totalTime, $timesheetTextInput);
+
+        // Execute MySQL Statement
+        return $stmt->execute();
     }
 
     // Returns the TA limit of a session
@@ -508,6 +563,105 @@
         
         return $table;
 
+    }
+
+    function getModulesAssignedToUser($userID, $conn) {
+        // Get modules that user is assigned to
+        $stmt = $conn->prepare('SELECT DISTINCT modules.module_num, modules.module_name, modules.module_convenor, modules.module_description, modules.link FROM modules, module_sessions, assigned_to WHERE assigned_to.ta_num = ? AND module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.module_num = modules.module_num
+        ');
+        $userID = getUserIDByEmail($_SESSION['email'], $conn);
+        $stmt->bind_param('i', $userID);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+    }
+
+    function getAllModules($conn){
+        // Get rows from module table
+        $stmt = $conn->prepare('SELECT * from modules ORDER BY module_num ASC');
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    function generateModuleHTML($modulerows) {
+        $html = '';
+
+        foreach ($modulerows as $row) {
+            $html .= '<div class="col-4 pb-3">';
+                $html .= '<div class="card h-100 bg-primary">';
+                    $html .= '<div class="card-header">';
+                        $html .= '<h6 class="mt-2 mb-2">' . $row['module_name'] . ' (ID: ' . $row['module_num'] . ')</h6>';
+                    $html .= '</div>';
+                    $html .= '<div class="card-body">';
+                        $html .= '<h6 class="card-subtitle mb-2"><i class="fa-solid fa-chalkboard-user"></i> : '
+                        . $row['module_convenor'] . '</h6>';
+                        $html .= '<p class="card-text">' . $row['module_description'] . '</p>';
+                        $html .= '<a href="' . $row['link'] . '" class="card-link link-info" target="_blank">Canvas Page</a>';
+                    $html .= '</div>';
+                $html .= '</div>';
+            $html .= '</div>';
+        }
+
+        return $html;
+    }
+
+    function generateModuleList($modulerows) {
+        $html = '';
+
+        foreach ($modulerows as $row) {
+            $html .= '<option value="'.$row['module_num'].'">'.$row['module_name'].'</option>';
+        }
+
+        return $html;
+    }
+
+    function getAllSessions($conn) {
+        // Get rows from table 
+        $stmt = $conn->prepare("SELECT module_sessions.module_session_num, modules.module_name, module_sessions.session_day, DATE_FORMAT(module_sessions.session_start, '%H:%i') AS session_start, DATE_FORMAT(module_sessions.session_end, '%H:%i') AS session_end FROM modules, module_sessions WHERE modules.module_num = module_sessions.module_num ORDER BY module_sessions.module_num ASC");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    function generateSessionList($sessionrows) {
+        $html = '';
+        $currentModule = null;
+
+        foreach ($sessionrows as $row) {
+            if ($currentModule != $row['module_name']) {
+                if ($currentModule != null) {
+                    $html .= '</optgroup>';
+                }
+                $html .= '<optgroup label="' . $row['module_name'] . '">';
+                $currentModule = $row['module_name'];
+            }
+            $html .= '<option value="'.$row['module_session_num'] .'">'.$row['session_day'].', '.$row['session_start']. ' - ' . $row['session_end'] .'</option>';
+        }
+
+        $html .= '</optgroup>'; 
+
+        return $html;
+    }
+
+    function getAllUsers($conn) {
+        // Get rows from teaching assistants table 
+        $stmt = $conn->prepare('SELECT ta_num, fname, lname from teaching_assistants ORDER BY ta_num ASC');
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    function generateUserList($tarows) {
+        $html = '';
+
+        foreach ($tarows as $row) {
+            $html .=  '<option value="'.$row['ta_num'] .'">'.$row['fname'].' '.$row['lname'].'</option>';
+        }
+        
+        return $html;
+    }
+
+    function returnHTTPResponse($status, $responseText) {
+        http_response_code($status);
+        echo $responseText;
     }
 
  ?>
