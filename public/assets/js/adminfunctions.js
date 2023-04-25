@@ -181,7 +181,7 @@ function formHandler(id) {
               },
             });
           } else if (id == "viewAllocationByModule") {
-            $("div#allocationDiv table").dataTable({
+            allocationTable = $("div#allocationDiv table").DataTable({
               dom: "Bfrtip",
               paging: false,
               select: true,
@@ -224,7 +224,7 @@ function formHandler(id) {
               ],
             });
           } else if (id == "viewAllocationBySession") {
-            $("div#allocationDiv table").dataTable({
+            allocationTable = $("div#allocationDiv table").DataTable({
               dom: "Bfrtip",
               paging: false,
               select: true,
@@ -263,7 +263,7 @@ function formHandler(id) {
               ],
             });
           } else if (id == "viewAllocationByUser") {
-            $("div#allocationDiv table").dataTable({
+            allocationTable = $("div#allocationDiv table").DataTable({
               dom: "Bfrtip",
               paging: false,
               select: true,
@@ -344,9 +344,18 @@ function formHandler(id) {
                   selected: true,
                 })
                 .indexes()[0];
-              timesheettable.row(rowIndex).remove();
+              timesheettable.row(rowIndex).remove().draw();
             }
             break;
+        }
+      } if (id == "removeAlloc") {
+        if (data == "Allocation Successfully Removed") {
+          var rowIndex = allocationTable
+          .rows({
+            selected: true,
+          })
+          .indexes()[0];
+        allocationTable.row(rowIndex).remove().draw();
         }
       }
       alert(data);

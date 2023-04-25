@@ -101,8 +101,18 @@
                                     exit();
                                 }
 
+                                if (($monStartTime == ''  && $monEndTime != '') or ($monStartTime != ''  && $monEndTime == '')) {
+                                    returnHTTPResponse(400, 'Monday start time and/or end time are incorrect');
+                                    exit();
+                                }
+
                                 if (!validateInput($tueStartTime, inputType::HHMM) && !validateInput($tueEndTime, inputType::HHMM) && (strtotime($tueEndTime) < strtotime($tueStartTime))) {
                                     returnHTTPResponse(400, 'Tuesday start time and/or end time are incorrect');
+                                    exit();
+                                }
+                                
+                                if (($tueStartTime == ''  && $tueEndTime != '') or ($tueStartTime != ''  && $tueEndTime == '')) {
+                                    returnHTTPResponse(400, 'Monday start time and/or end time are incorrect');
                                     exit();
                                 }
 
@@ -110,14 +120,29 @@
                                     returnHTTPResponse(400, 'Wednesday start time and/or end time are incorrect');
                                     exit();
                                 }
+                                
+                                if (($wedStartTime == ''  && $wedEndTime != '') or ($wedStartTime != ''  && $wedEndTime == '')) {
+                                    returnHTTPResponse(400, 'Monday start time and/or end time are incorrect');
+                                    exit();
+                                }
 
                                 if (!validateInput($thuStartTime, inputType::HHMM) && !validateInput($thuEndTime, inputType::HHMM) && (strtotime($thuEndTime) < strtotime($thuStartTime))) {
                                     returnHTTPResponse(400, 'Thursday start time and/or end time are incorrect');
                                     exit();
                                 }
+                                
+                                if (($thuStartTime == ''  && $thuEndTime != '') or ($thuStartTime != ''  && $thuEndTime == '')) {
+                                    returnHTTPResponse(400, 'Monday start time and/or end time are incorrect');
+                                    exit();
+                                }
 
                                 if (!validateInput($friStartTime, inputType::HHMM) && !validateInput($friEndTime, inputType::HHMM) && (strtotime($friEndTime) < strtotime($friStartTime))) {
                                     returnHTTPResponse(400, 'Friday start time and/or end time are incorrect');
+                                    exit();
+                                }
+                                
+                                if (($friStartTime == ''  && $friEndTime != '') or ($friStartTime != ''  && $friEndTime == '')) {
+                                    returnHTTPResponse(400, 'Monday start time and/or end time are incorrect');
                                     exit();
                                 }
 

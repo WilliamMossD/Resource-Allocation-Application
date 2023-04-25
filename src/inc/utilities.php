@@ -143,7 +143,7 @@
     // Returns the user ID associated with the email
     function getUserIDByEmail($email, $conn) {
         $stmt = $conn->prepare('SELECT ta_num FROM teaching_assistants WHERE email = ?');
-        $stmt->bind_param('i', $email);
+        $stmt->bind_param('s', $email);
 
         // Executes the statement and stores the result
         $stmt->execute();
@@ -152,10 +152,10 @@
         return $result['ta_num'];
     }
 
-    // Gets user data by ID - Does not return password column
+    // Gets user data by ID
     function getUserDataByEmail($email, $conn) {
         $stmt = $conn->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE email = ?');
-        $stmt->bind_param('i', $email);
+        $stmt->bind_param('s', $email);
 
         // Executes the statement and stores the result
         $stmt->execute();
@@ -348,9 +348,9 @@
 
         // Executes the statement and stores the result
         $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $stmt->get_result()->fetch_array(MYSQLI_ASSOC);
         
-        return $result;
+        return $result['num_of_ta'];
     }
 
     // Returns the number of TAs currently allocated to a session

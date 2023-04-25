@@ -784,7 +784,7 @@
                             // Makes sure all users entered are unique and its an array of numbers
                             if (count($usersSelect) === count(array_flip($usersSelect))) {
                                 // Checks that the allocation does not exceed the session ta num
-                                if ((sessionTAAllocation($sessionSelect, $con) + count($usersSelect)) >= sessionTALimit($sessionSelect, $con)) {
+                                if ((sessionTAAllocation($sessionSelect, $con) + count($usersSelect)) <= sessionTALimit($sessionSelect, $con)) {
 
                                     // Iterates the usersSelect array
                                     foreach ($usersSelect as $user) {

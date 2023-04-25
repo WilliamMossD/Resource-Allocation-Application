@@ -10,19 +10,6 @@ session_start();
 
 require_once('../src/inc/utilities.php');
 
-// Check is user is logged in
-if (empty($_SESSION['loggedin']) or !$_SESSION['loggedin'] or empty($_SESSION['email'])) {
-    header('Location: index.html?errorcode=5');
-    exit();
-}
-
-// Generate CSRF token to attach to forms
-if (empty($_SESSION['token'])) {
-    $_SESSION['token'] = bin2hex(random_bytes(32));
-}
-
-$token = $_SESSION['token'];
-
 // Connect to database
 try {
     $con = mysqliConnect();
@@ -35,17 +22,33 @@ try {
     exit();
 }
 
+// Check is user is logged in
+if (empty($_SESSION['loggedin']) or !$_SESSION['loggedin'] or empty($_SESSION['email'])) {
+    header('Location: index.html?errorcode=5');
+    exit();
+}
+
 // Get session email and make sure its valid
 if (!userExistsByEmail($_SESSION['email'], $con)) {
     header('Location: index.html?errorcode=1');
     exit();
 }
 
+$email = $_SESSION['email'];
 
 // Get user data
-$userData = getUserDataByEmail($_SESSION['email'], $con)->fetch_array(MYSQLI_ASSOC);
+$userData = getUserDataByEmail($email, $con)->fetch_array(MYSQLI_ASSOC);
 $name = getUserName($userData['ta_num'], $con);
 $admin = $userData['admin'];
+
+// Generate CSRF token to attach to forms
+if (empty($_SESSION['token'])) {
+    $_SESSION['token'] = bin2hex(random_bytes(32));
+}
+
+$token = $_SESSION['token'];
+
+
 
 if ($admin == '1') {
     $userList = generateUserList(getAllUsers($con));
@@ -53,7 +56,7 @@ if ($admin == '1') {
     $sessionList = generateSessionList(getAllSessions($con));
     $moduleCards = generateModuleHTML(getAllModules($con));
 } else if ($admin == '0') {
-    $moduleCards = generateModuleHTML(getModulesAssignedToUser(getUserIDByEmail($_SESSION['email'], $con), $con));
+    $moduleCards = generateModuleHTML(getModulesAssignedToUser(getUserIDByEmail($email, $con), $con));
 }
 
 ?>
@@ -97,7 +100,7 @@ if ($admin == '1') {
 
     <!-- JavaScript -->
     <script defer src="assets/js/functions.js?version=64"></script>
-    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=67"></script><?php endif; ?>
+    <?php if ($admin == '1') : ?><script defer src="assets/js/adminfunctions.js?version=70"></script><?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
@@ -132,8 +135,8 @@ if ($admin == '1') {
                     <div class="container ps-4 text-start">
                         <h1 class="display-6">Welcome, <?= $name ?></h1>
                         <h5 class="fw-light">Position: <?php if ($admin == '1') : ?>Admin<? else : ?>Teaching Assistant<?php endif; ?></h5>
-                        <h5 class="fw-light" id='email'>Email: <?= $_SESSION['email'] ?></h5>
-                        <h5 class="fw-light" id='id'>ID: <?= getUserIDByEmail($_SESSION['email'], $con) ?></h5>
+                        <h5 class="fw-light" id='email'>Email: <?= $email ?></h5>
+                        <h5 class="fw-light" id='id'>ID: <?= $userData['ta_num'] ?></h5>
                     </div>
                 </div>
                 <div class="col-4 text-center user-button">
