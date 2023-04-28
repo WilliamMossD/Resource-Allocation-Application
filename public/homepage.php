@@ -130,8 +130,8 @@ if ($admin == '1') {
     <div class="container mt-5">
         <div class="row">
             <div class="col-12 d-flex user-row rounded shadow bg-lightblue p-5 mt-5">
-                <div class="col-8 d-flex text-center">
-                    <img class="profile-icon" src="assets/images/person-icon.png">
+                <div class="col-8 d-flex pe-3 text-center">
+                    <img class="profile-icon d-sm-none d-lg-block" src="assets/images/person-icon.png">
                     <div class="container ps-4 text-start">
                         <h1 class="display-6">Welcome, <?= $name ?></h1>
                         <h5 class="fw-light">Position: <?php if ($admin == '1') : ?>Admin<? else : ?>Teaching Assistant<?php endif; ?></h5>
@@ -139,17 +139,17 @@ if ($admin == '1') {
                         <h5 class="fw-light" id='id'>ID: <?= $userData['ta_num'] ?></h5>
                     </div>
                 </div>
-                <div class="col-4 text-center user-button">
-                    <button type="button" class="btn btn-primary me-3" disabled><i class="fa-solid fa-message fa-2xl"></i><br>
+                <div class="col-4 text-center user-button my-auto">
+                    <button type="button" class="btn btn-primary pt-4 pb-4 me-3" disabled><i class="fa-solid fa-message fa-2xl"></i><br>
                         <p class="mb-1 mt-2 fs-6 text-wrap">Messages</p>
                     </button>
-                    <button onclick="location.href='logout.php'" type="button" class="btn btn-primary"><i class="fa-solid fa-right-from-bracket fa-2xl"></i><br>
+                    <button onclick="location.href='logout.php'" type="button" class="btn btn-primary pt-4 pb-4"><i class="fa-solid fa-right-from-bracket fa-2xl"></i><br>
                         <p class="mb-1 mt-2 fs-6 text-wrap">Logout</p>
                     </button>
                 </div>
             </div>
             <div class="col-12 p-0 mt-4 mb-4 d-lg-flex">
-                <div class="col-lg-2 rounded shadow bg-lightblue p-3 mb-5" style="height: fit-content;">
+                <div class="col-lg-2 rounded shadow bg-lightblue p-3 mb-4" style="height: fit-content;">
                     <div class="nav flex-lg-column nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <?php if ($admin == '0') : ?><button class="nav-link active" id="v-pills-timetable-tab" data-bs-toggle="pill" data-bs-target="#v-pills-timetable" type="button" role="tab" aria-controls="v-pills-timetable" aria-selected="true">Timetable</button><?php endif; ?>
                         <button <?php if ($admin == '0') : ?>class="nav-link" <? else : ?>class="nav-link active" <?php endif; ?> id="v-pills-work-tab" data-bs-toggle="pill" data-bs-target="#v-pills-work" type="button" role="tab" aria-controls="v-pills-work" aria-selected="false">Modules</button>
