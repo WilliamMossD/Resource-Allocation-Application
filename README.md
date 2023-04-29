@@ -1,28 +1,28 @@
 # Resource Allocation Appliction (TALL)
-------------
+
 A PHP web application for my dissertation project at the University of Sussex.
 ## Introduction
-------------
+
 This project was developed for the Engineering & Informatics department at the University of Sussex providing an online web application to simplify and automate the process of allocating teaching assistants to sessions.
 
 This is accomplished through the included admin interface allowing the manipulation of resources stored on the database such as timesheets, modules, sessions and session allocation. Additionally, TALL provides a user interface allowing users, non-admins, to view the sessions they have been assigned to and submit timesheets for work they have completed. 
 
 ## Dependencies
-------------
+
 This project uses composer as a dependency manager for PHP and uses the following:
 - microsoft/microsoft-graph **v1.93+**
 - vlucas/phpdotenv **v5.5+**
 - thenetworg/oauth2-azure **v2.1+**
 
 ## Requirements
-------------
+
 - PHP **8.1+**
 - MariaDB **v10.5.19+**
 
 Note: This application uses Azure AD for the Single Sign-On functionality. Therefore you will need to register an application in the Azure portal and create a secret key.
 
 ## Installation
-------------
+
 #### Web Server Files
 These instructions will guide you on how to clone the repository into the correct place and create the .env file.
 1. Clone the GitHub repository onto the web server.
