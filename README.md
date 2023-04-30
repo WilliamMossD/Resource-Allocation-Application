@@ -1,4 +1,4 @@
-# Resource Allocation Appliction (TALL)
+# Resource Allocation Application (TALL)
 
 A PHP web application for my dissertation project at the University of Sussex.
 ## Introduction
@@ -51,7 +51,7 @@ These instructions will guide you on how to clone the repository into the correc
 		PASSWORD = '{DATABASE_PASSWORD}'
 		DATABASE = '{DATABASE_NAME}'
 		
-		# Azure AD Enviroment Variables
+		# Azure AD Environment Variables
 		CLIENT_ID = '{CLIENT_ID}'
 		CLIENT_SECRET = '{CLIENT_SECRET}'
 		REDIRECT_URI = '{REDIRECT_URI}'
