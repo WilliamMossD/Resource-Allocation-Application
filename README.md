@@ -44,6 +44,7 @@ These instructions will guide you on how to clone the repository into the correc
 4.  Now create a file named `.env` within the `\config` directory.
 
 5.  Add the following code to the `.env` file and fill in the fields.
+
 		# Database Details
 		HOST = '{DATABASE_HOST}'
 		USER = '{DATABASE_USERNAME}'
