@@ -37,7 +37,7 @@
         exit();
     }
 
-    // Verify user is admin (Only admins can submit these forms)
+    // Verify user is admin (Only admins can access this data)
     if (!isUserAdmin(getUserIDByEmail($_SESSION['email'], $con), $con)) {
         // User is not logged in. Send bad request
         returnHTTPResponse(401, 'HTTP Status 401: You are not permitted to access this resource!');

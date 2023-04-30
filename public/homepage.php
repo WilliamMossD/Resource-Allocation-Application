@@ -48,8 +48,6 @@ if (empty($_SESSION['token'])) {
 
 $token = $_SESSION['token'];
 
-
-
 if ($admin == '1') {
     $userList = generateUserList(getAllUsers($con));
     $moduleList = generateModuleList(getAllModules($con));

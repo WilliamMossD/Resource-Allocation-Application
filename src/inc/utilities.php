@@ -24,23 +24,37 @@
     $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/../config');
     $dotenv->load();
     $dotenv->required(['HOST', 'USER', 'PASSWORD', 'DATABASE', 'DOMAIN_NAME']);
-
+    
+    /**
+     * Returns a new object that represents a MySQL server connection or false on error
+     *
+     * @return mysqli|false An object that represents a MySQL server connection or false on error
+     */
     function mysqliConnect() {
         try {
             return mysqli_connect($_ENV['HOST'], $_ENV['USER'], $_ENV['PASSWORD'], $_ENV['DATABASE']);
         } catch (Exception $e) {
-            // Redirect back to root
-            header('Location: index.html');
-            exit();
+            return false;
         }
     }
 
-    // Sanitize Function 
+    /**
+     * Returns in $input after converting special characters to HTML entities.
+     *
+     * @param string $input The string to be converted
+     * @return string The converted string
+     */
     function sanitizeInput($input){
         return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
     }
-
-    // Validation Function
+ 
+    /**
+     * validateInput
+     *
+     * @param  mixed $input Input to be validated
+     * @param  inputType $it Input type chosen from the inputType enum
+     * @return bool Returns true if input passes validation. False otherwise
+     */
     function validateInput($input, inputType $it) {
         switch ($it) {
             case inputType::Name:
@@ -106,12 +120,22 @@
         }
     }
 
-    // Returns the Domain name in the env config
+    /**
+     * Returns the domain name in the env config
+     *
+     * @return string The domain name stored in the .env file
+     */
     function getDomainName() {
         return $_ENV['DOMAIN_NAME'];
     }
-
-    // Gets user data by ID - Does not return password column
+ 
+    /**
+     * Get user data by ID
+     *
+     * @param int $id ID of user you wish to retrieve the information of
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return mysqli_result|false Returns a resultset or FALSE on failure
+     */
     function getUserData($id, $conn) {
         $stmt = $conn->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE ta_num = ?');
         $stmt->bind_param('i', $id);
@@ -123,7 +147,13 @@
         return $result;
     }
 
-    // Returns true if user is admin false otherwise
+    /**
+     * Checks to see if the user is admin
+     *
+     * @param  int $id ID of user you wish to check is an admin
+     * @param  mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True if user is an admin. False otherwise
+     */
     function isUserAdmin($id, $conn) {
         $stmt = $conn->prepare("SELECT admin FROM teaching_assistants WHERE ta_num=? AND admin=1");
         $stmt->bind_param('i', $id);
@@ -140,7 +170,13 @@
         return true;
     }
 
-    // Returns the user ID associated with the email
+    /**
+     * Returns the ID of the user associated with the email
+     *
+     * @param  string $email The email of the user that you wish to get their ID for
+     * @param  mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return int The ID of the user
+     */
     function getUserIDByEmail($email, $conn) {
         $stmt = $conn->prepare('SELECT ta_num FROM teaching_assistants WHERE email = ?');
         $stmt->bind_param('s', $email);
@@ -152,7 +188,13 @@
         return $result['ta_num'];
     }
 
-    // Gets user data by ID
+    /**
+     * Get user data by email
+     *
+     * @param int $id ID of user you wish to retrieve the information of
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return mysqli_result|false Returns a resultset or FALSE on failure
+     */
     function getUserDataByEmail($email, $conn) {
         $stmt = $conn->prepare('SELECT ta_num, fname, lname, email, admin FROM teaching_assistants WHERE email = ?');
         $stmt->bind_param('s', $email);
@@ -164,7 +206,13 @@
         return $result;
     }
 
-    // Gets user name by user ID
+    /**
+     * Get user name by user ID    
+     *
+     * @param  int $id ID of user you wish to retrieve the information of
+     * @param  mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return string First name and last name joined with a space in-between them
+     */
     function getUserName($id, $conn) {
         $stmt = $conn->prepare('SELECT fname, lname FROM teaching_assistants WHERE ta_num = ?');
         $stmt->bind_param('i', $id);
@@ -176,8 +224,14 @@
         return $result[0] . " " . $result[1];
 
     }
-
-    // Gets module name by ID
+ 
+    /**
+     * Get module name by ID
+     *
+     * @param  int $id ID of session you wish to retrieve the information of
+     * @param  mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return string The module name
+     */
     function getModuleName($id, $conn) {
         $stmt = $conn->prepare('SELECT module_name FROM modules WHERE module_num = ?');
         $stmt->bind_param('i', $id);
@@ -188,8 +242,14 @@
 
         return $result[0];
     }
-
-    // Gets module data by ID
+    
+    /**
+     * Get module data by ID
+     *
+     * @param int $id ID of module you wish to retrieve the information of
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return mysqli_result|false Returns a resultset or FALSE on failure
+     */
     function getModuleData($id, $conn) {
         $stmt = $conn->prepare('SELECT * FROM modules WHERE module_num = ?');
         $stmt->bind_param('i', $id);
@@ -201,7 +261,13 @@
         return $result;
     }
 
-    // Returns the module num of the session by the session ID
+    /**
+     * Returns the module number (ID) associated with a session by the session ID
+     *
+     * @param  int $id ID of the session that you wish to find the module num for
+     * @param  mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return int The module number
+     */
     function getModuleNumBySession($id, $conn) {
         $stmt = $conn->prepare('SELECT module_num FROM module_sessions WHERE module_session_num = ?');
         $stmt->bind_param('i', $id);
@@ -213,7 +279,13 @@
         return $result[0];
     }
 
-    // Gets session data by ID
+    /**
+     * Get session data by ID
+     * 
+     * @param int $id ID of session you wish to retrieve the information of
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return mysqli_result|false Returns a resultset or FALSE on failure
+     */
     function getSessionData($id, $conn) {
         $stmt = $conn->prepare("SELECT module_session_num, module_num, session_location, session_type, num_of_ta, session_day, DATE_FORMAT(session_start, '%H:%i') AS session_start, DATE_FORMAT(session_end, '%H:%i') AS session_end FROM module_sessions WHERE module_session_num = ?");
         $stmt->bind_param('i', $id);
@@ -225,7 +297,13 @@
         return $result;
     }
 
-    // Checks if user exists
+    /**
+     * Checks user exists by ID
+     *
+     * @param int $id The ID that you wish to perform the check on
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True if user exists. False otherwise
+     */
     function userExists($id, $conn) {
         if (getUserData($id, $conn)->num_rows == 0) {
             return false;
@@ -233,7 +311,13 @@
         return true;
     }
 
-    // Checks if user exists
+    /**
+     * Checks user exists by email
+     *
+     * @param int $id The email that you wish to perform the check on
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True if user exists. False otherwise
+     */
     function userExistsByEmail($email, $conn) {
         $stmt = $conn->prepare("SELECT email FROM teaching_assistants WHERE email=?");
         $stmt->bind_param('s', $email);
@@ -250,7 +334,13 @@
         return true;
     }
 
-    // Checks if module exists
+    /**
+     * Checks module exists by ID
+     *
+     * @param int $id The ID that you wish to perform the check on
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True if user exists. False otherwise
+     */
     function moduleExists($id, $conn) {
         if (getModuleData($id, $conn)->num_rows == 0) {
             return false;
@@ -258,7 +348,13 @@
         return true;
     }
 
-    // Checks if session exists
+    /**
+     * Checks session exists by ID
+     *
+     * @param int $id The ID that you wish to perform the check on
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True if user exists. False otherwise
+     */
     function sessionExists($id, $conn) {
         if (getSessionData($id, $conn)->num_rows == 0) {
             return false;
@@ -266,12 +362,32 @@
         return true;
     }
 
-    // Gets total seconds for timesheet
+    
+    /**
+     * Calculates the total number of seconds between the start time and end time for Monday to Friday. All strings must be in the 24 hour format HH:MM.
+     *
+     * @param  string $monStartTime
+     * @param  string $monEndTime
+     * @param  string $tueStartTime
+     * @param  string $tueEndTime
+     * @param  string $wedStartTime
+     * @param  string $wedEndTime
+     * @param  string $thuStartTime
+     * @param  string $thuEndTime
+     * @param  string $friStartTime
+     * @param  string $friEndTime
+     * @return int Total number of seconds
+     */
     function getTotalSeconds($monStartTime, $monEndTime, $tueStartTime, $tueEndTime, $wedStartTime, $wedEndTime, $thuStartTime, $thuEndTime, $friStartTime, $friEndTime) {
         return (strtotime($monEndTime) - strtotime($monStartTime)) + (strtotime($tueEndTime) - strtotime($tueStartTime)) + (strtotime($wedEndTime) - strtotime($wedStartTime)) + (strtotime($thuEndTime) - strtotime($thuStartTime)) + (strtotime($friEndTime) - strtotime($friStartTime));
     }
-    
-    // Gets total time for timesheet
+        
+    /**
+     * Takes an amount of seconds and turns it into hours and minutes
+     *
+     * @param  int $seconds
+     * @return string In the format HH:MM
+     */
     function getTotalTime($seconds) {
         $minutes = (int) (($seconds / 60) % 60);
         $hours = (int) (($seconds / 60) - $minutes) / 60;
@@ -287,7 +403,13 @@
         return $hours . ':' . $minutes;
     }
 
-    // Checks timesheet exists by ID
+    /**
+     * Checks timesheet exists by ID
+     *
+     * @param int $id The ID that you wish to perform the check on
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True if user exists. False otherwise
+     */
     function timesheetExists($id, $conn) {
         $stmt = $conn->prepare('SELECT timesheet_num FROM timesheets WHERE timesheet_num = ?');
         $stmt->bind_param('i', $id);
@@ -302,7 +424,13 @@
         return true;
     }
 
-    // Gets current status of timesheet
+    /**
+     * Returns the current status of a timesheet
+     *
+     * @param  mixed $id The ID of the timesheet 
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return string The status of the timesheet
+     */
     function getTimesheetStatus($id, $conn) {
         $stmt = $conn->prepare('SELECT status FROM timesheets WHERE timesheet_num = ?');
         $stmt->bind_param('i', $id);
@@ -314,7 +442,15 @@
         return $result;
     }
     
-    // Checks to see if a timesheet for the week and year already exists for the user. Returns true or false
+    /**
+     * Checks to see if an active or pending timesheet for a certain week and year already exists for the user. 
+     *
+     * @param  mixed $weekInput Week input in WW
+     * @param  mixed $yearInput Year input in YYYY
+     * @param  mixed $idInput User ID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool 
+     */
     function timesheetExistsForWeekAndYearForUser($weekInput, $yearInput, $idInput, $conn){
         $stmt = $conn->prepare('SELECT ta_num, week_num, year FROM timesheets WHERE ta_num = ? AND week_num = ? AND year = ? AND (status = "Pending" OR status = "Approved")');
         $stmt->bind_param('iii', $idInput, $weekInput, $yearInput);
@@ -331,7 +467,27 @@
         return false;
     }
 
-    // Inserts new timesheet in database. Returns !$stmt->execute()
+    /**
+     * Creates a new timesheet on the database. Times must be in HH:MM format or empty
+     *
+     * @param  mixed $idInput User ID
+     * @param  mixed $weekInput Week Number WW
+     * @param  mixed $yearInput Year Number YYYY
+     * @param  mixed $monStartTime 
+     * @param  mixed $monEndTime 
+     * @param  mixed $tueStartTime 
+     * @param  mixed $tueEndTime 
+     * @param  mixed $wedStartTime
+     * @param  mixed $wedEndTime
+     * @param  mixed $thuStartTime
+     * @param  mixed $thuEndTime
+     * @param  mixed $friStartTime
+     * @param  mixed $friEndTime
+     * @param  mixed $totalTime
+     * @param  mixed $timesheetTextInput
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True on success, false on failure
+     */
     function insertTimesheet($idInput, $weekInput, $yearInput, $monStartTime, $monEndTime, $tueStartTime, $tueEndTime, $wedStartTime, $wedEndTime, $thuStartTime, $thuEndTime, $friStartTime, $friEndTime, $totalTime, $timesheetTextInput, $conn) {
 
         $stmt = $conn->prepare('INSERT INTO timesheets (ta_num, week_num, year, monStart, monEnd, tueStart, tueEnd, wedStart, wedEnd, thuStart, thuEnd, friStart, friEnd, total, comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -340,8 +496,14 @@
         // Execute MySQL Statement
         return $stmt->execute();
     }
-
-    // Returns the TA limit of a session
+    
+    /**
+     * Returns the TA limit of a session
+     *
+     * @param  int $sessionID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return int 
+     */
     function sessionTALimit($sessionID, $conn) {
         $stmt = $conn->prepare('SELECT num_of_ta FROM module_sessions WHERE module_session_num = ?');
         $stmt->bind_param('i', $sessionID);
@@ -353,12 +515,24 @@
         return $result['num_of_ta'];
     }
 
-    // Returns the number of TAs currently allocated to a session
+    /**
+     * Returns the number of TAs currently allocated to a session    
+     *
+     * @param int $sessionID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return int
+     */
     function sessionTAAllocation($sessionID, $conn) {
         return getSessionAllocation($sessionID, $conn)->num_rows;
     }
 
-    // Returns session allocation by ID
+    /**
+     * Returns a mysqli_result containing the ID, first name and last name of the users that are allocated to the session
+     *
+     * @param  int $sessionID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return mysqli_result 
+     */
     function getSessionAllocation($sessionID, $conn) {
         // Prepare MySQL Statement
         $stmt = $conn->prepare("SELECT teaching_assistants.ta_num AS 'User ID', teaching_assistants.fname AS 'First Name', teaching_assistants.lname AS 'Last Name', assigned_to.ta_num, assigned_to.module_session_num FROM teaching_assistants, assigned_to WHERE teaching_assistants.ta_num = assigned_to.ta_num AND assigned_to.module_session_num=?");
@@ -369,7 +543,13 @@
         return $stmt->get_result();
     }
 
-    // Returns an array containing the session IDs of sessions assigned to a module
+    /**
+     * Returns an mysqli_result containing an array of all the sessions assigned to a module
+     *
+     * @param  int $moduleID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return mysqli_result 
+     */
     function getModuleSessions($moduleID, $conn) {
         $stmt = $conn->prepare("SELECT module_session_num FROM module_sessions WHERE module_num = ? ORDER BY module_session_num ASC");
         $stmt->bind_param('i', $moduleID);
@@ -377,7 +557,14 @@
         return $stmt->get_result();
     } 
 
-    // Checks if user is assigned to a session
+    /**
+     * Checks if a user is assigned to a session
+     *
+     * @param  int $userID
+     * @param  int $sessionID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True is user is assigned. False otherwise
+     */
     function isAssigned($userID, $sessionID, $conn) {
         $stmt = $conn->prepare('SELECT * FROM assigned_to WHERE ta_num=? AND module_session_num=?');
         $stmt->bind_param('ii', $userID, $sessionID);
@@ -390,9 +577,17 @@
         }
         return true;
     }
-
-    // Checks to see if user is available between a set time by checking current sessions they are assigned to   
-    // True if they are available, false if not   
+  
+    /**
+     * Checks to see if user is available between a set time by checking all of the sessions they are assigned to   
+     *
+     * @param  mixed $userID
+     * @param  mixed $starttime HH:MM
+     * @param  mixed $endtime HH:MM
+     * @param  mixed $day Monday, Tuesday, Wednesday, Thursday, Friday
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True if they are available between the start time and end time, false otherwise
+     */
     function isAvailable($userID, $starttime, $endtime, $day, $conn) {
         
         $stmt = $conn->prepare('SET @start = ?');
@@ -423,8 +618,17 @@
         return true;
     }
 
-    // Checks to see if user is available between a set time by checking current sessions they are assigned to
-    // returns array containing the session_IDs of the session they are assigned to during that time   
+
+    /**
+     * Returns an array of the session IDs that the user is allocated between the start time and end time on a certain day    
+     *
+     * @param  mixed $userID
+     * @param  mixed $starttime HH:MM
+     * @param  mixed $endtime HH:MM
+     * @param  mixed $day Monday, Tuesday, Wednesday, Thursday, Friday
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return array
+     */
     function isAvailableModule($userID, $starttime, $endtime, $day, $conn) {
         $stmt = $conn->prepare('SET @start = ?');
         $stmt->bind_param('s', $starttime);
@@ -452,7 +656,14 @@
         return $session_IDs;
     }
 
-    // Allocates user to session
+    /**
+     * Allocates a user to a session
+     *
+     * @param  int $userID
+     * @param  int $sessionID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return bool True on success, false on failure
+     */
     function allocateUser($userID, $sessionID, $conn) {
 
         // Prepare MySQL Statement
@@ -564,7 +775,14 @@
         return $table;
 
     }
-
+    
+    /**
+     * Returns information about the modules of the sessions the user is assigned to 
+     *
+     * @param  int $userID
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return array An array of associative arrays holding the module information
+     */
     function getModulesAssignedToUser($userID, $conn) {
         // Get modules that user is assigned to
         $stmt = $conn->prepare('SELECT DISTINCT modules.module_num, modules.module_name, modules.module_convenor, modules.module_description, modules.link FROM modules, module_sessions, assigned_to WHERE assigned_to.ta_num = ? AND module_sessions.module_session_num = assigned_to.module_session_num AND module_sessions.module_num = modules.module_num
@@ -575,14 +793,26 @@
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
     }
-
+    
+    /**
+     * Returns an array of associative arrays holding the module_num, module_name, module_convenor, module_description and link of all the modules within the database
+     *
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return array An array of associative arrays holding the module information
+     */
     function getAllModules($conn){
         // Get rows from module table
         $stmt = $conn->prepare('SELECT * from modules ORDER BY module_num ASC');
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-
+    
+    /**
+     * Generates HTML code for the modules tab
+     *
+     * @param  array $modulerows An associative array containing the module information
+     * @return string 
+     */
     function generateModuleHTML($modulerows) {
         $html = '';
 
@@ -604,7 +834,13 @@
 
         return $html;
     }
-
+    
+    /**
+     * Generates a HTML option list containing the modules
+     *
+     * @param  array $modulerows An array of associative arrays holding the module information
+     * @return string 
+     */
     function generateModuleList($modulerows) {
         $html = '';
 
@@ -614,14 +850,26 @@
 
         return $html;
     }
-
+    
+    /**
+     * Returns an array of associative arrays holding the module_session_num, module_name, session_day, session_start and session_end of all the sessions within the database
+     *
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return array An array of associative arrays holding the module information
+     */
     function getAllSessions($conn) {
         // Get rows from table 
         $stmt = $conn->prepare("SELECT module_sessions.module_session_num, modules.module_name, module_sessions.session_day, DATE_FORMAT(module_sessions.session_start, '%H:%i') AS session_start, DATE_FORMAT(module_sessions.session_end, '%H:%i') AS session_end FROM modules, module_sessions WHERE modules.module_num = module_sessions.module_num ORDER BY module_sessions.module_num ASC");
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
-
+    
+    /**
+     * Generates a HTML option list containing the sessions split into groups by their modules
+     *
+     * @param  array $sessionrows An array of associative arrays holding the session information
+     * @return string 
+     */
     function generateSessionList($sessionrows) {
         $html = '';
         $currentModule = null;
@@ -641,7 +889,13 @@
 
         return $html;
     }
-
+    
+    /**
+     * Returns an array of associative arrays holding the ta_num, fname and lname of all the users within the database
+     *
+     * @param mysqli $conn An object which represents the connection to a MySQL Server 
+     * @return array An array of associative arrays holding the user information
+     */
     function getAllUsers($conn) {
         // Get rows from teaching assistants table 
         $stmt = $conn->prepare('SELECT ta_num, fname, lname from teaching_assistants ORDER BY ta_num ASC');
@@ -649,6 +903,12 @@
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    /**
+     * Generates a HTML option list containing the users
+     *
+     * @param  array $tarows An array of associative arrays holding the session information
+     * @return string 
+     */
     function generateUserList($tarows) {
         $html = '';
 
@@ -658,7 +918,13 @@
         
         return $html;
     }
-
+    
+    /**
+     * Sets the HTTP response could and returns error text with it
+     *
+     * @param  int $status
+     * @param  string $responseText
+     */
     function returnHTTPResponse($status, $responseText) {
         http_response_code($status);
         echo $responseText;

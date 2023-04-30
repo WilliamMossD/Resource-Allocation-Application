@@ -4,7 +4,7 @@
  * formHandler.php file for the Individual Project (University of Sussex 2023) 
  * Author: William Moss (235319)
  *
- * Handles form submissions
+ * Handles Ajax POST requests containing form data to the server.
  */
  
     require_once('../src/inc/utilities.php');
@@ -69,6 +69,7 @@
                 // Validate Inputs
                 if (validateInput($firstNameInput, inputType::Name)){
                     if (validateInput($lastNameInput, inputType::Name)) {
+                        // Checks for valid email and that it't not already in use
                         if (validateInput($emailInput, inputType::Email) && !userExistsByEmail($emailInput, $con)) {
                             
                             // Prepare MySQL Statement
@@ -955,7 +956,7 @@
                     exit();
                 }
 
-            // Approve Timesheet Case
+            // Approve Timesheet Form
             case "approveTimesheet":
 
                 $timesheet_id = filter_var($_POST['timesheet_id'], FILTER_SANITIZE_NUMBER_INT);
@@ -993,7 +994,7 @@
                     exit();
                 }
 
-            // Deny Timesheet Case
+            // Deny Timesheet Form
             case "denyTimesheet":
 
                 $timesheet_id = filter_var($_POST['timesheet_id'], FILTER_SANITIZE_NUMBER_INT);
@@ -1031,7 +1032,7 @@
                     exit();
                 }
 
-            // Delete Timesheet Case
+            // Delete Timesheet Form
             case "deleteTimesheet":
 
                 $timesheet_id = filter_var($_POST['timesheet_id'], FILTER_SANITIZE_NUMBER_INT);
