@@ -129,7 +129,6 @@ These instructions will guide you in setting up the MySQL database.
 		`fname` varchar(50) NOT NULL,
 		`lname` varchar(50) NOT NULL,
 		`email` varchar(320) NOT NULL,
-		`password` varchar(255) DEFAULT NULL,
 		`admin` tinyint(1) NOT NULL DEFAULT 0
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -159,7 +158,7 @@ These instructions will guide you in setting up the MySQL database.
 		`status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Pending',
 		`submit_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
 		`update_datetime` timestamp NULL DEFAULT NULL
-		) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 		--
 		-- Indexes for table `assigned_to`
